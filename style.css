@@ -1,0 +1,352 @@
+/* Estilo geral */
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #ecf0f1;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+    .submit-container {
+        position: static;
+        bottom: auto;
+        left: auto;
+        transform: none;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: auto;
+    }
+
+
+.content {
+    display: flex;
+    justify-content: center;
+    background-color: #fff;
+    border-radius: 15px;
+    width: 960px;
+    max-width: 90%;
+    height: 70%;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para a coluna lateral (menu vertical) */
+.side-column {
+    background-color: #E9ECEF;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo {
+    max-width: 200px;
+    margin-bottom: 30px;
+}
+    
+.menu-item {
+    font-size: 18px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    color: #333;
+    text-transform: capitalize;
+}
+
+a {
+    text-decoration: none;
+}
+    
+#atual {
+    background-color: #FFB703;
+}
+
+/* Estilos para o botão de logout */
+.logout-btn {
+    margin-top: 20px; /* Adicione um espaço entre os botões do menu e o botão de logout */
+    border: none;
+    background-color: #023047;
+    color: #fff;
+    font-size: 16px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 15px;
+    text-transform: uppercase;
+}
+
+.logout-btn:hover {
+    background-color: #FFB703;
+}
+
+
+.content-column {
+    padding: 20px;
+    flex: 1;
+}
+    
+.title {
+    font-size: 28px;
+    font-weight: bold;
+    text-transform: capitalize;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+/* Estilos para o botões */
+.btn {
+    border-radius: 15px;
+    text-transform: uppercase;
+    color: #fff;
+    font-size: 16px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 150px;
+    align-self: center;
+    border: none;
+    background-color: #023047;
+}
+
+.menu-item.btn {
+    background-color: #023047;
+    color: #fff;
+    padding: 10px 20px;
+    text-align: center;  
+
+}
+    
+.menu-item.btn:hover {
+    background-color: #FFB703;
+}
+
+.btn-primary:hover {
+    background-color: #FFB703;
+}
+
+/* Formulário */
+.content-column form.two-column-form {
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+}
+
+.form-column {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 40px;
+}
+
+.form-column label {
+    display: block;
+    font-size: 16px;
+    color: #333;
+}
+
+.dropdown-column {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 40px;
+}
+
+/* Estilos para o select */
+.dropdown-column select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #fff;
+    color: #333;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    width: 300px;
+}
+
+    
+.input-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+
+.content-column input,
+.form-column select {
+width: 100%;
+padding: 10px;
+margin-bottom: 10px;
+border: 1px solid #ccc;
+border-radius: 5px;
+font-size: 16px;
+}
+
+.content-column button {
+    align-self: flex-end;
+    width: 100%;
+}
+
+/* Estilos para o multiselect */
+.multiselect {
+    width: 200px;
+    position: relative;
+}
+
+.selectBox {
+    position: relative;
+    cursor: pointer;
+}
+
+.selectBox select {
+    width: 100%;
+    font-weight: bold;
+    margin: 5px 0;
+    border-radius: 5px;
+    height: 40px;
+    background-color: #fff;
+    color: #333;
+}
+
+.selectBox select:focus {
+    outline: none;
+    border: 1px solid #023047;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.overSelect {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: 5px;
+}
+
+.two-fields {
+    display: flex;
+    flex-direction: row;
+}
+
+.two-fields label,
+.two-fields select {
+    width: 100%;
+}
+
+/* Estilos para as opções do multiselect */
+#checkboxes-publico,
+#checkboxes-conteudo,
+#checkboxes-ferramenta,
+#checkboxes-habilidade {
+display: block;
+border: 1px #dadada solid;
+background-color: #fff;
+z-index: 1;
+top: 40px;
+left: 0;
+right: 0;
+max-height: 200px;
+overflow-y: auto;
+width: 100%;
+position: absolute;
+}
+
+#checkboxes-publico label,
+#checkboxes-conteudo label,
+#checkboxes-ferramenta label,
+#checkboxes-habilidade label {
+position: relative;
+padding: 10px 40px 10px 30px;
+font-size: 16px;
+color: #333;
+display: inline-block;
+width: 100%;
+text-align: center;
+}
+
+#checkboxes-publico label:hover,
+#checkboxes-conteudo label:hover,
+#checkboxes-ferramenta label:hover,
+#checkboxes-habilidade label:hover {
+background-color: #FFB703;
+cursor: pointer;
+width: 100%;
+}
+
+#checkboxes-publico.closed,
+#checkboxes-conteudo.closed,
+#checkboxes-ferramenta.closed,
+#checkboxes-habilidade.closed {
+display: none;
+}
+
+/* Media queries */
+@media screen and (max-width: 768px) {
+    body {
+    font-size: 16px;
+    }
+    .content {
+        flex-direction: column;
+        height: auto;
+        box-shadow: none;
+    }
+    .side-column{
+        flex-direction: row;
+        align-items: center;
+        margin-top: 40%;
+        border-radius: 0;
+        gap: 5px;
+    }
+    .submit-container {
+        flex-direction: column;
+        align-items: center; 
+        margin-top: 40px; 
+        gap: 10px; 
+    }
+    .logo{
+        max-width: 80px;
+    }
+    .form-container {
+        width: 100%;
+        height: auto;
+    }
+    .content-column form.two-column-form {
+        flex-direction: column;
+        gap: 2px;
+    }
+    .title {
+        font-size: 24px;
+    }
+    .form-column {
+        margin: 5px;
+    }
+    .menu-item.btn{
+        text-align: center;  
+        font-size: 10px;
+    }
+    
+}

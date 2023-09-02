@@ -1,11 +1,9 @@
 <?php 
     //sippectoken = 624879f5e6346c9cda0e80421d95a37c8626a2ee0a215e261be42e355390100d
-    if(!isset($GET['t'])) {
+    if(!isset($_GET['t'])) {
         die('Acesso negado');
     }
-    if($GET['t'] !== hash('256', 'sippectoken')) {
-        die('Acesso negado');
-    } else {
+    if($_GET['t'] !== hash('sha256', 'sippectoken')) {
         die('Acesso negado');
     }
 ?>

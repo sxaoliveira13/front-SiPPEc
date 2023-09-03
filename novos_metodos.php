@@ -1,10 +1,8 @@
 <?php 
     //sippectoken = 624879f5e6346c9cda0e80421d95a37c8626a2ee0a215e261be42e355390100d
-    if(!isset($_GET['t'])) {
-        die('Acesso negado');
-    }
-    if($_GET['t'] !== hash('sha256', 'sippectoken')) {
-        die('Acesso negado');
+    if(!isset($_GET['t']) || $_GET['t'] !== hash('sha256', 'sippectoken')) {
+        header("Location: https://liag.ft.unicamp.br/act/");
+        die();
     } 
 ?>
 <!DOCTYPE html>
@@ -13,14 +11,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de conteúdos - Métodos </title>
-    <link rel="stylesheet" href="style.css">
-    <script src="multiselect.js"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/multiselect.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="content">
             <div class="side-column">
-                <img src="imagens/logo completo sem fundo.png" class="logo"> 
+                <img src="assets/imagens/logo completo sem fundo.png" class="logo"> 
                 <a href="novos_artigos.html" class="menu-item btn" >Registrar Artigos</a>
                 <a href="novos_jogos.html" class="menu-item btn">Registrar Jogos</a>
                 <a href="novos_metodos.html" class="menu-item btn" id="atual">Registrar Métodos</a>

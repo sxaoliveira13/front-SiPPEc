@@ -39,7 +39,7 @@ function sanitize($string, string $type = "default")
 function forceRedirect($location)
 {
     global $CFG;
-    $url = $CFG['systemUrl'] . sanitize($location, "url");
+    $url = $CFG['system_url'] . sanitize($location, "url");
     if (!headers_sent()) {
         header("location: {$url}");
     } else {

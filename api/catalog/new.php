@@ -1,5 +1,8 @@
 <?php
 
+require("../config.php");
+require("../functions.php");
+
 //Tipo de resposta do servidor e codificação dos caracteres
 header('Content-Type: application/json; charset=utf-8');
 

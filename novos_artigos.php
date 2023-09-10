@@ -1,20 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de conteúdos - Artigos </title>
-    <link rel="stylesheet" href="style.css">
-    <script src="multiselect.js"></script>
-</head>
+<?php 
+   if(!isset($_GET['t']) || $_GET['t'] !== hash('sha256', 'sippectoken')) {
+        header("Location: https://liag.ft.unicamp.br/act/");
+        die();
+    } 
+
+    $pageName = 'Artigos';
+    require(dirname(__FILE__).'/includes/head.php');
+?>
 <body>
     <div class="container">
         <div class="content">
             <div class="side-column">
-                <img src="imagens/logo completo sem fundo.png" class="logo"> 
-                <a href="novos_artigos.html" class="menu-item btn btn-small" id="atual">Registrar Artigos</a>
-                <a href="novos_jogos.html" class="menu-item btn btn-small">Registrar Jogos</a>
-                <a href="novos_metodos.html" class="menu-item btn btn-small">Registrar Métodos</a>  
+                <img src="<?php echo $CFG['system_url'].'assets/img/logo completo sem fundo.png'?>" class="logo"> 
+                <a href="<?php echo $CFG['system_url'].'novos_artigos.php?t='.$CFG['access_token']?>" class="menu-item btn btn-small" id="atual">Registrar Artigos</a>
+                <a href="<?php echo $CFG['system_url'].'novos_jogos.php?t='.$CFG['access_token']?>" class="menu-item btn btn-small">Registrar Jogos</a>
+                <a href="<?php echo $CFG['system_url'].'novos_metodos.php?t='.$CFG['access_token']?>" class="menu-item btn btn-small">Registrar Métodos</a>  
                 <div class="submit-container">
                     <button type="submit" class="btn btn-primary">Enviar</button>
                     <button class="btn btn-primary">Sair</button>

@@ -16,7 +16,7 @@
                 <a href="<?php echo $CFG['system_url'].'novos_jogos.php?t='.$CFG['access_token']?>" class="menu-item btn btn-small" id="atual">Registrar Jogos</a>
                 <a href="<?php echo $CFG['system_url'].'novos_metodos.php?t='.$CFG['access_token']?>" class="menu-item btn btn-small">Registrar Métodos</a>
                 <div class="submit-container">
-                    <button type="submit" class="btn btn-primary">Enviar</button>
+                    <button id="btnSendGame" type="button" class="btn btn-primary">Enviar</button>
                     <button class="btn btn-primary">Sair</button>
                 </div>
             </div>

@@ -22,5 +22,4 @@ $CFG['access_token'] = '624879f5e6346c9cda0e80421d95a37c8626a2ee0a215e261be42e35
     <title>Cadastro de conteúdos <?php if(!empty($pageName)){echo " - ".$pageName; } ?></title>
     <link rel="stylesheet" href="<?php echo $CFG['system_url'] ?>assets/css/style.css">
     <script src="<?php echo $CFG['system_url'] ?>assets/js/main.js"></script>
-    <script src="<?php echo $CFG['system_url'] ?>assets/js/multiselect.js"></script>
 </head>

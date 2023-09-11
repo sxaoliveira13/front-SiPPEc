@@ -7,6 +7,12 @@ if (!isset($_GET['t']) || $_GET['t'] !== hash('sha256', 'sippectoken')) {
 $pageName = 'Artigos';
 require(dirname(__FILE__) . '/includes/head.php');
 ?>
+<style>
+    select {
+        max-height: 200px;
+        /* Defina a altura máxima desejada */
+    }
+</style>
 
 <body>
     <div class="container">
@@ -48,128 +54,99 @@ require(dirname(__FILE__) . '/includes/head.php');
                         <div class="dropdown-column">
                             <div class="input-field">
                                 <label for="publico">Públicos</label>
-                                <div class="multiselect">
-                                    <div class="selectBox" onclick="showCheckboxes_publico()">
-                                        <select id="publico" class="closed">
-                                            <option disabled selected>Selecionar</option>
-                                        </select>
-                                        <div class="overSelect"></div>
-                                    </div>
-                                    <div id="checkboxes-publico" class="closed">
-                                        <label for="pub1">
-                                            <input type="checkbox" id="pub1" />Fundamental II</label>
-                                        <label for="pub2">
-                                            <input type="checkbox" id="pub2" />Ensino Médio</label>
-                                        <label for="pub3">
-                                            <input type="checkbox" id="pub3" />Formação para professores</label>
-                                        <label for="pub4">
-                                            <input type="checkbox" id="pub4" />Ensino Técnico</label>
-                                        <label for="pub5">
-                                            <input type="checkbox" id="pub5" />Ensino Superior</label>
-                                    </div>
-                                </div>
+                                <select id="publico">
+                                    <option value="-1" disabled selected>Selecionar</option>
+                                    <option value="1">Ensino Infantil</option>
+                                    <option value="2">Ensino Fundamental I</option>
+                                    <option value="3">Ensino Fundamental II</option>
+                                    <option value="4">Ensino Médio</option>
+                                    <option value="5">Formação para professores</option>
+                                    <option value="6">Educação especial</option>
+                                    <option value="7">Ensino Técnico</option>
+                                    <option value="8">Ensino Superior</option>
+                                    <option value="9">Fundamental II / Formação para professores / Ensino Médio / Ensino Técnico / Ensino Superior</option>
+                                    <option value="10">Fundamental II / Ensino Médio / Ensino Técnico / Ensino Superior</option>
+                                </select>
                             </div>
 
                             <div class="input-field">
                                 <label for="conteudo">Conteúdo</label>
-                                <div class="multiselect">
-                                    <div class="selectBox" onclick="showCheckboxes_conteudo()">
-                                        <select id="conteudo" class="closed">
-                                            <option disabled selected>Selecionar</option>
-                                        </select>
-                                        <div class="overSelect"></div>
-                                    </div>
-                                    <div id="checkboxes-conteudo" class="closed">
-                                        <label for="one">
-                                            <input type="checkbox" id="one" />Aprendizagem Significativa</label>
-                                        <label for="two">
-                                            <input type="checkbox" id="two" />Programação Orientada a Objetos</label>
-                                        <label for="three">
-                                            <input type="checkbox" id="three" />Ensino de Programação</label>
-                                        <label for="four">
-                                            <input type="checkbox" id="four" />Concreteness Fading</label>
-                                        <label for="five">
-                                            <input type="checkbox" id="five" />Revisão Sistemática</label>
-                                        <label for="six">
-                                            <input type="checkbox" id="six" />Pensamento Computacional</label>
-                                        <label for="seven">
-                                            <input type="checkbox" id="seven" />Oficina</label>
-                                        <label for="eight">
-                                            <input type="checkbox" id="eight" />Mapeamento Sistemático</label>
-                                        <label for="nine">
-                                            <input type="checkbox" id="five" />Teoria da Aprendizagem Significativa</label>
-                                        <label for="ten">
-                                            <input type="checkbox" id="ten" /> Direcionamento de grupos de PC</label>
-                                        <label for="eleven">
-                                            <input type="checkbox" id="eleven" />Construcionismo</label>
-                                        <label for="twelve">
-                                            <input type="checkbox" id="twelve" />Jogos Sérios</label>
-                                        <label for="thirteen">
-                                            <input type="checkbox" id="thirteen" />Jogos Educativos</label>
-                                        <label for="fourteen">
-                                            <input type="checkbox" id="fourteen" />Desing Participativo</label>
-                                        <label for="fiveteen">
-                                            <input type="checkbox" id="fiveteen" />PBL (Problem Based Learning)</label>
-                                        <label for="sixteen">
-                                            <input type="checkbox" id="sixteen" />PBL (Problem Based Learning)</label>
-                                        <label for="seventeen">
-                                            <input type="checkbox" id="seventeen" />RP (Robótica Pedagógica)</label>
-                                        <label for="eightteen">
-                                            <input type="checkbox" id="eightteen" />Toxicologia Ambiental</label>
-                                        <label for="nineteen">
-                                            <input type="checkbox" id="nineteen" />Outros</label>
-                                    </div>
-                                </div>
+                                <select id="conteudo">
+                                    <option value="-1" disabled selected>Selecionar</option>
+                                    <option value="Computação Física; ComFAPOO; Arduino; C++; Avaliações">Computação Física; ComFAPOO; Arduino; C++; Avaliações</option>
+                                    <option value="Computação “Desplugada” (CD); Jogos Digitais (JD); Linguagem de Programação (LP); Linguagem de Programação Visual (LPV); Robótica Pedagógica (RP)">Computação “Desplugada” (CD); Jogos Digitais (JD); Linguagem de Programação (LP); Linguagem de Programação Visual (LPV); Robótica Pedagógica (RP)</option>
+                                    <option value="Scratch; Code.Org; Era uma vez">Scratch; Code.Org; Era uma vez</option>
+                                    <option value="Computação Física; Arduino">Computação Física; Arduino</option>
+                                    <option value="Arduino; Makey Makey; Lego Mindstorms; LilyPad Arduino">Arduino; Makey Makey; Lego Mindstorms; LilyPad Arduino</option>
+                                    <option value="Computação Física; ComFAPOO">Computação Física; ComFAPOO</option>
+                                    <option value="Apresentação Gradativa; Jogos Digitais; Novas Linguagens; Mapas Conceituais; Metodologias Ativas; PBL;Recursos Multimídias; Robótica Pedagógicas; Scratch">Apresentação Gradativa; Jogos Digitais; Novas Linguagens; Mapas Conceituais; Metodologias Ativas; PBL;Recursos Multimídias; Robótica Pedagógicas; Scratch</option>
+                                    <option value="Arduino; Robotica; Plataformas Diversas, Atividades Desplugadas; Programação em Blocos">Arduino; Robotica; Plataformas Diversas, Atividades Desplugadas; Programação em Blocos</option>
+                                    <option value="Thinkertank; Unity; Linguagem C#">Thinkertank; Unity; Linguagem C#</option>
+                                    <option value="Gestão de projetos; PMBOK; Braindraw; Avaliação Heurística">Gestão de projetos; PMBOK; Braindraw; Avaliação Heurística</option>
+                                    <option value="Arduino; Gogo Board; Scratch; Robomid; Robocode">Arduino; Gogo Board; Scratch; Robomid; Robocode</option>
+                                    <option value="HTML5; Javascript">HTML5; Javascript</option>
+                                </select>
                             </div>
 
                             <div class="input-field">
                                 <label for="ferramenta">Ferramenta</label>
-                                <div class="multiselect">
-                                    <div class="selectBox" onclick="showCheckboxes_ferramenta()">
-                                        <select id="ferramenta" class="closed">
-                                            <option disabled selected>Selecionar</option>
-                                        </select>
-                                        <div class="overSelect"></div>
-                                    </div>
-                                    <div id="checkboxes-ferramenta" class="closed">
-                                        <label for="ferramenta1">
-                                            <input type="checkbox" id="ferramenta1" />Computação Física</label>
-                                        <label for="ferramenta2">
-                                            <input type="checkbox" id="ferramenta2" />ComFAPOO</label>
-                                        <label for="ferramenta3">
-                                            <input type="checkbox" id="ferramenta3" />Arduino</label>
-                                        <label for="ferramenta4">
-                                            <input type="checkbox" id="ferramenta4" />C++</label>
-                                        <label for="ferramenta5">
-                                            <input type="checkbox" id="ferramenta5" />Computação “Desplugada” (CD)</label>
-                                    </div>
-                                </div>
+                                <select id="ferramenta">
+                                    <option value="-1" disabled selected>Selecionar</option>
+                                    <option value="1">GNU</option>
+                                    <option value="2">Estilo BSD</option>
+                                    <option value="3">Papel e lápis</option>
+                                    <option value="4">Scratch</option>
+                                    <option value="5">App Inventor</option>
+                                    <option value="6">Computação Física</option>
+                                    <option value="7">HTML</option>
+                                    <option value="8">HTML / CSS</option>
+                                    <option value="9">Python</option>
+                                    <option value="10">Robótica Educacional</option>
+                                    <option value="11">Programação</option>
+                                    <option value="12">MIT</option>
+                                    <option value="13">Apache</option>
+                                    <option value="14">WTFPL</option>
+                                    <option value="15">Geogebra</option>
+                                    <option value="16">D. Público</option>
+                                    <option value="17">Não se aplica</option>
+                                    <option value="18">Beer License</option>
+                                    <option value="19">MirOS</option>
+                                    <option value="20">ISC</option>
+                                    <option value="21">EPL</option>
+                                    <option value="22">XSkat</option>
+                                    <option value="23">Computação Física; ComFAPOO; Arduino; C++; Avaliações</option>
+                                    <option value="24">Computação “Desplugada” (CD); Jogos Digitais (JD); Linguagem de Programação (LP); Linguagem de Programação Visual (LPV); Robótica Pedagógica (RP)</option>
+                                    <option value="25">Scratch; Code.Org; Era uma vez</option>
+                                    <option value="26">Computação Física; Arduino</option>
+                                    <option value="27">Arduino; Makey Makey; Lego Mindstorms; LilyPad Arduino</option>
+                                    <option value="28">Computação Física; ComFAPOO</option>
+                                    <option value="29">Apresentação Gradativa; Jogos Digitais; Novas Linguagens; Mapas Conceituais; Metodologias Ativas; PBL;Recursos Multimídias; Robótica Pedagógicas; Scratch</option>
+                                    <option value="30">Arduino; Robotica; Plataformas Diversas, Atividades Desplugadas; Programação em Blocos</option>
+                                    <option value="31">Thinkertank; Unity; Linguagem C#</option>
+                                    <option value="32">Gestão de projetos; PMBOK; Braindraw; Avaliação Heurística</option>
+                                    <option value="33">Arduino; Gogo Board; Scratch; Robomid; Robocode</option>
+                                    <option value="34">HTML5; Javascript</option>
+                                </select>
                             </div>
 
                             <div class="input-field">
                                 <label for="habilidade">Habilidade</label>
-                                <div class="multiselect">
-                                    <div class="selectBox" onclick="showCheckboxes_habilidade()">
-                                        <select id="habilidade" class="closed">
-                                            <option disabled selected>Selecionar</option>
-                                        </select>
-                                        <div class="overSelect"></div>
-                                    </div>
-                                    <div id="checkboxes-habilidade" class="closed">
-                                        <label for="habilidade1">
-                                            <input type="checkbox" id="habilidade1" />Resolução de problemas</label>
-                                        <label for="habilidade2">
-                                            <input type="checkbox" id="habilidade2" />Raciocínio Lógico</label>
-                                        <label for="habilidade3">
-                                            <input type="checkbox" id="habilidade3" />Criatividade</label>
-                                        <label for="habilidade4">
-                                            <input type="checkbox" id="habilidade4" />Colaboração</label>
-                                        <label for="habilidade5">
-                                            <input type="checkbox" id="habilidade5" />Programação</label>
-                                    </div>
-                                </div>
+                                <select id="habilidade">
+                                    <option value="-1" disabled selected>Selecionar</option>
+                                    <option value="1">Pensamento Lógico</option>
+                                    <option value="2">Criatividade</option>
+                                    <option value="3">Resolução de problemas</option>
+                                    <option value="4">Programação</option>
+                                    <option value="5">Não se aplica</option>
+                                    <option value="6">Raciocínio lógico</option>
+                                    <option value="7">Colaboração</option>
+                                    <option value="8">Conhecimento computacional</option>
+                                    <option value="9">Lógica</option>
+                                    <option value="10">Sustentabilidade</option>
+                                    <option value="11">Abstração</option>
+                                    <option value="12">Resolução de problemas / Raciocínio Lógico / Criatividade / Colaboração / Programação / Lógica / Conhecimento computacional</option>
+                                </select>
                             </div>
-                        </div>
                     </form>
                 </div>
             </div>

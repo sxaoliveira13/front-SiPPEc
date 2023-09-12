@@ -1,0 +1,13 @@
+Options -Indexes
+<filesMatch ".(htaccess|phps)$">
+  Deny from all
+</filesMatch>
+
+Header set Access-Control-Allow-Credentials "true"
+Header set Access-Control-Allow-Methods "GET,POST"
+Header set Access-Control-Allow-Origin "https://liag.ft.unicamp.br"
+Header set Vary "Origin"
+Header always edit Set-Cookie (.*) "$1; SameSite=none"
+
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule !.*\.php$ %{REQUEST_FILENAME}.php [QSA,L]

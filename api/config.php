@@ -38,4 +38,3 @@ $CFG['db_options'] = array(
 );
 
 $CFG['link'] = new PDO("mysql:host={$CFG['host_mysql']};dbname={$CFG['db']};charset=UTF8",  $CFG['user_mysql'], $CFG['pass_mysql'], $CFG['db_options']);
-

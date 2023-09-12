@@ -16,8 +16,6 @@ $CFG['access_token'] = '624879f5e6346c9cda0e80421d95a37c8626a2ee0a215e261be42e35
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <meta name="author" content="">
-    <meta name="description" content="">
     <meta name="theme-color" content="##ECF0F1">
     <title>Cadastro de conteúdos <?php if(!empty($pageName)){echo " - ".$pageName; } ?></title>
     <link rel="stylesheet" href="<?php echo $CFG['system_url'] ?>assets/css/style.css">

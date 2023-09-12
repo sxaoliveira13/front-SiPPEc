@@ -70,5 +70,5 @@ function hashPass($pass)
  * @return int $code
  */
 function error($msg,$code=999){
-    die(json_encode(array("success"=>true,"msg"=>$msg,"code"=>$code)));
+    die(json_encode(array("success"=>false,"msg"=>$msg,"code"=>$code)));
 }

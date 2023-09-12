@@ -63,3 +63,12 @@ function hashPass($pass)
     $pass = hash("sha512", $CFG['salt1'] . $pass . $CFG['salt2']);
     return $pass;
 }
+
+/**
+ * Return a error message and a code
+ * @param string $msg
+ * @return int $code
+ */
+function error($msg,$code=999){
+    die(json_encode(array("success"=>true,"msg"=>$msg,"code"=>$code)));
+}

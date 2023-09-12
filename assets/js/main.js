@@ -1,7 +1,7 @@
 const apiUrl = 'http://localhost/sippec/api';
 
 function newCatalog() {
-    fetch(`${apiUrl}/catalog/new.php`, {
+    fetch(`${apiUrl}/article/new.php`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

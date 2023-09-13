@@ -65,7 +65,7 @@ require(dirname(__FILE__) . '/includes/head.php');
 
                             <div class="input-field">
                                 <label for="conteudo">Conteúdo</label>
-                                <select id="conteudo">
+                                <select id="conteudo" name="conteudo">
                                     <option value="-1" disabled selected>Selecionar</option>
                                     <option value="Computação Física; ComFAPOO; Arduino; C++; Avaliações">Computação Física; ComFAPOO; Arduino; C++; Avaliações</option>
                                     <option value="Computação “Desplugada” (CD); Jogos Digitais (JD); Linguagem de Programação (LP); Linguagem de Programação Visual (LPV); Robótica Pedagógica (RP)">Computação “Desplugada” (CD); Jogos Digitais (JD); Linguagem de Programação (LP); Linguagem de Programação Visual (LPV); Robótica Pedagógica (RP)</option>
@@ -84,7 +84,7 @@ require(dirname(__FILE__) . '/includes/head.php');
 
                             <div class="input-field">
                                 <label for="ferramenta">Ferramenta</label>
-                                <select id="ferramenta">
+                                <select id="ferramenta" name="ferramenta">
                                     <option value="-1" disabled selected>Selecionar</option>
                                     <option value="1">GNU</option>
                                     <option value="2">Estilo BSD</option>
@@ -125,7 +125,7 @@ require(dirname(__FILE__) . '/includes/head.php');
 
                             <div class="input-field">
                                 <label for="habilidade">Habilidade</label>
-                                <select id="habilidade">
+                                <select id="habilidade" name="habilidade">
                                     <option value="-1" disabled selected>Selecionar</option>
                                     <option value="1">Pensamento Lógico</option>
                                     <option value="2">Criatividade</option>

@@ -23,7 +23,7 @@ require(dirname(__FILE__) . '/includes/head.php');
                 <a href="<?php echo $CFG['system_url'] . 'novos_jogos.php?t=' . $CFG['access_token'] ?>" class="menu-item btn btn-small">Registrar Jogos</a>
                 <a href="<?php echo $CFG['system_url'] . 'novos_metodos.php?t=' . $CFG['access_token'] ?>" class="menu-item btn btn-small">Registrar Métodos</a>
                 <div class="submit-container">
-                    <button id="btnSendArticle" type="button" class="btn btn-primary">Enviar</button>
+                    <button id="btnSendArticle" type="button" disabled class="btn btn-primary">Enviar</button>
                     <button class="btn btn-primary">Sair</button>
                 </div>
             </div>

@@ -77,7 +77,9 @@ async function newCatalog(data) {
         .then((resp) => {
             if (!resp['success']) {
                 alert(resp['msg']);
+                return;
             }
+            alert('Cadastro bem sucedido!');
         }).catch((err) => {
             alert('Erro desconhecido!');
         });

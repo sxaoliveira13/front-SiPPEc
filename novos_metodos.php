@@ -48,7 +48,7 @@ require(dirname(__FILE__) . '/includes/head.php');
                         <div class="dropdown-column">
                             <div class="input-field">
                                 <label for="publico">Públicos</label>
-                                <select id="publico">
+                                <select id="publico" name="publico">
                                     <option value="-1" disabled selected>Selecionar</option>
                                     <option value="1">Ensino Infantil</option>
                                     <option value="2">Ensino Fundamental I</option>

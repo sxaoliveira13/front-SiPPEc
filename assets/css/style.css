@@ -1,5 +1,4 @@
-/* Estilo geral */
-
+/* Reset de estilos para todos os elementos */
 *{
     margin: 0;
     padding: 0;
@@ -11,6 +10,7 @@ body {
     background-color: #ecf0f1;
 }
 
+/* Contêiner para o formulário */
 .container {
     display: flex;
     justify-content: center;
@@ -24,18 +24,26 @@ body {
     align-items: center;
 }
 
-
-    .submit-container {
-        position: static;
-        bottom: auto;
-        left: auto;
-        transform: none;
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        margin-top: auto;
-    }
-
+/* parte dos botoes enviar e sair */
+.submit-container {
+    position: static;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: auto;
+}
+/* Remover a seta dos selects */
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: none;
+    background-color: #fff; /* Cor de fundo do select */
+    padding-right: 30px; /* Espaço para a seta */
+}
 
 .content {
     display: flex;
@@ -165,14 +173,6 @@ a {
     color: #333;
 }
 
-.dropdown-column {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-    margin-top: 40px;
-}
-
 /* Estilos para o select */
 .dropdown-column select {
     width: 100%;
@@ -206,103 +206,15 @@ border-radius: 5px;
 font-size: 16px;
 }
 
-.content-column button {
-    align-self: flex-end;
-    width: 100%;
-}
 
-/* Estilos para o multiselect */
-.multiselect {
-    width: 200px;
-    position: relative;
-}
 
-.selectBox {
-    position: relative;
-    cursor: pointer;
-}
 
-.selectBox select {
-    width: 100%;
-    font-weight: bold;
-    margin: 5px 0;
-    border-radius: 5px;
-    height: 40px;
-    background-color: #fff;
-    color: #333;
-}
 
-.selectBox select:focus {
-    outline: none;
-    border: 1px solid #023047;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
 
-.overSelect {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    border-radius: 5px;
-}
 
-.two-fields {
-    display: flex;
-    flex-direction: row;
-}
 
-.two-fields label,
-.two-fields select {
-    width: 100%;
-}
 
-/* Estilos para as opções do multiselect */
-#checkboxes-publico,
-#checkboxes-conteudo,
-#checkboxes-ferramenta,
-#checkboxes-habilidade {
-display: block;
-border: 1px #dadada solid;
-background-color: #fff;
-z-index: 1;
-top: 40px;
-left: 0;
-right: 0;
-max-height: 200px;
-overflow-y: auto;
-width: 100%;
-position: absolute;
-}
 
-#checkboxes-publico label,
-#checkboxes-conteudo label,
-#checkboxes-ferramenta label,
-#checkboxes-habilidade label {
-position: relative;
-padding: 10px 40px 10px 30px;
-font-size: 16px;
-color: #333;
-display: inline-block;
-width: 100%;
-text-align: center;
-}
-
-#checkboxes-publico label:hover,
-#checkboxes-conteudo label:hover,
-#checkboxes-ferramenta label:hover,
-#checkboxes-habilidade label:hover {
-background-color: #FFB703;
-cursor: pointer;
-width: 100%;
-}
-
-#checkboxes-publico.closed,
-#checkboxes-conteudo.closed,
-#checkboxes-ferramenta.closed,
-#checkboxes-habilidade.closed {
-display: none;
-}
 
 /* Media queries */
 @media screen and (max-width: 768px) {
@@ -314,19 +226,6 @@ display: none;
         height: auto;
         box-shadow: none;
     }
-    .side-column{
-        flex-direction: row;
-        align-items: center;
-        margin-top: 40%;
-        border-radius: 0;
-        gap: 5px;
-    }
-    .submit-container {
-        flex-direction: column;
-        align-items: center; 
-        margin-top: 40px; 
-        gap: 10px; 
-    }
     .logo{
         max-width: 80px;
     }
@@ -336,7 +235,7 @@ display: none;
     }
     .content-column form.two-column-form {
         flex-direction: column;
-        gap: 2px;
+        gap: 5px;
     }
     .title {
         font-size: 24px;

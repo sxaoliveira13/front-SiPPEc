@@ -32,20 +32,9 @@ require(dirname(__FILE__) . '/includes/head.php');
                                 <input type="text" id="titulo" name="titulo" required placeholder="Digite o título do conteúdo">
                             </div>
                             <div class="input-field">
-                                <label for="email">Email para contato:</label>
-                                <input type="email" id="email" name="email" required placeholder="exemplo@gmail.com">
+                                <label for="link">Link de acesso</label>
+                                <input type="url" id="link" name="link" required placeholder="Link para acesso ao conteúdo">
                             </div>
-                            <div class="input-field">
-                                <label for="link">Link de acesso ao conteúdo:</label>
-                                <input type="url" id="link" name="link" required placeholder="Cole o link de acesso ao conteúdo">
-                            </div>
-                            <div class="input-field">
-                                <label for="autor">Nome do autor do conteúdo:</label>
-                                <input type="text" id="autor" name="autor" required placeholder="Digite o nome do autor">
-                            </div>
-                        </div>
-
-                        <div class="dropdown-column">
                             <div class="input-field">
                                 <label for="publico">Públicos</label>
                                 <select id="publico" name="publico">
@@ -62,25 +51,18 @@ require(dirname(__FILE__) . '/includes/head.php');
                                     <option value="10">Fundamental II / Ensino Médio / Ensino Técnico / Ensino Superior</option>
                                 </select>
                             </div>
-
                             <div class="input-field">
-                                <label for="conteudo">Conteúdo</label>
-                                <select id="conteudo" name="conteudo">
-                                    <option value="-1" disabled selected>Selecionar</option>
-                                    <option value="Computação Física; ComFAPOO; Arduino; C++; Avaliações">Computação Física; ComFAPOO; Arduino; C++; Avaliações</option>
-                                    <option value="Computação “Desplugada” (CD); Jogos Digitais (JD); Linguagem de Programação (LP); Linguagem de Programação Visual (LPV); Robótica Pedagógica (RP)">Computação “Desplugada” (CD); Jogos Digitais (JD); Linguagem de Programação (LP); Linguagem de Programação Visual (LPV); Robótica Pedagógica (RP)</option>
-                                    <option value="Scratch; Code.Org; Era uma vez">Scratch; Code.Org; Era uma vez</option>
-                                    <option value="Computação Física; Arduino">Computação Física; Arduino</option>
-                                    <option value="Arduino; Makey Makey; Lego Mindstorms; LilyPad Arduino">Arduino; Makey Makey; Lego Mindstorms; LilyPad Arduino</option>
-                                    <option value="Computação Física; ComFAPOO">Computação Física; ComFAPOO</option>
-                                    <option value="Apresentação Gradativa; Jogos Digitais; Novas Linguagens; Mapas Conceituais; Metodologias Ativas; PBL;Recursos Multimídias; Robótica Pedagógicas; Scratch">Apresentação Gradativa; Jogos Digitais; Novas Linguagens; Mapas Conceituais; Metodologias Ativas; PBL;Recursos Multimídias; Robótica Pedagógicas; Scratch</option>
-                                    <option value="Arduino; Robotica; Plataformas Diversas, Atividades Desplugadas; Programação em Blocos">Arduino; Robotica; Plataformas Diversas, Atividades Desplugadas; Programação em Blocos</option>
-                                    <option value="Thinkertank; Unity; Linguagem C#">Thinkertank; Unity; Linguagem C#</option>
-                                    <option value="Gestão de projetos; PMBOK; Braindraw; Avaliação Heurística">Gestão de projetos; PMBOK; Braindraw; Avaliação Heurística</option>
-                                    <option value="Arduino; Gogo Board; Scratch; Robomid; Robocode">Arduino; Gogo Board; Scratch; Robomid; Robocode</option>
-                                    <option value="HTML5; Javascript">HTML5; Javascript</option>
-                                </select>
-                            </div>
+                                    <label for="ambiente">Ambiente</label>
+                                    <select id="ambiente" class="two-selects" name="ambiente">
+                                        <option disabled selected>Selecionar</option>
+                                        <option value="Extracurricular">Extracurricular</option>
+                                        <option value="Intracurricular">Intracurricular</option>
+                                    </select>
+                                </div>
+                        </div>
+
+                        <div class="form-column">
+                           
 
                             <div class="input-field">
                                 <label for="ferramenta">Ferramenta</label>
@@ -141,16 +123,26 @@ require(dirname(__FILE__) . '/includes/head.php');
                                     <option value="12">Resolução de problemas / Raciocínio Lógico / Criatividade / Colaboração / Programação / Lógica / Conhecimento computacional</option>
                                 </select>
                             </div>
-
-                            <div class="input-fields-container">
-                                <div class="input-field">
-                                    <label for="ambiente">Ambiente</label>
-                                    <select id="ambiente" class="two-selects" name="ambiente">
-                                        <option disabled selected>Selecionar</option>
-                                        <option value="Extracurricular">Extracurricular</option>
-                                        <option value="Intracurricular">Intracurricular</option>
-                                    </select>
-                                </div>
+                            <div class="input-field">
+                                <label for="conteudo">Conteúdo</label>
+                                <select id="conteudo" name="conteudo">
+                                    <option value="-1" disabled selected>Selecionar</option>
+                                    <option value="Computação Física; ComFAPOO; Arduino; C++; Avaliações">Computação Física; ComFAPOO; Arduino; C++; Avaliações</option>
+                                    <option value="Computação “Desplugada” (CD); Jogos Digitais (JD); Linguagem de Programação (LP); Linguagem de Programação Visual (LPV); Robótica Pedagógica (RP)">Computação “Desplugada” (CD); Jogos Digitais (JD); Linguagem de Programação (LP); Linguagem de Programação Visual (LPV); Robótica Pedagógica (RP)</option>
+                                    <option value="Scratch; Code.Org; Era uma vez">Scratch; Code.Org; Era uma vez</option>
+                                    <option value="Computação Física; Arduino">Computação Física; Arduino</option>
+                                    <option value="Arduino; Makey Makey; Lego Mindstorms; LilyPad Arduino">Arduino; Makey Makey; Lego Mindstorms; LilyPad Arduino</option>
+                                    <option value="Computação Física; ComFAPOO">Computação Física; ComFAPOO</option>
+                                    <option value="Apresentação Gradativa; Jogos Digitais; Novas Linguagens; Mapas Conceituais; Metodologias Ativas; PBL;Recursos Multimídias; Robótica Pedagógicas; Scratch">Apresentação Gradativa; Jogos Digitais; Novas Linguagens; Mapas Conceituais; Metodologias Ativas; PBL;Recursos Multimídias; Robótica Pedagógicas; Scratch</option>
+                                    <option value="Arduino; Robotica; Plataformas Diversas, Atividades Desplugadas; Programação em Blocos">Arduino; Robotica; Plataformas Diversas, Atividades Desplugadas; Programação em Blocos</option>
+                                    <option value="Thinkertank; Unity; Linguagem C#">Thinkertank; Unity; Linguagem C#</option>
+                                    <option value="Gestão de projetos; PMBOK; Braindraw; Avaliação Heurística">Gestão de projetos; PMBOK; Braindraw; Avaliação Heurística</option>
+                                    <option value="Arduino; Gogo Board; Scratch; Robomid; Robocode">Arduino; Gogo Board; Scratch; Robomid; Robocode</option>
+                                    <option value="HTML5; Javascript">HTML5; Javascript</option>
+                                </select>
+                            </div>
+                          
+                                
 
                                 <div class="input-field">
                                     <label for="abordagem">Abordagem</label>
@@ -161,7 +153,7 @@ require(dirname(__FILE__) . '/includes/head.php');
                                         <option value="Construtivista">Construtivista</option>
                                     </select>
                                 </div>
-                            </div>
+                            
 
 
                     </form>

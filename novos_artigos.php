@@ -38,20 +38,9 @@ require(dirname(__FILE__) . '/includes/head.php');
                                 <input type="text" id="titulo" name="titulo" required placeholder="Digite o título do conteúdo">
                             </div>
                             <div class="input-field">
-                                <label for="email">Email para contato:</label>
-                                <input type="email" id="email" name="email" required placeholder="exemplo@gmail.com">
+                                <label for="link">Link de acesso</label>
+                                <input type="url" id="link" name="link" required placeholder="Link para acesso ao conteúdo">
                             </div>
-                            <div class="input-field">
-                                <label for="link">Link de acesso ao conteúdo:</label>
-                                <input type="url" id="link" name="link" required placeholder="Cole o link de acesso ao conteúdo">
-                            </div>
-                            <div class="input-field">
-                                <label for="autor">Nome do autor do conteúdo:</label>
-                                <input type="text" id="autor" name="autor" required placeholder="Digite o nome do autor">
-                            </div>
-                        </div>
-
-                        <div class="dropdown-column">
                             <div class="input-field">
                                 <label for="publico">Públicos</label>
                                 <select id="publico" name="publico">
@@ -68,7 +57,9 @@ require(dirname(__FILE__) . '/includes/head.php');
                                     <option value="10">Fundamental II / Ensino Médio / Ensino Técnico / Ensino Superior</option>
                                 </select>
                             </div>
+                        </div>
 
+                        <div class="form-column">
                             <div class="input-field">
                                 <label for="conteudo">Conteúdo</label>
                                 <select id="conteudo" name="conteudo">
@@ -147,6 +138,7 @@ require(dirname(__FILE__) . '/includes/head.php');
                                     <option value="12">Resolução de problemas / Raciocínio Lógico / Criatividade / Colaboração / Programação / Lógica / Conhecimento computacional</option>
                                 </select>
                             </div>
+                        </div>
                     </form>
                 </div>
             </div>

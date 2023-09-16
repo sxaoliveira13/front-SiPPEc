@@ -56,7 +56,8 @@ function inputIsValid(input) {
         }
         case 'select-one': {
             if (input.value === '-1') {
-                alert('fazer com que apareça uma mensagem dizendo para selecionar alguma opção');
+                //Exibir mensagem avisando que o select está inválido
+                alert('Selecione uma opção para o campo ' + input.name);
                 return false;
             }
             break;

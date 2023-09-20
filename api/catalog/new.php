@@ -7,12 +7,12 @@ require_once("../functions.php");
 header('Content-Type: application/json; charset=utf-8');
 
 //Saída de dados
-$out = array('success' => true, 'data' => array());
+$out = array('success' => true);
 
 //Se não for um POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
-    error('Método de requisição inválido', 1);
+    error('Método de requisição inválido');
 }
 
 //Obtendo dados enviados via POST

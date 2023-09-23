@@ -7,7 +7,7 @@ if (!isset($_GET['t']) || $_GET['t'] !== hash('sha256', 'sippectoken')) {
 $pageName = 'Jogos';
 require(dirname(__FILE__) . '/includes/head.php');
 ?>
-
+<link rel="stylesheet" href="<?php echo $CFG['system_url'] ?>assets/css/forms.css">
 <body>
     <div class="container">
         <div class="content">

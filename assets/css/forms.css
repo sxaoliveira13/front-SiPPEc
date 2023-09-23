@@ -1,5 +1,5 @@
 /* Reset de estilos para todos os elementos */
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -35,14 +35,17 @@ body {
     gap: 10px;
     margin-top: auto;
 }
+
 /* Remover a seta dos selects */
 select {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
     background-image: none;
-    background-color: #fff; /* Cor de fundo do select */
-    padding-right: 30px; /* Espaço para a seta */
+    background-color: #fff;
+    /* Cor de fundo do select */
+    padding-right: 30px;
+    /* Espaço para a seta */
 }
 
 .content {
@@ -72,7 +75,7 @@ select {
     max-width: 200px;
     margin-bottom: 30px;
 }
-    
+
 .menu-item {
     font-size: 18px;
     margin-bottom: 10px;
@@ -84,14 +87,15 @@ select {
 a {
     text-decoration: none;
 }
-    
+
 #atual {
     background-color: #FFB703;
 }
 
 /* Estilos para o botão de logout */
 .logout-btn {
-    margin-top: 20px; /* Adicione um espaço entre os botões do menu e o botão de logout */
+    margin-top: 20px;
+    /* Adicione um espaço entre os botões do menu e o botão de logout */
     border: none;
     background-color: #023047;
     color: #fff;
@@ -112,7 +116,7 @@ a {
     padding: 20px;
     flex: 1;
 }
-    
+
 .title {
     font-size: 28px;
     font-weight: bold;
@@ -140,10 +144,10 @@ a {
     background-color: #023047;
     color: #fff;
     padding: 10px 20px;
-    text-align: center;  
+    text-align: center;
 
 }
-    
+
 .menu-item.btn:hover {
     background-color: #FFB703;
 }
@@ -188,64 +192,59 @@ a {
     width: 300px;
 }
 
-    
 .input-field {
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
 }
 
-
 .content-column input,
 .form-column select {
-width: 100%;
-padding: 10px;
-margin-bottom: 10px;
-border: 1px solid #ccc;
-border-radius: 5px;
-font-size: 16px;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
 }
-
-
-
-
-
-
-
-
-
-
 
 /* Media queries */
 @media screen and (max-width: 768px) {
     body {
-    font-size: 16px;
+        font-size: 16px;
     }
+
     .content {
         flex-direction: column;
         height: auto;
         box-shadow: none;
     }
-    .logo{
+
+    .logo {
         max-width: 80px;
     }
+
     .form-container {
         width: 100%;
         height: auto;
     }
+
     .content-column form.two-column-form {
         flex-direction: column;
         gap: 5px;
     }
+
     .title {
         font-size: 24px;
     }
+
     .form-column {
         margin: 5px;
     }
-    .menu-item.btn{
-        text-align: center;  
+
+    .menu-item.btn {
+        text-align: center;
         font-size: 10px;
     }
-    
+
 }

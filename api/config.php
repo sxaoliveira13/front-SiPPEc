@@ -28,6 +28,8 @@ if ($_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '127.0.0.
     $CFG['db'] = 'liag';
 }
 
+$CFG['sessionValidity']= 3600 * 24 * 15; //15 days
+
 //Salts para fortalecer as senhas
 $CFG['salt0'] = '9tkvNCFzmS4lCjtK0HvV9Y';
 $CFG['salt1'] = 'z1w3jfk50kK0HKRkBGhubT';

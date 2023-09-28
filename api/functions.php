@@ -151,16 +151,17 @@ function checkToken($tokenCookie)
     
             $stmt->bindParam(':tokenId', $tokenId, PDO::PARAM_INT);
             $stmt->bindParam(':tokenCookie', hashPass($tokenCookie), PDO::PARAM_STR);
-    
+            $stmt->execute();
+            
             $rs = $stmt->fetch(PDO::FETCH_ASSOC);
             $stmt = null;
 
             if (empty($rs['userId'])) {
                 forceRedirect("login.php");
             }
-            if (!(strtotime($rs['tokenValidity']) <= time())) {
-                forceRedirect("login.php");
+            if (strtotime($rs['tokenValidity']) >= time()) {
                 unsetcookie('userToken');
+                forceRedirect("login.php");
             }
         } catch(Exception $e) {
             error('Falha ao tentar verificar token de acesso!');

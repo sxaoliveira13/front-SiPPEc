@@ -33,7 +33,6 @@ try {
     }
 
     $userId = (int)$rs['userId'];
-
 } catch (PDOException $e) {
     error('Falha ao tentar logar!');
 } catch (Exception $e) {

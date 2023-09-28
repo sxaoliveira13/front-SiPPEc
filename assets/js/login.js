@@ -5,10 +5,9 @@ window.addEventListener('DOMContentLoaded', () => {
 })
 
 async function sendLogin(btn) {
-    data = {}
+    data = {};
     data['userLogin'] = document.forms['loginForm']['userLogin'].value;
     data['userPassword'] = document.forms['loginForm']['userPassword'].value;
-    /* validação */
     btn.disabled = true;
     btn.textContent = 'CARREGANDO...';
     await verifyLogin(data);
@@ -29,7 +28,7 @@ async function verifyLogin(data) {
                 alert(resp['msg']);
                 return;
             }
-            alert('Login bem sucedido!');
+            //Redirecionar para a página do formulário
         }).catch((err) => {
             alert(err);
         });

@@ -1,24 +1,38 @@
 <?php
-if (!isset($_GET['t']) || $_GET['t'] !== hash('sha256', 'sippectoken')) {
-    header("Location: https://liag.ft.unicamp.br/act/");
-    die();
-}
+
+require_once("api/config.php");
+require_once("api/functions.php");
 
 $pageName = 'Métodos';
+
+if(!isset($_COOKIE['userToken'])) {
+    header("Location: login.php");
+    exit;
+}
+
+$USERDATA = checkToken($_COOKIE['userToken'] ?? []);
+
+if (empty($USERDATA)) {
+    header("Location: login.php");
+    exit;
+}
+
 require(dirname(__FILE__) . '/includes/head.php');
 ?>
 <link rel="stylesheet" href="<?php echo $CFG['system_url'] ?>assets/css/forms.css">
+<script>const userData = <?php echo json_encode($USERDATA); ?></script>
+
 <body>
     <div class="container">
         <div class="content">
             <div class="side-column">
                 <img src="<?php echo $CFG['system_url'] . 'assets/img/logo completo sem fundo.png' ?>" class="logo">
-                <a href="<?php echo $CFG['system_url'] . 'novos_artigos.php?t=' . $CFG['access_token'] ?>" class="menu-item btn btn-small">Registrar Artigos</a>
-                <a href="<?php echo $CFG['system_url'] . 'novos_jogos.php?t=' . $CFG['access_token'] ?>" class="menu-item btn btn-small">Registrar Jogos</a>
-                <a href="<?php echo $CFG['system_url'] . 'novos_metodos.php?t=' . $CFG['access_token'] ?>" class="menu-item btn btn-small" id="atual">Registrar Métodos</a>
+                <a href="<?php echo $CFG['system_url'] . 'novos_artigos.php' ?>" class="menu-item btn btn-small">Registrar Artigos</a>
+                <a href="<?php echo $CFG['system_url'] . 'novos_jogos.php' ?>" class="menu-item btn btn-small">Registrar Jogos</a>
+                <a href="<?php echo $CFG['system_url'] . 'novos_metodos.php' ?>" class="menu-item btn btn-small" id="atual">Registrar Métodos</a>
                 <div class="submit-container">
                     <button id="btnSendMethod" type="button" class="btn btn-primary">Enviar</button>
-                    <button class="btn btn-primary">Sair</button>
+                    <button id="btnLogout" class="btn btn-primary">Sair</button>
                 </div>
             </div>
 

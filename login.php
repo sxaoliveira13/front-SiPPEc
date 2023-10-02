@@ -1,10 +1,18 @@
 <?php
-if (!isset($_GET['t']) || $_GET['t'] !== hash('sha256', 'sippectoken')) {
-    header("Location: https://liag.ft.unicamp.br/act/");
-    die();
-}
+
+require_once("api/config.php");
+require_once("api/functions.php");
 
 $pageName = 'Login';
+
+if(isset($_COOKIE['userToken'])) {
+    $USERDATA = checkToken($_COOKIE['userToken'] ?? []);
+    if (!empty($USERDATA)) {
+        header("Location: novos_artigos.php");
+        exit;
+    }
+}
+
 require(dirname(__FILE__) . '/includes/head.php');
 ?>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -14,7 +22,7 @@ require(dirname(__FILE__) . '/includes/head.php');
 <body>
     <?php require(dirname(__FILE__) . '/includes/navbar.php'); ?>
     <div id="login">
-        <form id="loginForm" class="card">
+        <form id="login-form" class="card">
             <div class="card-header">
                 <h2>Login</h2>
                 <h4>Apenas para administradores!</h4>
@@ -22,11 +30,11 @@ require(dirname(__FILE__) . '/includes/head.php');
             <div class="card-content">
                 <div class="card-content-area">
                     <label for="userLogin">Usuário</label>
-                    <input type="text" id="userLogin" autocomplete="off">
+                    <input type="text" name="userLogin" id="userLogin" autocomplete="off">
                 </div>
                 <div class="card-content-area">
                     <label for="userPassword">Senha</label>
-                    <input type="password" id="userPassword" autocomplete="off">
+                    <input type="password" name="userPassword" id="userPassword" autocomplete="off">
                 </div>
             </div>
             <div class="card-footer">

@@ -23,11 +23,6 @@ function sanitize($string, string $type = "default")
                 $string = htmlspecialchars($string, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
                 return $string;
             }
-        case ("url"): {
-                $string = preg_replace("/[^A-Za-z0-9\&\/\\\.\?\=?!]/", '', $string);
-                $string = str_replace("..", ".", $string);
-                return str_replace("..", ".", $string);
-            }
     }
     return "";
 }
@@ -39,7 +34,7 @@ function sanitize($string, string $type = "default")
 function forceRedirect($location)
 {
     global $CFG;
-    $url = $CFG['system_url'] . sanitize($location, "url");
+    $url = $CFG['system_url'] . $location;
     if (!headers_sent()) {
         header("location: {$url}");
     } else {
@@ -111,6 +106,14 @@ function error($msg, $code = 999)
     die(json_encode(array("success" => false, "msg" => $msg, "code" => $code)));
 }
 
+/**
+ * Remove a specific cookie by key
+ * @param string $key
+ * @param string $path
+ * @param string $domain
+ * @param bool $secure
+ * @return bool
+ */
 function unsetcookie($key, $path = '', $domain = '', $secure = true)
 {
     if (array_key_exists($key, $_COOKIE)) {
@@ -124,49 +127,75 @@ function unsetcookie($key, $path = '', $domain = '', $secure = true)
     return true;
 }
 
+/**
+ * Check the validity of a user token in the database
+ * @param string $tokenCookie 
+ * @return array|void 
+ */
 function checkToken($tokenCookie)
 {
     global $CFG;
     if (empty($tokenCookie)) {
-        forceRedirect("login.php");
+        return;
     }
     $token = @explode('_', $tokenCookie);
     $tokenId = 0;
     if (count($token) != 2) {
-        $tokenCookie = "";
+        return;
     } else {
-        $tokenCookie = sanitize($token[1], "alphaNum");
+        $tokenCookie = $token[1];
         $tokenId = (int)$token[0];
         if (empty($tokenId)) {
-            $tokenCookie = "";
+            return;
         }
     }
-    if (empty($tokenCookie)) {
-        forceRedirect("login.php");
-    } else {
-        try {
-            $sql = "select u.userId, u.userLogin, uT.userId, uT.tokenKey, uT.tokenValidity from actUserToken uT join actUser u on u.userId = uT.userId where uT.tokenId = :tokenId and uT.tokenKey = :tokenCookie";
+    try {
+        $sql = "select u.userId, u.userLogin, uT.tokenId, uT.userId, uT.tokenKey, uT.tokenValidity from actUserToken uT join actUser u on u.userId = uT.userId where uT.tokenId = :tokenId and uT.tokenKey = :tokenCookie";
 
-            $stmt = $CFG['link']->prepare($sql);
-    
-            $stmt->bindParam(':tokenId', $tokenId, PDO::PARAM_INT);
-            $stmt->bindParam(':tokenCookie', hashPass($tokenCookie), PDO::PARAM_STR);
-            $stmt->execute();
-            
-            $rs = $stmt->fetch(PDO::FETCH_ASSOC);
-            $stmt = null;
+        $stmt = $CFG['link']->prepare($sql);
 
-            if (empty($rs['userId'])) {
-                forceRedirect("login.php");
-            }
-            if (strtotime($rs['tokenValidity']) >= time()) {
-                unsetcookie('userToken');
-                forceRedirect("login.php");
-            }
-        } catch(Exception $e) {
-            error('Falha ao tentar verificar token de acesso!');
+        $tokenCookie = hashPass($tokenCookie);
+
+        $stmt->bindParam(':tokenId', $tokenId, PDO::PARAM_INT);
+        $stmt->bindParam(':tokenCookie', $tokenCookie, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $rs = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt = null;
+
+        if (empty($rs['userId'])) {
+            return;
         }
+        if (strtotime($rs['tokenValidity']) <= time()) {
+            deleteUserToken((int)$rs['tokenId']);
+            unsetcookie('userToken');
+            return;
+        }
+    } catch (Exception $e) {
+        return;
+    }
 
-        return array('userId' => $rs['userId'], 'userLogin' => $rs['userLogin']);
+    return array('userId' => $rs['userId'], 'userLogin' => $rs['userLogin']);
+}
+
+/**
+ * Deletes a user token from the database
+ * @param int $tokenId
+ * @return void
+ */
+function deleteUserToken($tokenId)
+{
+    global $CFG;
+    try {
+        $sql = "DELETE FROM actUserToken WHERE tokenId = :tokenId";
+        $stmt = $CFG['link']->prepare($sql);
+        $stmt->bindParam(':tokenId', $tokenId, PDO::PARAM_INT);
+        $success = $stmt->execute();
+
+        if (!$success) {
+            throw new Exception("Falha ao excluir o token de usuário.");
+        }
+    } catch (Exception $e) {
+        return;
     }
 }

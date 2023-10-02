@@ -5,9 +5,7 @@ window.addEventListener('DOMContentLoaded', () => {
 })
 
 async function sendLogin(btn) {
-    data = {};
-    data['userLogin'] = document.forms['loginForm']['userLogin'].value;
-    data['userPassword'] = document.forms['loginForm']['userPassword'].value;
+    const data = getFormData('login-form');
     btn.disabled = true;
     btn.textContent = 'CARREGANDO...';
     await verifyLogin(data);
@@ -16,7 +14,7 @@ async function sendLogin(btn) {
 }
 
 async function verifyLogin(data) {
-     fetch(`${apiUrl}/user/login.php`, {
+    fetch(`${apiUrl}/user/login.php`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -28,7 +26,8 @@ async function verifyLogin(data) {
                 alert(resp['msg']);
                 return;
             }
-            //Redirecionar para a página do formulário
+            window.location.href = `${systemUrl}novos_artigos.php`;
+            return;
         }).catch((err) => {
             alert(err);
         });

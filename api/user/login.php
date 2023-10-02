@@ -4,7 +4,7 @@ require_once("../config.php");
 require_once("../functions.php");
 
 header('Content-Type: application/json; charset=utf-8');
-$out = array('success' => true);
+$out = array('success' => true, 'data' => []);
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -19,7 +19,7 @@ $userPassword = hashPass($data['userPassword']);
 $userId = 0;
 
 try {
-    $sql = "select userId from actUser where userLogin = :userLogin and userPassword = :userPassword";
+    $sql = "select userId, userLogin from actUser where userLogin = :userLogin and userPassword = :userPassword";
     $stmt = $CFG['link']->prepare($sql);
 
     $stmt->bindParam(':userLogin', $userLogin, PDO::PARAM_STR);
@@ -33,6 +33,7 @@ try {
     }
 
     $userId = (int)$rs['userId'];
+    $out['data']['userLogin'] = $rs['userLogin'];
 } catch (PDOException $e) {
     error('Falha ao tentar logar!');
 } catch (Exception $e) {

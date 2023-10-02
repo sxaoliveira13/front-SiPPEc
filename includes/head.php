@@ -8,8 +8,6 @@ if ($_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '127.0.0.
     $CFG['system_url'] = 'https://liag.ft.unicamp.br/act-sistema/sippec/';
 }
 
-$CFG['access_token'] = '624879f5e6346c9cda0e80421d95a37c8626a2ee0a215e261be42e355390100d';
-
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -19,4 +17,5 @@ $CFG['access_token'] = '624879f5e6346c9cda0e80421d95a37c8626a2ee0a215e261be42e35
     <meta name="theme-color" content="##ECF0F1">
     <title>Cadastro de conteúdos <?php if(!empty($pageName)){echo " - ".$pageName; } ?></title>
     <script src="<?php echo $CFG['system_url'] ?>assets/js/main.js"></script>
+    <script>const systemUrl = '<?php echo $CFG['system_url'] ?>';</script>
 </head>

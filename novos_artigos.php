@@ -37,7 +37,7 @@ require(dirname(__FILE__) . '/includes/head.php');
                 <a href="<?php echo $CFG['system_url'] . 'novos_jogos.php' ?>" class="menu-item btn btn-small">Registrar Jogos</a>
                 <a href="<?php echo $CFG['system_url'] . 'novos_metodos.php' ?>" class="menu-item btn btn-small">Registrar Métodos</a>
                 <div class="submit-container">
-                    <button id="btnSendArticle" type="button" disabled class="btn btn-primary">Enviar</button>
+                    <button id="btnSendArticle" type="button" class="btn btn-primary">Enviar</button>
                     <button id="btnLogout" class="btn btn-primary">Sair</button>
                 </div>
             </div>

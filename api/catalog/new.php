@@ -42,7 +42,7 @@ try {
 } catch (PDOException $e) {
     error('Falha ao tentar cadastrar!');
 } catch (Exception $e) {
-    error('Erro desconhecido!');
+    error($e->getMessage());
 }
 
 //Resposta do servidor

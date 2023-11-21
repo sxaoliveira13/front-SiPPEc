@@ -3,7 +3,10 @@
 require_once("./config.php");
 require_once("./functions.php");
 
-header('Content-Type: application/json; charset=utf-8');
+if(!isset($_COOKIE['userToken'])) {
+    header("Location: login.php");
+    exit;
+}
 
 $json = file_get_contents('php://input');
 $data = json_decode($json, true);

@@ -2,6 +2,9 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById("userName").textContent = userData.userName;
     handleButtonsAndInputs();
 
+    document.getElementById('editCatalogModal').addEventListener('hidden.bs.modal', function () {
+        document.getElementById("catalogDeleteInput").value = "";
+    });
 });
 
 function handleButtonsAndInputs() {
@@ -42,8 +45,6 @@ function handleButtonsAndInputs() {
 var catalogs = {};
 fetchUserCatalogs();
 async function fetchUserCatalogs() {
-    document.getElementById("catalogListLoader")?.classList.add("d-none");
-
     fetch(`${apiUrl}/catalog/get.php`, {
         method: 'POST',
         headers: {
@@ -55,17 +56,16 @@ async function fetchUserCatalogs() {
             await locks['onload'];
 
             if (!resp['success']) {
-                alert(resp['msg']);
+                error("Erro ao buscar catálogos!");
                 return;
             }
 
             setTimeout(() => {
                 document.getElementById("catalogsQuantity").textContent = resp['data'].length;
-                document.getElementById("catalogListLoader").classList.add("d-none");
                 buildCatalogsList(resp['data']);
             }, 700);
         }).catch((err) => {
-            alert('Erro desconhecido!');
+            error("Erro ao buscar catálogos!");
         });
 }
 
@@ -129,10 +129,10 @@ function buildEditModalFields(catalogId) {
 async function updateCatalog(btn) {
     const data = getFormData("editCatalogForm");
 
-    if (typeof data === "undefined") {
-        alert("Preencha todos os campos");
-        return;
-    }
+    // if (typeof data === "undefined") {
+    //     warning("Preencha todos os campos!");
+    //     return;
+    // }
 
     if (data['categoryId'] != "2") {
         data['ambiente'] = null;
@@ -154,30 +154,33 @@ async function updateCatalog(btn) {
         .then((resp) => {
             btn.disabled = false;
             btn.textContent = 'Salvar Alterações';
+
             if (!resp['success']) {
-                alert(resp['msg']);
+                error("Erro ao tentar atualizar catálogo!");
                 return;
             }
+
             document.getElementById(`catalogTitle-${data['catalogId']}`).textContent = data['titulo'];
-            alert('Atualização bem sucedida!');
+            success('Atualização bem sucedida!');
         }).catch((err) => {
             btn.disabled = false;
             btn.textContent = 'Salvar Alterações';
-            alert('Erro desconhecido!');
+            error("Erro ao tentar atualizar catálogo!");
         });
 }
 
 async function insertCatalog(formId, categoryId, btn) {
     const data = getFormData(formId);
 
-    if (typeof data === "undefined") {
-        alert("Preencha todos os campos");
-        return;
-    }
+    // if (typeof data === "undefined") {
+    //     warning("Preencha todos os campos");
+    //     return;
+    // }
 
     data['categoria'] = categoryId;
     data['userId'] = userData.userId;
 
+    const lastBtnText = btn.textContent;
     btn.disabled = true;
     btn.textContent = 'ENVIANDO...';
 
@@ -190,16 +193,19 @@ async function insertCatalog(formId, categoryId, btn) {
     }).then((resp) => resp.json())
         .then((resp) => {
             btn.disabled = false;
-            btn.textContent = 'ENVIAR';
+            btn.textContent = lastBtnText;
+
             if (!resp['success']) {
-                alert(resp['msg']);
+                error("Erro ao tentar inserir catálogo!");
                 return;
             }
-            alert('Cadastro bem sucedido!');
+
+            success("Cadastro bem sucedido!");
+            fetchUserCatalogs();
         }).catch((err) => {
             btn.disabled = false;
-            btn.textContent = 'ENVIAR';
-            alert('Erro desconhecido!');
+            btn.textContent = lastBtnText;
+            error("Erro ao tentar inserir catálogo!");
         });
 }
 
@@ -215,11 +221,11 @@ async function deleteCatalog() {
     }).then((resp) => resp.json())
         .then(async (resp) => {
             if (!resp['success']) {
-                alert(resp['msg']);
+                error("Erro ao tentar deletar catálogo!");
                 return;
             }
 
-            alert("Catálogo deletado com sucesso");
+            success("Catálogo deletado com sucesso");
 
             document.getElementById(`catalog_${catalogId}`).remove();
 
@@ -232,6 +238,6 @@ async function deleteCatalog() {
 
             $("#editCatalogModal").modal('hide');
         }).catch((err) => {
-            alert('Erro desconhecido!');
+            error("Erro ao tentar deletar catálogo!");
         });
 }

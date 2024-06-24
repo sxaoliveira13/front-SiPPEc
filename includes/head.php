@@ -25,6 +25,7 @@ if ($_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '127.0.0.
                     } ?></title>
     <link rel="stylesheet" href="<?php echo $CFG['system_url'] ?>assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?php echo $CFG['system_url'] ?>main.css">
+    <link rel="stylesheet" href="<?php echo $CFG['system_url'] ?>alert.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
@@ -32,7 +33,9 @@ if ($_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '127.0.0.
     <script src="<?php echo $CFG['system_url'] ?>assets/js/bootstrap.bundle.min.js"></script>
     <script src="<?php echo $CFG['system_url'] ?>main.js"></script>
     <script>const systemUrl = '<?php echo $CFG['system_url'] ?>'; </script>
+    <?php if (!empty($USERDATA)) : ?>
     <script>
         const userData = <?php echo json_encode($USERDATA, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
         promiseUserLoad();
     </script>
+    <?php endif; ?>

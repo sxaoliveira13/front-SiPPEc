@@ -6,12 +6,12 @@ async function registerUser(btn) {
     const data = getFormData('registerForm');
 
     if (typeof data === "undefined") {
-        alert("Preencha todos os campos");
+        warning("Preencha todos os campos!");
         return;
     };
 
     if (data['userPassword'] !== data['userConfirmePassword']) {
-        alert("As senhas não são iguais!");
+        warning("As senhas não são iguais!");
         return;
     }
 
@@ -29,14 +29,17 @@ async function registerUser(btn) {
     }).then((resp) => resp.json())
         .then((resp) => {
             if (!resp['success']) {
-                alert(resp['msg']);
+                error(resp['msg']);
                 return;
             }
-            window.location.href = `${systemUrl}catalog.php`;
-            return;
-        }).catch((err) => {
 
-            alert(err);
+            success("Cadastro bem sucedido!");
+
+            setTimeout(() => {
+                window.location.href = `${systemUrl}catalog.php`;
+            }, 600);
+        }).catch((err) => {
+            error("Erro ao tentar cadastrar!");
         });
 
     btn.disabled = false;

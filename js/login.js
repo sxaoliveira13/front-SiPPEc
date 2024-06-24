@@ -1,5 +1,4 @@
 window.addEventListener('DOMContentLoaded', () => {
-    clearAllInputs();
     document.getElementById('btnSubmitLogin')?.addEventListener('click', (e) => {
         checkLogin(e.target);
     });
@@ -9,7 +8,7 @@ async function checkLogin(btn) {
     const data = getFormData('loginForm');
 
     if (typeof data === "undefined") {
-        alert("Preencha todos os campos");
+        warning("Preencha todos os campos!");
         return;
     };
 
@@ -26,15 +25,17 @@ async function checkLogin(btn) {
         .then((resp) => {
             btn.disabled = false;
             btn.textContent = 'Acessar Conta';
+
             if (!resp['success']) {
-                alert(resp['msg']);
+                error("Falha ao tentar fazer login");
                 return;
             }
+
             window.location.href = `${systemUrl}catalog.php`;
             return;
         }).catch((err) => {
             btn.disabled = false;
             btn.textContent = 'Acessar Conta';
-            alert(err);
+            error("Falha ao tentar fazer login");
         });
 }

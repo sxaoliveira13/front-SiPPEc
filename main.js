@@ -26,15 +26,16 @@ async function logout() {
     }).then((resp) => resp.json())
         .then((resp) => {
             if (!resp['success']) {
-                alert(resp['msg']);
+                error("Erro ao tentar desconectar");
+                // console.log(resp["message"] ?? "");
                 return;
             }
             window.location.href = 'login.php';
         }).catch((err) => {
-            alert('Erro desconhecido!');
+            error("Erro ao tentar desconectar");
+            // console.log(err);
         });
 }
-
 
 function getFormData(target) {
     const form = document.forms[target];
@@ -45,30 +46,31 @@ function getFormData(target) {
         const input = formInputs[i];
         if (input.type === 'button') continue;
 
-        if (!inputIsValid(input)) {
-            console.log(input)
-            input.reportValidity();
-            return;
-        };
-
+        if (!inputIsValid(input)) return;
         data[input.name] = input.value;
     }
 
     return data;
 }
 
+
 function inputIsValid(input) {
     const inputType = input.type;
     switch (inputType) {
         case 'select-one': {
             if (input.value === '-1') {
-                alert('Selecione uma opção para o campo ' + input.name);
+                warning(`Selecione uma opção para o campo "${input.name}"`);
+                input.reportValidity();
                 return false;
             }
             break;
         }
         default: {
-            if (!input.checkValidity()) return false;
+            if (!input.checkValidity()) {
+                warning(`O campo "${input.name}" é inválido!`);
+                input.reportValidity();
+                return false;
+            }
         }
     }
 
@@ -112,7 +114,6 @@ function clearAllInputs() {
         if (input.type === 'checkbox' || input.type === 'radio') {
             input.checked = false;
         } else {
-            console.log(input)
             input.value = '';
         }
     });
@@ -126,5 +127,68 @@ function clearAllInputs() {
     });
 }
 
-// Chame a função quando necessário
-clearAllInputs();
+function error(msg, timeout = 2500) {
+    handlerAlertMessage('error', msg, timeout);
+}
+function success(msg, timeout = 2500) {
+    handlerAlertMessage('success', msg, timeout);
+}
+function warning(msg, timeout = 2500) {
+    handlerAlertMessage('warning', msg, timeout);
+}
+
+function handlerAlertMessage(type, msg, timeout = 2500) {
+    if (!document.getElementById('alertMessageList')) {
+        document.body.insertAdjacentHTML('beforeend', '<ul id="alertMessageList" class="alert-message-list list-unstyled m-0 p-0">\n' +
+            '</ul>');
+    }
+
+    let alertMessageList = document.getElementById('alertMessageList');
+
+    const typeClass = { 'success': 'success-alert', 'warning': 'warning-alert', 'error': 'error-alert' };
+
+    let id = Date.now().toString();
+
+    while (document.getElementById(id) !== null) {
+        id = Date.now().toString();
+    }
+
+    const html = `<li id="${id}" class="alert-message-item show ${typeClass[type]}">
+        <div class="w-100 d-flex flex-nowrap justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <img src="assets/img/${type}.svg" alt="${type}" class="alert-msg-icon img-fluid me-3"">
+                <p class="alert-msg my-0 pe-2">${msg}</p>
+            </div>
+            <img src="assets/img/close.svg" alt="${type}" class="alert-close-icon img-fluid">
+        </div>
+    </li>`;
+
+    alertMessageList.insertAdjacentHTML('beforeend', html);
+    alertMessageList.style.visibility = 'visible';
+
+    let currentAlertItem = document.getElementById(id);
+
+    const hiddenAlert = () => {
+        if (!document.getElementById(id)) return;
+        currentAlertItem.classList.remove('show');
+        currentAlertItem.classList.add('hidden');
+
+        currentAlertItem.addEventListener('animationend', () => {
+            currentAlertItem.remove();
+
+            if (alertMessageList.children.length < 1) {
+                alertMessageList.style.visibility = 'hidden';
+            }
+        });
+    }
+
+    currentAlertItem.addEventListener('animationend', () => {
+        setTimeout(() => {
+            hiddenAlert();
+        }, timeout);
+    });
+
+    currentAlertItem.addEventListener('click', () => {
+        hiddenAlert();
+    });
+}

@@ -68,9 +68,9 @@ require(dirname(__FILE__) . '/includes/head.php');
                 <input class="form-group__input form-group__input--filter" type="text" placeholder="Pesquisar" id="filterCatalog" name="filterCatalog" autocomplete="off">
             </div>
             <ul id="catalogsList" class="main__section-catalogs u-box-padding--horizontal position-relative h-100 my-0" style="max-height: 66vh;overflow: auto;">
-                <div id="catalogListLoader" class="position-absolute top-50 start-50 translate-middle">
-                    <span class="loader"></span>
-                </div>
+            <div id="catalogListLoader" class="position-absolute top-50 start-50 translate-middle">
+                <span class="loader"></span>
+            </div>
             </ul>
         </section>
         <section class="main__grid--2 h-100">
@@ -128,7 +128,7 @@ require(dirname(__FILE__) . '/includes/head.php');
                             </div>
                             <div class="form-group">
                                 <label class="form-group__label" for="articleTool">Ferramenta <span class="text-danger">*</span></label>
-                                <select class="form-group__input form-group__input" type="text" id="articleTool" name="ferramneta" required>
+                                <select class="form-group__input form-group__input" type="text" id="articleTool" name="ferramenta" required>
                                     <option value="-1" disabled selected>Selecionar</option>
                                     <option value="1">GNU</option>
                                     <option value="2">Estilo BSD</option>
@@ -316,7 +316,7 @@ require(dirname(__FILE__) . '/includes/head.php');
                             <div class="form-group">
                                 <label class="form-group__label" for="gameAmbient">Ambiente do Jogo <span class="text-danger">*</span></label>
                                 <select class="form-group__input form-group__input" type="text" id="gameAmbient" name="ambiente" required>
-                                    <option disabled selected>Selecionar</option>
+                                    <option value="-1" disabled selected>Selecionar</option>
                                     <option value="Extracurricular">Extracurricular</option>
                                     <option value="Intracurricular">Intracurricular</option>
                                 </select>
@@ -324,7 +324,7 @@ require(dirname(__FILE__) . '/includes/head.php');
                             <div class="form-group">
                                 <label class="form-group__label" for="gameApproach">Abordagem <span class="text-danger">*</span></label>
                                 <select class="form-group__input form-group__input" type="text" id="gameApproach" name="abordagem" required>
-                                    <option disabled selected>Selecionar</option>
+                                    <option value="-1" disabled selected>Selecionar</option>
                                     <option value="Instrucionista">Instrucionista</option>
                                     <option value="Intracurricular">Construcionista</option>
                                     <option value="Construtivista">Construtivista</option>

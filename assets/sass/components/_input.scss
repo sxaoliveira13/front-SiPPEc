@@ -57,6 +57,16 @@ select {
                 text-indent: 3rem;
             }
 
+            &--delete {
+                min-height: 6rem;
+                border: 1px solid $color-red !important;
+                color: $color-red;
+
+                &::placeholder {
+                    color: $color-red;
+                }
+            }
+
             &-icon {
                 width: 2.6rem;
                 height: 2.6rem;
@@ -79,6 +89,29 @@ select {
 
             &[type="password"] {
                 padding-right: 8rem;
+            }
+        }
+
+        &__button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 6rem;
+            height: 100%;
+            padding: 0;
+            border-top-right-radius: 1rem;
+            border-bottom-right-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .15s ease;
+
+            &--delete {
+                background-color: $color-red;
+
+                &:disabled {
+                    background-color: #5a5a5a;
+                }
             }
         }
     }

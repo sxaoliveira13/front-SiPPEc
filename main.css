@@ -1,3 +1,11 @@
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 *,
 *::before,
 *::after {
@@ -108,6 +116,16 @@ body {
   filter: invert(66%) sepia(18%) saturate(1200%) hue-rotate(140deg) brightness(90%) contrast(90%);
 }
 
+.u-text-muted--1 {
+  color: #838383;
+}
+.u-text-muted--2 {
+  color: #A5A5A5;
+}
+.u-text-muted--3 {
+  color: #C5C5C5;
+}
+
 .badge {
   width: 3.3rem;
   height: 3.3rem;
@@ -123,6 +141,14 @@ body {
 }
 .badge--rounded {
   border-radius: 50%;
+}
+
+button {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 0;
+  box-shadow: unset;
 }
 
 .button-primary {
@@ -254,6 +280,14 @@ select {
 .form-group__input--filter {
   text-indent: 3rem;
 }
+.form-group__input--delete {
+  min-height: 6rem;
+  border: 1px solid #D00505 !important;
+  color: #D00505;
+}
+.form-group__input--delete::placeholder {
+  color: #D00505;
+}
 .form-group__input-icon {
   width: 2.6rem;
   height: 2.6rem;
@@ -273,6 +307,26 @@ select {
 }
 .form-group__input[type=password] {
   padding-right: 8rem;
+}
+.form-group__button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 6rem;
+  height: 100%;
+  padding: 0;
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+.form-group__button--delete {
+  background-color: #D00505;
+}
+.form-group__button--delete:disabled {
+  background-color: #5a5a5a;
 }
 .form-group + .form-group {
   margin-top: 3.5rem;
@@ -312,6 +366,17 @@ select {
   height: 10px;
   background-color: #49AEBE;
   border-radius: 1px;
+}
+
+.loader {
+  min-width: 5rem;
+  min-height: 5rem;
+  border: 5px solid #49AEBE;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
 }
 
 .header__logo-box {

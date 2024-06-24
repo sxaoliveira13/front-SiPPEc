@@ -31,12 +31,8 @@ if ($_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '127.0.0.
     <script src="<?php echo $CFG['system_url'] ?>assets/js/jquery.min.js"></script>
     <script src="<?php echo $CFG['system_url'] ?>assets/js/bootstrap.bundle.min.js"></script>
     <script src="<?php echo $CFG['system_url'] ?>main.js"></script>
-
+    <script>const systemUrl = '<?php echo $CFG['system_url'] ?>'; </script>
     <script>
-        const systemUrl = '<?php echo $CFG['system_url'] ?>';
+        const userData = <?php echo json_encode($USERDATA, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+        promiseUserLoad();
     </script>
-    <?php if (isset($USERDATA)) : ?>
-        <script>
-            const userData = <?php echo json_encode($USERDATA, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
-        </script>
-    <?php endif; ?>

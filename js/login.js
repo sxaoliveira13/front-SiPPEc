@@ -1,4 +1,5 @@
 window.addEventListener('DOMContentLoaded', () => {
+    clearAllInputs();
     document.getElementById('btnSubmitLogin')?.addEventListener('click', (e) => {
         checkLogin(e.target);
     });

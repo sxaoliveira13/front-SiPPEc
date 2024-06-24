@@ -1,3 +1,11 @@
+button {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border: 0;
+    box-shadow: unset
+}
+
 .button-primary {
     @include button-styles($color-primary, 1.8rem, #ffffff, .6rem);
 }

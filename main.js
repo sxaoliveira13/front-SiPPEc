@@ -1,24 +1,21 @@
 const apiUrl = 'http://localhost/sippec/api';
 
-window.addEventListener('DOMContentLoaded', () => {
-    document.getElementById("userName").textContent = userData.userName;
+var locks = {};
 
-    document.getElementById('btnNewArticle')?.addEventListener('click', (e) => {
-        newCatalog("articleForm", 1, e.target);
-    });
+var promiseResolveLoad;
+locks['onload'] = new Promise(function (resolve, reject) {
+    promiseResolveLoad = resolve;
+});
 
-    document.getElementById('btnNewGame')?.addEventListener('click', (e) => {
-        newCatalog("gameForm", 2, e.target);
-    });
+var promiseUserLoad;
+locks['user'] = new Promise(function (resolve, reject) {
+    promiseUserLoad = resolve;
+});
 
-    document.getElementById('btnNewMethod')?.addEventListener('click', (e) => {
-        newCatalog("methodForm", 3, e.target);
-    });
-
-    document.getElementById('btnLogout')?.addEventListener('click', (e) => {
-        logout();
-    });
-})
+window.addEventListener("DOMContentLoaded", () => {
+    clearAllInputs();
+    promiseResolveLoad();
+});
 
 async function logout() {
     return fetch(`${apiUrl}/user/logout.php`, {
@@ -41,7 +38,6 @@ async function logout() {
 
 function getFormData(target) {
     const form = document.forms[target];
-
     const formInputs = form.elements;
     const data = {};
 
@@ -57,7 +53,6 @@ function getFormData(target) {
 
         data[input.name] = input.value;
     }
-
 
     return data;
 }
@@ -80,38 +75,56 @@ function inputIsValid(input) {
     return true;
 }
 
-async function newCatalog(formId, categoryId, btn) {
-    const data = getFormData(formId);
+function beautifyDate(datetimeString, options = {}) {
+    const date = new Date(datetimeString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
 
-    if (typeof data === "undefined") {
-        alert("Preencha todos os campos");
-        return;
+    const longMonthNames = [
+        "janeiro", "fevereiro", "março", "abril", "maio", "junho",
+        "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"
+    ];
+
+    let formattedDate = '';
+    if (options.full) {
+        formattedDate = `${day} de ${longMonthNames[date.getMonth()]} de ${year}`;
+    } else {
+        formattedDate = `${day}/${month}/${year}`;
     }
 
-    data['categoria'] = categoryId;
-    data['userId'] = userData.userId;
+    if (options.withTime) {
+        formattedDate += ` ${hours}:${minutes}:${seconds}`;
+    }
 
-    btn.disabled = true;
-    btn.textContent = 'ENVIANDO...';
-
-    return fetch(`${apiUrl}/catalog/new.php`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-    }).then((resp) => resp.json())
-        .then((resp) => {
-            btn.disabled = false;
-            btn.textContent = 'ENVIAR';
-            if (!resp['success']) {
-                alert(resp['msg']);
-                return;
-            }
-            alert('Cadastro bem sucedido!');
-        }).catch((err) => {
-            btn.disabled = false;
-            btn.textContent = 'ENVIAR';
-            alert('Erro desconhecido!');
-        });
+    return formattedDate;
 }
+
+function clearAllInputs() {
+    const inputs = document.querySelectorAll('input');
+    const textareas = document.querySelectorAll('textarea');
+    const selects = document.querySelectorAll('select');
+
+    inputs.forEach(input => {
+        if (input.type === 'checkbox' || input.type === 'radio') {
+            input.checked = false;
+        } else {
+            console.log(input)
+            input.value = '';
+        }
+    });
+
+    textareas.forEach(textarea => {
+        textarea.value = '';
+    });
+
+    selects.forEach(select => {
+        select.selectedIndex = 0;
+    });
+}
+
+// Chame a função quando necessário
+clearAllInputs();

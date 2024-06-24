@@ -5,10 +5,7 @@ window.addEventListener('DOMContentLoaded', () => {
 async function registerUser(btn) {
     const data = getFormData('registerForm');
 
-    if (typeof data === "undefined") {
-        warning("Preencha todos os campos!");
-        return;
-    };
+    if (typeof data === "undefined") return;
 
     if (data['userPassword'] !== data['userConfirmePassword']) {
         warning("As senhas não são iguais!");

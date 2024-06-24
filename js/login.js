@@ -7,10 +7,7 @@ window.addEventListener('DOMContentLoaded', () => {
 async function checkLogin(btn) {
     const data = getFormData('loginForm');
 
-    if (typeof data === "undefined") {
-        warning("Preencha todos os campos!");
-        return;
-    };
+    if (typeof data === "undefined") return;
 
     btn.disabled = true;
     btn.textContent = 'CARREGANDO...';
@@ -27,7 +24,7 @@ async function checkLogin(btn) {
             btn.textContent = 'Acessar Conta';
 
             if (!resp['success']) {
-                error("Falha ao tentar fazer login");
+                error(resp['msg']);
                 return;
             }
 

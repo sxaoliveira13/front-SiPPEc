@@ -129,10 +129,7 @@ function buildEditModalFields(catalogId) {
 async function updateCatalog(btn) {
     const data = getFormData("editCatalogForm");
 
-    // if (typeof data === "undefined") {
-    //     warning("Preencha todos os campos!");
-    //     return;
-    // }
+    if (typeof data === "undefined") return;
 
     if (data['categoryId'] != "2") {
         data['ambiente'] = null;
@@ -172,10 +169,7 @@ async function updateCatalog(btn) {
 async function insertCatalog(formId, categoryId, btn) {
     const data = getFormData(formId);
 
-    // if (typeof data === "undefined") {
-    //     warning("Preencha todos os campos");
-    //     return;
-    // }
+    if (typeof data === "undefined") return;
 
     data['categoria'] = categoryId;
     data['userId'] = userData.userId;

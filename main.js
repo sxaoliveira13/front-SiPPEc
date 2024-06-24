@@ -67,7 +67,7 @@ function inputIsValid(input) {
         }
         default: {
             if (!input.checkValidity()) {
-                warning(`O campo "${input.name}" é inválido!`);
+                warning(`Campo inválido!`);
                 input.reportValidity();
                 return false;
             }

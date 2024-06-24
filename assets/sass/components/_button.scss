@@ -1,0 +1,7 @@
+.button-primary {
+    @include button-styles($color-primary, 1.8rem, #ffffff, .6rem);
+}
+
+.button-dark {
+    @include button-styles($color-black, 1.8rem, #ffffff, .6rem);
+}

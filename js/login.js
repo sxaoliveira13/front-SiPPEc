@@ -1,19 +1,20 @@
 window.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('btnSendLogin')?.addEventListener('click', (e) => {
-        sendLogin(e.target);
+    document.getElementById('btnSubmitLogin')?.addEventListener('click', (e) => {
+        checkLogin(e.target);
     });
-})
+});
 
-async function sendLogin(btn) {
-    const data = getFormData('login-form');
+async function checkLogin(btn) {
+    const data = getFormData('loginForm');
+
+    if (typeof data === "undefined") {
+        alert("Preencha todos os campos");
+        return;
+    };
+
     btn.disabled = true;
     btn.textContent = 'CARREGANDO...';
-    await verifyLogin(data);
-    btn.disabled = false;
-    btn.textContent = 'Login';
-}
 
-async function verifyLogin(data) {
     fetch(`${apiUrl}/user/login.php`, {
         method: 'POST',
         headers: {
@@ -22,13 +23,17 @@ async function verifyLogin(data) {
         body: JSON.stringify(data)
     }).then((resp) => resp.json())
         .then((resp) => {
+            btn.disabled = false;
+            btn.textContent = 'Acessar Conta';
             if (!resp['success']) {
                 alert(resp['msg']);
                 return;
             }
-            window.location.href = `${systemUrl}novos_artigos.php`;
+            window.location.href = `${systemUrl}catalog.php`;
             return;
         }).catch((err) => {
+            btn.disabled = false;
+            btn.textContent = 'Acessar Conta';
             alert(err);
         });
 }

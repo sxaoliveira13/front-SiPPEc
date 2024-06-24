@@ -1,16 +1,18 @@
 const apiUrl = 'http://localhost/sippec/api';
 
 window.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('btnSendArticle')?.addEventListener('click', (e) => {
-        sendData(e.target, 1);
+    document.getElementById("userName").textContent = userData.userName;
+
+    document.getElementById('btnNewArticle')?.addEventListener('click', (e) => {
+        newCatalog("articleForm", 1, e.target);
     });
 
-    document.getElementById('btnSendGame')?.addEventListener('click', (e) => {
-        sendData(e.target, 2);
+    document.getElementById('btnNewGame')?.addEventListener('click', (e) => {
+        newCatalog("gameForm", 2, e.target);
     });
 
-    document.getElementById('btnSendMethod')?.addEventListener('click', (e) => {
-        sendData(e.target, 3);
+    document.getElementById('btnNewMethod')?.addEventListener('click', (e) => {
+        newCatalog("methodForm", 3, e.target);
     });
 
     document.getElementById('btnLogout')?.addEventListener('click', (e) => {
@@ -36,19 +38,10 @@ async function logout() {
         });
 }
 
-async function sendData(btn, categoryId) {
-    const data = getFormData('content-form');
-    if (!data) return;
-    data['categoria'] = categoryId;
-    btn.disabled = true;
-    btn.textContent = 'CARREGANDO...';
-    await newCatalog(data);
-    btn.disabled = false;
-    btn.textContent = 'ENVIAR';
-}
 
 function getFormData(target) {
     const form = document.forms[target];
+
     const formInputs = form.elements;
     const data = {};
 
@@ -57,12 +50,14 @@ function getFormData(target) {
         if (input.type === 'button') continue;
 
         if (!inputIsValid(input)) {
+            console.log(input)
             input.reportValidity();
             return;
         };
 
         data[input.name] = input.value;
     }
+
 
     return data;
 }
@@ -85,7 +80,20 @@ function inputIsValid(input) {
     return true;
 }
 
-async function newCatalog(data) {
+async function newCatalog(formId, categoryId, btn) {
+    const data = getFormData(formId);
+
+    if (typeof data === "undefined") {
+        alert("Preencha todos os campos");
+        return;
+    }
+
+    data['categoria'] = categoryId;
+    data['userId'] = userData.userId;
+
+    btn.disabled = true;
+    btn.textContent = 'ENVIANDO...';
+
     return fetch(`${apiUrl}/catalog/new.php`, {
         method: 'POST',
         headers: {
@@ -94,12 +102,16 @@ async function newCatalog(data) {
         body: JSON.stringify(data)
     }).then((resp) => resp.json())
         .then((resp) => {
+            btn.disabled = false;
+            btn.textContent = 'ENVIAR';
             if (!resp['success']) {
                 alert(resp['msg']);
                 return;
             }
             alert('Cadastro bem sucedido!');
         }).catch((err) => {
+            btn.disabled = false;
+            btn.textContent = 'ENVIAR';
             alert('Erro desconhecido!');
         });
 }

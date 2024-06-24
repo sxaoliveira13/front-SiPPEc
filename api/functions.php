@@ -150,7 +150,7 @@ function checkToken($tokenCookie)
         }
     }
     try {
-        $sql = "select u.userId, u.userLogin, uT.tokenId, uT.userId, uT.tokenKey, uT.tokenValidity from actUserToken uT join actUser u on u.userId = uT.userId where uT.tokenId = :tokenId and uT.tokenKey = :tokenCookie";
+        $sql = "select u.id, u.name, u.email, u.phone, u.type, uT.id as tokenId, uT.userId, uT.token, uT.validity from actUserToken uT join actUser u on u.id = uT.userId where uT.id = :tokenId and uT.token = :tokenCookie";
 
         $stmt = $CFG['link']->prepare($sql);
 
@@ -166,7 +166,7 @@ function checkToken($tokenCookie)
         if (empty($rs['userId'])) {
             return;
         }
-        if (strtotime($rs['tokenValidity']) <= time()) {
+        if (strtotime($rs['validity']) <= time()) {
             deleteUserToken((int)$rs['tokenId']);
             unsetcookie('userToken');
             return;
@@ -175,7 +175,7 @@ function checkToken($tokenCookie)
         return;
     }
 
-    return array('userId' => $rs['userId'], 'userLogin' => $rs['userLogin']);
+    return array('userId' => $rs['userId'], 'userName' => $rs['name']);
 }
 
 /**
@@ -187,7 +187,7 @@ function deleteUserToken($tokenId)
 {
     global $CFG;
     try {
-        $sql = "DELETE FROM actUserToken WHERE tokenId = :tokenId";
+        $sql = "DELETE FROM actUserToken WHERE id = :tokenId";
         $stmt = $CFG['link']->prepare($sql);
         $stmt->bindParam(':tokenId', $tokenId, PDO::PARAM_INT);
         $success = $stmt->execute();

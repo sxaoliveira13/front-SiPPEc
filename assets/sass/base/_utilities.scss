@@ -1,0 +1,66 @@
+.u-container {
+    width: 100%;
+    max-width: $container-width;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.u-flex-auto {
+    flex: 1 1 auto;
+}
+
+.u-cursor-pointer {
+    cursor: pointer;
+}
+
+.u-box-padding {
+    &--horizontal {
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+
+        &-big {
+            padding-left: 4rem;
+            padding-right: 4rem;
+        }
+    }
+
+    &--vertical {
+        padding-top: 2.5rem;
+        padding-bottom: 2.5rem;
+
+        &-big {
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+        }
+    }
+}
+
+.u-fw-500 {
+    font-weight: 500 !important;
+}
+
+.u-text-color {
+    &--green {
+        color: $color-green;
+    }
+
+    &--red {
+        color: $color-red;
+    }
+
+    &--yellow {
+        color: $color-yellow;
+    }
+
+    &--muted {
+        color: $color-grey-light-2;
+    }
+}
+
+.u-hover-svg {
+    transition: all .2s ease;
+
+    &--primary:hover {
+        filter: invert(66%) sepia(18%) saturate(1200%) hue-rotate(140deg) brightness(90%) contrast(90%);
+    }
+}

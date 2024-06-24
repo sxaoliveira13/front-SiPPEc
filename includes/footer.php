@@ -1,6 +1,4 @@
 
-<footer class="footer">
-    <p> LIAG - FT - UNICAMP </p>
-    </div>
-    </div>
+<footer class="footer u-container">
+    <p class="mb-0"> LIAG - FT - UNICAMP </p>
 </footer>

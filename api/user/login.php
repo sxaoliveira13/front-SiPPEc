@@ -14,26 +14,26 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $json = file_get_contents('php://input');
 $data = json_decode($json, true);
 
-$userLogin = sanitize($data['userLogin']);
+$userEmail = sanitize($data['userEmail']);
 $userPassword = hashPass($data['userPassword']);
 $userId = 0;
 
 try {
-    $sql = "select userId, userLogin from actUser where userLogin = :userLogin and userPassword = :userPassword";
+    $sql = "select id, email from actUser where email = :userEmail and password = :userPassword";
     $stmt = $CFG['link']->prepare($sql);
 
-    $stmt->bindParam(':userLogin', $userLogin, PDO::PARAM_STR);
+    $stmt->bindParam(':userEmail', $userEmail, PDO::PARAM_STR);
     $stmt->bindParam(':userPassword', $userPassword, PDO::PARAM_STR);
     $stmt->execute();
 
     $rs = $stmt->fetch(PDO::FETCH_ASSOC);
    
-    if (empty($rs['userId'])) {
+    if (empty($rs['id'])) {
         error('Usuário e/ou senha incorretos!');
     }
 
-    $userId = (int)$rs['userId'];
-    $out['data']['userLogin'] = $rs['userLogin'];
+    $userId = (int)$rs['id'];
+    $out['data']['userEmail'] = $rs['email'];
 } catch (PDOException $e) {
     error('Falha ao tentar logar!');
 } catch (Exception $e) {
@@ -45,14 +45,14 @@ try {
     $validity = date("Y-m-d H:i:s", (time() + $CFG['sessionValidity']));
     $hashPass = hashPass($key);
 
-    $sql = "INSERT INTO actUserToken (tokenId, userId, tokenKey, tokenValidity) 
-                        VALUES (NULL, :userId, :tokenKey, :tokenValidity)";
+    $sql = "INSERT INTO actUserToken (id, userId, token, validity) 
+                        VALUES (NULL, :userId, :token, :validity)";
 
     $stmt = $CFG['link']->prepare($sql);
 
     $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
-    $stmt->bindParam(':tokenKey', $hashPass, PDO::PARAM_STR);
-    $stmt->bindParam(':tokenValidity', $validity, PDO::PARAM_STR);
+    $stmt->bindParam(':token', $hashPass, PDO::PARAM_STR);
+    $stmt->bindParam(':validity', $validity, PDO::PARAM_STR);
     
     $rs = $stmt->execute();
     $tokenId = $CFG['link']->lastInsertId();

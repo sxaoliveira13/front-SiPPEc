@@ -175,7 +175,7 @@ function checkToken($tokenCookie)
         return;
     }
 
-    return array('userId' => $rs['userId'], 'userName' => $rs['name']);
+    return array('userId' => $rs['userId'], 'userName' => $rs['name'], 'userType' => $rs['type']);
 }
 
 /**

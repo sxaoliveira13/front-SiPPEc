@@ -22,33 +22,10 @@ require(dirname(__FILE__) . '/includes/head.php');
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="<?php echo $CFG['system_url'] ?>js/catalog.js"></script>
 
-
 </head>
 
 <body>
-    <header class="header u-container">
-        <nav class="header__nav d-flex justify-content-between align-items-center">
-            <div class="d-flex flex-column">
-                <h2 class="fs-3 text-muted fw-bolder mb-1">Bem vindo,</h2>
-                <h1 id="userName" class="fs-1 fw-bolder mb-0"></h1>
-            </div>
-            <ul class="header__nav-list d-lg-flex d-none flex-row list-unstyled my-0">
-                <li class="mx-0">
-                    <a href="#" onclick="logout();" class="u-hover-svg u-hover-svg--primary"><svg class="u-hover-svg u-hover-svg--primary" width="3.2rem" height="3.2rem" viewBox="0 0 32 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M10.75 28.3846H5.5C3.56695 28.3846 2 26.908 2 25.0866L2 5.2981C2 3.47658 3.56695 2.00003 5.5 2.00003H10.75M23 21.7885L30 15.1923M30 15.1923L23 8.59618M30 15.1923L9 15.1923" stroke="#2E2E2E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </a>
-                </li>
-                <li class="mx-0">
-                    <a href="#" class="u-hover-svg u-hover-svg--primary pe-0">
-                        <svg width="3.5rem" height="3.5rem" xmlns="http://www.w3.org/2000/svg" width="28" height="33" fill="none">
-                            <path fill="#2E2E2E" d="M14.0458 6.43867c.7649-.02967 1.3638-.75286 1.3374-1.61529-.0262-.86244-.6677-1.53755-1.4327-1.50788l.0953 3.12317ZM5.60554 15.2333l-1.3853.048a1.7563 1.7563 0 0 0 .00235.055l1.38295-.103Zm-2.3657 7.1188.90478 1.1835a1.35712 1.35712 0 0 0 .07201-.075l-.97679-1.1085Zm-.81079.7562.81414 1.2646a1.45554 1.45554 0 0 0 .06706-.0585l-.8812-1.2061Zm7.96555 5.0167c.7655 0 1.386-.6996 1.386-1.5625S11.1601 25 10.3946 25v3.125Zm3.6512-24.8095c-.765-.02967-1.4064.64544-1.4329 1.50788-.0262.86243.5725 1.58562 1.3376 1.61529l.0953-3.12317Zm8.3449 11.9178 1.383.1027c.0011-.0183.0018-.0364.0024-.0547l-1.3854-.048Zm2.3657 7.1167-.9768 1.1085c.0233.0259.0473.0511.0721.075l.9047-1.1835Zm.8109.7563-.8813 1.206c.0214.0198.0432.039.0656.0573l.8157-1.2633ZM17.6017 25c-.7654 0-1.386.6996-1.386 1.5625s.6206 1.5625 1.386 1.5625V25ZM12.6122 4.87708c0 .86294.6205 1.5625 1.386 1.5625.7654 0 1.3859-.69956 1.3859-1.5625h-2.7719Zm2.7719-3.31458C15.3841.69956 14.7636 0 13.9982 0c-.7655 0-1.386.69956-1.386 1.5625h2.7719ZM10.3946 25c-.76543 0-1.38595.6996-1.38595 1.5625s.62052 1.5625 1.38595 1.5625V25Zm7.2071 3.125c.7654 0 1.3859-.6996 1.3859-1.5625S18.3671 25 17.6017 25v3.125Zm-5.8211-1.5625c0-.8629-.6205-1.5625-1.386-1.5625-.76543 0-1.38595.6996-1.38595 1.5625h2.77195Zm7.207 0c0-.8629-.6205-1.5625-1.3859-1.5625-.7654 0-1.386.6996-1.386 1.5625h2.7719Zm-5.0371-23.247c-5.58424.21654-9.90341 5.60535-9.73026 11.9658l2.77062-.0959c-.12834-4.7143 3.06184-8.5919 7.05494-8.74673l-.0953-3.12317ZM4.22259 15.3363c.12978 2.2154-.59207 4.3758-1.95954 5.9072l1.95358 2.2171c1.94474-2.1781 2.95372-5.226 2.77187-8.3302l-2.76591.2059Zm-1.88753 5.8322c-.28955.2813-.53293.4978-.78723.7338l1.76242 2.4121c.20335-.189.51491-.4684.83437-.7788l-1.80956-2.3671Zm-.72014.6753c-.40519.3316-.77337.8054-1.04783 1.3056-.27106.4937-.5304 1.1585-.56363 1.8939-.03635.8044.20943 1.699.93957 2.3284.65322.5633 1.51398.7533 2.42473.7533V25c-.30183 0-.50148-.0333-.62397-.0685-.12144-.0348-.14305-.0646-.11688-.0421.03389.0294.08414.0914.11727.1808.03009.0815.0275.1348.02763.1323.00026-.006.00394-.0498.03032-.1319.02578-.0802.0664-.1754.12214-.2768.05542-.1011.11845-.195.18089-.2734.06422-.0808.11413-.1281.13803-.1475l-1.62827-2.5291Zm1.75284 6.2812h7.02684V25H3.36776v3.125ZM13.9505 6.43867c3.9931.15483 7.1832 4.03243 7.0549 8.74673l2.7707.0959c.1731-6.36045-4.1461-11.74926-9.7303-11.9658l-.0953 3.12317Zm7.0573 8.69193c-.1812 3.1036.8277 6.1504 2.7718 8.3279l1.9536-2.217c-1.3671-1.5311-2.0889-3.6907-1.9595-5.9055l-2.7659-.2054Zm2.8439 8.4029c.3195.3105.631.5898.8343.7788l1.7624-2.4121c-.2543-.236-.4977-.4525-.7872-.7337l-1.8095 2.367Zm.8999.8361c.0248.0202.0754.0683.1401.1498.063.0791.1266.1735.1826.2752.0561.1021.0972.1977.1232.2783.0266.0825.0305.1265.0307.1323.0002.0025-.0026-.0514.0277-.1335.0333-.0904.0841-.1529.1183-.1825.0262-.0227.0046.007-.1174.042-.123.0355-.3235.0688-.6264.0688v3.125c.9116 0 1.7735-.1898 2.4271-.7531.7316-.6304.9766-1.5267.9388-2.3317-.0346-.7358-.2953-1.4002-.5668-1.8935-.275-.4996-.6431-.9725-1.0467-1.3038l-1.6312 2.5267ZM24.6304 25h-7.0287v3.125h7.0287V25ZM15.3841 4.87708V1.5625h-2.7719v3.31458h2.7719ZM10.3946 28.125h7.2071V25h-7.2071v3.125Zm-1.38595-1.5625c0 3.1267 2.20095 5.7292 4.98955 5.7292v-3.125c-1.192 0-2.2176-1.1284-2.2176-2.6042H9.00865Zm4.98955 5.7292c2.7883 0 4.9894-2.6025 4.9894-5.7292h-2.7719c0 1.4758-1.0258 2.6042-2.2175 2.6042v3.125Z" />
-                        </svg>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </header>
+    <?php require(dirname(__FILE__) . '/includes/authenticatedHeader.php'); ?>
     <main class="main main__grid--1 u-container u-flex-auto">
         <section class="main__section--box h-100">
             <div class="main__section-header border-bottom">
@@ -67,7 +44,7 @@ require(dirname(__FILE__) . '/includes/head.php');
                 </svg>
                 <input class="form-group__input form-group__input--filter" type="text" placeholder="Pesquisar" id="filterCatalog" name="filterCatalog" autocomplete="off">
             </div>
-            <ul id="catalogsList" class="main__section-catalogs u-box-padding--horizontal position-relative h-100 my-0" style="max-height: 66vh;overflow: auto;">
+            <ul id="catalogsList" class="main__section-catalogs u-box-padding--horizontal u-overflow-auto position-relative my-0">
             <div id="catalogListLoader" class="position-absolute top-50 start-50 translate-middle">
                 <span class="loader"></span>
             </div>
@@ -75,33 +52,44 @@ require(dirname(__FILE__) . '/includes/head.php');
         </section>
         <section class="main__grid--2 h-100">
             <section class="main__section--box overflow-hidden px-0">
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <ul class="nav nav-tabs d-flex flex-nowrap" id="myTab" role="tablist">
+                    <li class="nav-item d-none" id="manageSolicitations" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#manageSolicitationsTab" type="button" role="tab" aria-selected="false"><span>Gerenciar</span> Solicitações
+                            <div class="tab-line"></div>
+                        </button>
+                    </li>
+                    <script>showManageTab();</script>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#articleTab" type="button" role="tab" aria-selected="true">Registrar Artigos
+                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#articleTab" type="button" role="tab" aria-selected="true"><span>Registrar</span> Artigos
                             <div class="tab-line"></div>
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#educationGamesTab" type="button" role="tab" aria-selected="false">Registrar Jogos
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#educationGamesTab" type="button" role="tab" aria-selected="false"><span>Registrar</span> Jogos
                             <div class="tab-line"></div>
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#methodsTab" type="button" role="tab" aria-selected="false">Registrar Métodos
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#methodsTab" type="button" role="tab" aria-selected="false"><span>Registrar</span> Métodos
                             <div class="tab-line"></div>
                         </button>
                     </li>
                 </ul>
             </section>
-            <section class="main__section--box">
+            <section class="main__section--box u-overflow-auto">
                 <div class="tab-content d-flex flex-column" id="catalogTabs">
+                    <div class="tab-pane fade flex-auto" id="manageSolicitationsTab" role="tabpanel">
+                    <div class="d-flex flex-wrap align-items-center justify-content-sm-start justify-content-center position-sticky bg-white top-0 u-box-padding--vertical u-box-padding--horizontal-big border-bottom" style="z-index: 2; min-height: 10.7rem">
+                            <h4 class="fs-2 text-center fw-bolder mb-sm-0 mb-0" style="line-height: 1.7">Gerenciamento de Novas Solicitações</h4>
+                        </div>
+                    </div>
                     <div class="tab-pane fade show flex-auto active" id="articleTab" role="tabpanel">
-                        <div class="d-flex align-items-center justify-content-between u-box-padding--vertical u-box-padding--horizontal-big border-bottom">
-                            <h4 class="fs-2 fw-bolder mb-0">Cadastro de Artigo</h4>
+                        <div class="d-flex flex-sm-row flex-column flex-wrap align-items-center justify-content-between position-sticky bg-white top-0 u-box-padding--vertical u-box-padding--horizontal-big border-bottom" style="z-index: 2; min-height: 10.7rem">
+                            <h4 class="fs-2 fw-bolder mb-sm-0 mb-2">Cadastro de Artigo</h4>
                             <button id="btnNewArticle" class="w-auto button-primary px-5">Cadastrar Artigo</button>
                         </div>
-                        <form id="articleForm" class="form u-box-padding--vertical u-box-padding--horizontal-big" style="max-height: 58.5vh;overflow: auto;">
-                            <div style="min-height: 180px"></div>
+                        <form id="articleForm" class="form u-box-padding--vertical u-box-padding--horizontal-big">
+                
                             <div class="form-group">
                                 <label class="form-group__label" for="articleName">Título <span class="text-danger">*</span></label>
                                 <div class="position-relative">
@@ -209,12 +197,11 @@ require(dirname(__FILE__) . '/includes/head.php');
                         </form>
                     </div>
                     <div class="tab-pane fade" id="educationGamesTab" role="tabpanel">
-                        <div class="d-flex align-items-center justify-content-between u-box-padding--vertical u-box-padding--horizontal-big border-bottom">
-                            <h4 class="fs-2 fw-bolder mb-0">Cadastro de Jogo Educacional</h4>
+                        <div class="d-flex flex-sm-row flex-column flex-wrap align-items-center justify-content-between position-sticky bg-white top-0 u-box-padding--vertical u-box-padding--horizontal-big border-bottom" style="z-index: 2; min-height: 10.7rem">
+                            <h4 class="fs-2 fw-bolder mb-sm-0 mb-2">Cadastro de Jogo Educacional</h4>
                             <button id="btnNewGame" class="w-auto button-primary px-5">Cadastrar Jogo</button>
                         </div>
-                        <form id="gameForm" class="form u-box-padding--vertical u-box-padding--horizontal-big" style="max-height: 58.5vh;overflow: auto;">
-                            <div style="min-height: 440px"></div>
+                        <form id="gameForm" class="form u-box-padding--vertical u-box-padding--horizontal-big">
                             <div class="form-group">
                                 <label class="form-group__label" for="gameName">Título <span class="text-danger">*</span></label>
                                 <div class="position-relative">
@@ -339,12 +326,11 @@ require(dirname(__FILE__) . '/includes/head.php');
                         </form>
                     </div>
                     <div class="tab-pane fade" id="methodsTab" role="tabpanel">
-                        <div class="d-flex align-items-center justify-content-between u-box-padding--vertical u-box-padding--horizontal-big border-bottom">
-                            <h4 class="fs-2 fw-bolder mb-0">Cadastro de Método Educacional</h4>
+                        <div class="d-flex flex-sm-row flex-column flex-wrap align-items-center justify-content-between position-sticky bg-white top-0 u-box-padding--vertical u-box-padding--horizontal-big border-bottom" style="z-index: 2; min-height: 10.7rem">
+                            <h4 class="fs-2 fw-bolder mb-sm-0 mb-2">Cadastro de Método Educacional</h4>
                             <button id="btnNewMethod" class="w-auto button-primary px-5">Cadastrar Método</button>
                         </div>
-                        <form id="methodForm" class="form u-box-padding--vertical u-box-padding--horizontal-big" style="max-height: 58.5vh;overflow: auto;">
-                            <div style="min-height: 180px"></div>
+                        <form id="methodForm" class="form u-box-padding--vertical u-box-padding--horizontal-big">
                             <div class="form-group">
                                 <label class="form-group__label" for="methodName">Título <span class="text-danger">*</span></label>
                                 <div class="position-relative">
@@ -593,8 +579,8 @@ require(dirname(__FILE__) . '/includes/head.php');
                         </form>
                 </div>
                 <div class="modal-footer d-flex justify-content-end align-items-center border-0 u-box-padding--vertical u-box-padding--horizontal-big">
-                    <button id="btnUpdateCatalog" class="fs-4 w-auto button-dark px-5" data-bs-toggle="modal" data-bs-dismiss="modal">Cancelar</button>
-                        <button id="btnUpdateCatalog" onclick="updateCatalog(this);" class="fs-4 w-auto button-primary px-5">Salvar Alterações</button>
+                    <button id="btnUpdateCatalog" class="fs-4 w-auto button-dark px-5"  data-bs-toggle="modal" data-bs-dismiss="modal">Cancelar</button>
+                        <button id="btnUpdateCatalog" onclick="updateCatalog(this);" style="min-width: 200px" class="fs-4 w-auto button-primary px-5">Salvar Alterações</button>
                 </div>
             </div>
         </div>

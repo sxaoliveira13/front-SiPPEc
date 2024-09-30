@@ -12,6 +12,14 @@ locks['user'] = new Promise(function (resolve, reject) {
     promiseUserLoad = resolve;
 });
 
+class CustomError extends Error {
+    constructor(message, code) {
+        super(message);
+        this.code = code;
+        this.name = "CustomError";
+    }
+}
+
 window.addEventListener("DOMContentLoaded", () => {
     clearAllInputs();
     promiseResolveLoad();
@@ -191,4 +199,18 @@ function handlerAlertMessage(type, msg, timeout = 2500) {
     currentAlertItem.addEventListener('click', () => {
         hiddenAlert();
     });
+}
+
+function forceRedirect(url) {
+    url = systemUrl + url;
+    window.location.href = url;
+}
+
+function handleErrors(code) {
+    switch (code) {
+        case 1: {
+            forceRedirect('login.php');
+            break;
+        }
+    }
 }

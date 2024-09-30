@@ -12,7 +12,6 @@ if (isset($_COOKIE['userToken'])) {
         exit;
     }
 }
-
 require(dirname(__FILE__) . '/includes/head.php');
 ?>
 

@@ -4,6 +4,10 @@ require_once("../config.php");
 require_once("../functions.php");
 
 header('Content-Type: application/json; charset=utf-8');
+$USERDATA = checkToken($_COOKIE['userToken']);
+
+if (empty($USERDATA['userId'])) {error("Autenticação inválida ", 1);}
+if ($USERDATA['userType'] != 1 && $USERDATA['userType'] != 2) {error("Você não tem permissão para isso! ", 2);}
 
 $out = array('success' => true);
 

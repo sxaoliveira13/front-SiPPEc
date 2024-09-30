@@ -9,6 +9,10 @@
             display: grid;
             grid-template-columns: 2.5fr 7fr;
             gap: 5rem;
+
+            @media (max-width: 1200px) {
+                grid-template-columns: 1fr;
+            }
         }
 
         &--2 {
@@ -28,6 +32,10 @@
             background-color: $color-white;
             box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
             border-radius: $default-border-radius;
+
+            .tab-content {
+                max-height: 58.5vh;
+            }
         }
 
         &-header {
@@ -36,6 +44,11 @@
                 display: inline-block;
                 font-weight: 600;
             }
+        }
+
+        &-catalogs {
+            max-height: 66vh;
+            min-height: 100px;
         }
 
         &-catalog {

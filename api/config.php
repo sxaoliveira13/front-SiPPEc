@@ -2,6 +2,10 @@
 // error_reporting(E_ALL);
 // ini_set('display_errors', '1');
 
+require_once __DIR__ . '/../vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
 ini_set('session.cookie_httponly', 1);
 ini_set('session.use_only_cookies', 1);
 ini_set('session.cookie_secure', 1);
@@ -15,20 +19,20 @@ if ($_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '127.0.0.
     $CFG['db'] = 'sippec';
 } else {
     $CFG['system_url'] = 'https://liag.ft.unicamp.br/act-sistema/sippec/';
-    $CFG['host_mysql'] = 'liag.ft.unicamp.br';
-    $CFG['user_mysql'] = 'liag';
-    $CFG['pass_mysql'] = 'V2vWup3Pmd725S96';
-    $CFG['db'] = 'liag';
+    $CFG['host_mysql'] = $_ENV['DB_HOST'];
+    $CFG['user_mysql'] = $_ENV['DB_USERNAME'];
+    $CFG['pass_mysql'] = $_ENV['DB_PASSWORD'];
+    $CFG['db'] = $_ENV['DB_DATABASE'];
 }
 
 $CFG['sessionValidity'] = 3600 * 24 * 15; //15 days
 
-$CFG['salt0'] = '9tkvNCFzmS4lCjtK0HvV9Y';
-$CFG['salt1'] = 'z1w3jfk50kK0HKRkBGhubT';
-$CFG['salt2'] = 'StZiBxIeMRa5e0CqVyDcDh';
+$CFG['salt0'] = $_ENV['SALT0'];
+$CFG['salt1'] = $_ENV['SALT1'];
+$CFG['salt2'] = $_ENV['SALT2'];
 
 $CFG['db_options'] = array(
     PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
 );
 
-$CFG['link'] = new PDO("mysql:host={$CFG['host_mysql']};dbname={$CFG['db']};charset=UTF8",  $CFG['user_mysql'], $CFG['pass_mysql'], $CFG['db_options']);
+$CFG['link'] = new PDO("mysql:host={$CFG['host_mysql']};dbname={$CFG['db']};charset=UTF8",$CFG['user_mysql'],$CFG['pass_mysql'],$CFG['db_options']);

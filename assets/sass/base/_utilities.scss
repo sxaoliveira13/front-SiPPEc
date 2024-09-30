@@ -13,6 +13,10 @@
     cursor: pointer;
 }
 
+.u-overflow-auto {
+    overflow: auto;
+}
+
 .u-box-padding {
     &--horizontal {
         padding-left: 2.5rem;

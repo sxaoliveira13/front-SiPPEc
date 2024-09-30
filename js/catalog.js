@@ -40,9 +40,7 @@ function handleButtonsAndInputs() {
     });
 }
 
-
-
-var catalogs = {};
+let catalogs = {};
 fetchUserCatalogs();
 async function fetchUserCatalogs() {
     fetch(`${apiUrl}/catalog/get.php`, {
@@ -56,8 +54,7 @@ async function fetchUserCatalogs() {
             await locks['onload'];
 
             if (!resp['success']) {
-                error("Erro ao buscar catálogos!");
-                return;
+                throw new CustomError(resp['msg'], resp['code']);
             }
 
             setTimeout(() => {
@@ -65,7 +62,12 @@ async function fetchUserCatalogs() {
                 buildCatalogsList(resp['data']);
             }, 700);
         }).catch((err) => {
-            error("Erro ao buscar catálogos!");
+            if (err instanceof CustomError) {
+                error(err['message']);
+                handleErrors(err['code']);
+            } else {
+                error("Erro ao buscar catálogos!");
+            }
         });
 }
 
@@ -73,7 +75,7 @@ function buildCatalogsList(data) {
     document.getElementById("catalogsList").innerHTML = "";
 
     if (data.length === 0) {
-        document.getElementById("catalogsList").innerHTML = "<h3 style='transform: translateY(-2.5rem)' class='u-text-muted--2 d-flex align-items-center text-center h-100 mb-0'>Você não possui catálogos cadastrados</h3>"
+        document.getElementById("catalogsList").innerHTML = "<h3 style='line-height: 1.7' class='u-text-muted--2 d-flex align-items-center justify-content-center text-center h-100 mt-3 mb-0'>Você não possui catálogos cadastrados</h3>"
     }
 
     data.forEach((catalog) => {
@@ -94,11 +96,13 @@ function buildCatalogsList(data) {
             </li> 
         `;
 
+        console.log(catalog)
         catalogs[catalogId] = catalog;
 
         document.getElementById("catalogsList").insertAdjacentHTML("beforeend", html);
     });
 }
+
 function buildEditModalFields(catalogId) {
     const currentCatalog = catalogs[catalogId];
 
@@ -153,17 +157,28 @@ async function updateCatalog(btn) {
             btn.textContent = 'Salvar Alterações';
 
             if (!resp['success']) {
-                error("Erro ao tentar atualizar catálogo!");
-                return;
+                throw new CustomError(resp['msg', resp['code']]);
             }
 
             document.getElementById(`catalogTitle-${data['catalogId']}`).textContent = data['titulo'];
-            success('Atualização bem sucedida!');
+            success('Catálogo atualizado com sucesso!');
+            fetchUserCatalogs();
         }).catch((err) => {
+            if (err instanceof CustomError) {
+                error(err['message']);
+                handleErrors(err['code']);
+            } else {
+                error("Erro ao tentar atualizar catálogo!");
+            }
             btn.disabled = false;
             btn.textContent = 'Salvar Alterações';
-            error("Erro ao tentar atualizar catálogo!");
         });
+}
+
+function showManageTab() {
+    if (typeof userData['userType'] != "undefined" && userData['userType'] === "2") {
+        document.getElementById('manageSolicitations').classList.remove('d-none');
+    }
 }
 
 async function insertCatalog(formId, categoryId, btn) {
@@ -190,16 +205,20 @@ async function insertCatalog(formId, categoryId, btn) {
             btn.textContent = lastBtnText;
 
             if (!resp['success']) {
-                error("Erro ao tentar inserir catálogo!");
-                return;
+                throw new CustomError(resp['msg', resp['code']]);
             }
 
-            success("Cadastro bem sucedido!");
+            success("Catálogo adicionado com sucesso!");
             fetchUserCatalogs();
         }).catch((err) => {
+            if (err instanceof CustomError) {
+                error(err['message']);
+                handleErrors(err['code']);
+            } else {
+                error("Erro ao tentar adicionar catálogo!");
+            }
             btn.disabled = false;
             btn.textContent = lastBtnText;
-            error("Erro ao tentar inserir catálogo!");
         });
 }
 
@@ -215,23 +234,21 @@ async function deleteCatalog() {
     }).then((resp) => resp.json())
         .then(async (resp) => {
             if (!resp['success']) {
-                error("Erro ao tentar deletar catálogo!");
-                return;
+                throw new CustomError(resp['msg', resp['code']]);
             }
-
-            success("Catálogo deletado com sucesso");
 
             document.getElementById(`catalog_${catalogId}`).remove();
 
-            const catalogsQuantity = document.getElementsByClassName("main__section-catalog").length;
-            if (catalogsQuantity === 0) {
-                document.getElementById("catalogsList").innerHTML = "<h3 style='transform: translateY(-2.5rem)' class='u-text-muted--2 d-flex align-items-center text-center h-100 mb-0'>Você não possui catálogos cadastrados</h3>"
-            }
-            document.getElementById("catalogsQuantity").textContent = catalogsQuantity;
-
+            fetchUserCatalogs();
+            success("Catálogo excluído com sucesso!");
 
             $("#editCatalogModal").modal('hide');
         }).catch((err) => {
-            error("Erro ao tentar deletar catálogo!");
+            if (err instanceof CustomError) {
+                error(err['message']);
+                handleErrors(err['code']);
+            } else {
+                error("Erro ao tentar excluir catálogo!");
+            }
         });
 }

@@ -31,20 +31,20 @@ async function buildUserInfo() {
 
 async function fetchUserManage() {
     dataTableObj = $('.datatableNewUserRegisters').DataTable({
-        "data": [['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
-        ['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
-        ['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
-        ['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
-        ['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
-        ['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
-        ['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
-        ['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
-        ['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
-        ['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
-        ['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
-        ['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
-        ['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
-        ['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024']].map(function (c) {
+        "data": [['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
+        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
+        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
+        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
+        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
+        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
+        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
+        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
+        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
+        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
+        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
+        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
+        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
+        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024']].map(function (c) {
             return [c[0], `<a href="https://wa.me/${c[1]}">${c[1]}</a>`, c[2], c[3]];
         }),
     });

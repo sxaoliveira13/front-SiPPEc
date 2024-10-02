@@ -3,16 +3,17 @@
 *::after {
   margin: 0;
   padding: 0;
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
 
 html {
   font-size: 62.5%; //10px
 }
 
-html, body {
- min-height: 100dvh;
- min-height: 100vh; //fallback
+html,
+body {
+  min-height: 100dvh;
+  min-height: 100vh; //fallback
 }
 
 body {
@@ -26,13 +27,13 @@ a {
   color: $color-black;
 }
 
-// Disable automatic autofill in inputs
+// Disable automatic autofill style in inputs
 :-webkit-autofill {
   transition: all 100000s ease-in-out 0s;
 }
 
 @media (max-width: 766.98px) {
-    html {
-      font-size: 50%;
-    }
+  html {
+    font-size: 50%;
+  }
 }

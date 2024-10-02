@@ -3,14 +3,30 @@ header.u-container {
 }
 
 .datatable {
-
     &-scroll {
         overflow: auto;
-        max-height: 380px;
+        max-height: 310px;
 
         thead {
+            font-size: 1.45rem;
             position: sticky;
             top: 0;
+        }
+
+        tbody {
+            font-size: 1.4rem;
+        }
+    }
+}
+
+.main {
+    &__section {
+        &--box {
+            .tab-content {
+                @media (max-width: 1200px) {
+                    max-height: unset;
+                }
+            }
         }
     }
 }

@@ -33,7 +33,7 @@ require(dirname(__FILE__) . '/includes/head.php');
             <div class="main__section-header border-bottom">
                 <div class="d-flex justify-content-between align-items-center u-box-padding--horizontal u-box-padding--vertical">
                     <h2 class="mb-0">Seus Catálogos</h2>
-                    <span id="catalogsQuantity" class="badge badge--primary badge--rounded">0</span>
+                    <span id="catalogsQuantity" class="badge badge--primary badge--rounded badge--rounded-big">0</span>
                 </div>
             </div>
             <div class="form-group position-relative u-box-padding--horizontal u-box-padding--vertical">
@@ -54,24 +54,28 @@ require(dirname(__FILE__) . '/includes/head.php');
         </section>
         <section class="main__grid--2 h-100">
             <section class="main__section--box overflow-hidden px-0">
-                <ul class="nav nav-tabs d-flex flex-nowrap" id="myTab" role="tablist">
+                <ul class="nav nav-tabs nav-tabs--1 d-flex flex-nowrap" id="myTab" role="tablist">
                     <li class="nav-item d-none" id="manageSolicitations" role="presentation">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#manageSolicitationsTab" type="button" role="tab" aria-selected="false"><span>Gerenciar</span> Solicitações
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#manageSolicitationsTab" type="button" role="tab" aria-selected="false">
+                            <div class="d-flex justify-content-center align-items-center">
+                            <span class="d-md-inline d-none">Gerenciar</span>&nbsp;Solicitações
+                                <span id="catalogsQuantity" class="badge badge--danger badge--rounded badge--rounded-medium ms-3">0</span>
+                            </div>
                             <div class="tab-line"></div>
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#articleTab" type="button" role="tab" aria-selected="true"><span>Registrar</span> Artigos
+                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#articleTab" type="button" role="tab" aria-selected="true"><span class="d-md-inline d-none">Registrar</span> Artigos
                             <div class="tab-line"></div>
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#educationGamesTab" type="button" role="tab" aria-selected="false"><span>Registrar</span> Jogos
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#educationGamesTab" type="button" role="tab" aria-selected="false"><span class="d-md-inline d-none">Registrar</span> Jogos
                             <div class="tab-line"></div>
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#methodsTab" type="button" role="tab" aria-selected="false"><span>Registrar</span> Métodos
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#methodsTab" type="button" role="tab" aria-selected="false"><span class="d-md-inline d-none">Registrar</span> Métodos
                             <div class="tab-line"></div>
                         </button>
                     </li>
@@ -79,25 +83,46 @@ require(dirname(__FILE__) . '/includes/head.php');
    
             </section>
             <section class="main__section--box u-overflow-auto">
-                <div class="tab-content d-flex flex-column" id="catalogTabs">
+                <div class="tab-content d-flex flex-column">
                     <div class="tab-pane fade flex-auto" id="manageSolicitationsTab" role="tabpanel">
                         <div class="d-flex flex-wrap align-items-center justify-content-sm-start justify-content-center position-sticky bg-white top-0 u-box-padding--vertical u-box-padding--horizontal-big border-bottom" style="z-index: 2; min-height: 10.7rem">
                             <h4 class="fs-2 text-center fw-bolder mb-sm-0 mb-0" style="line-height: 1.7">Gerenciamento de Novas Solicitações</h4>
                         </div>
                         <div class="u-box-padding--vertical u-box-padding--horizontal-big">
-                            <table class="table datatableNewUserRegisters" style="font-size: 1.5rem;">
-                                <thead>
-                                    <tr>
-                                        <th>Nome</th>
-                                        <th>Telefone</th>
-                                        <th>Email</th>
-                                        <th>Criado em</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                            <ul class="nav nav-tabs nav-tabs--2 w-100 mb-3">
+                                <li class="nav-item">
+                                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#newCatalogs" type="button" role="tab" aria-selected="true">Novos Catálogos</button>
+                                </li>
+                                <li class="nav-item">
+                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#newUsers" type="button" role="tab" aria-selected="false">Novos Usuários</button>
+                                </li>
+                                <li class="nav-item">
+                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#educationGamesTab" type="button" role="tab" aria-selected="false">Usuários Cadastrados</button>
+                                </li>
+                                <li class="nav-item">
+                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#educationGamesTab" type="button" role="tab" aria-selected="false">Pesquisar Catálogos</button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-content d-flex flex-column u-box-padding--horizontal-big">
+                            <div class="tab-pane fade show flex-auto" id="newCatalogs" role="tabpanel">
+                                
+                            </div>
+                            <div class="tab-pane fade flex-auto" id="newUsers" role="tabpanel">
+                                <table class="table datatableNewUserRegisters">
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Telefone</th>
+                                            <th>Email</th>
+                                            <th>Criado em</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                     <div class="tab-pane fade show flex-auto active" id="articleTab" role="tabpanel">

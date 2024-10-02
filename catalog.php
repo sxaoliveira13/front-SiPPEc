@@ -91,22 +91,41 @@ require(dirname(__FILE__) . '/includes/head.php');
                         <div class="u-box-padding--vertical u-box-padding--horizontal-big">
                             <ul class="nav nav-tabs nav-tabs--2 w-100 mb-3">
                                 <li class="nav-item">
-                                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#newCatalogs" type="button" role="tab" aria-selected="true">Novos Catálogos</button>
+                                    <button class="nav-link d-flex align-items-center active" data-bs-toggle="tab" data-bs-target="#newCatalogs" type="button" role="tab" aria-selected="true">
+                                        Novos Catálogos
+                                        <span id="catalogsQuantity" class="badge badge--danger badge--rounded badge--rounded-small ms-3">0</span>
+                                    </button>
                                 </li>
                                 <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#newUsers" type="button" role="tab" aria-selected="false">Novos Usuários</button>
+                                    <button class="nav-link d-flex align-items-center" data-bs-toggle="tab" data-bs-target="#newUsers" type="button" role="tab" aria-selected="false">Novos Usuários
+                                    <span id="catalogsQuantity" class="badge badge--danger badge--rounded badge--rounded-small ms-3">0</span>
+                                    </button>
                                 </li>
                                 <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#educationGamesTab" type="button" role="tab" aria-selected="false">Usuários Cadastrados</button>
+                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#registredUsers" type="button" role="tab" aria-selected="false">Usuários Cadastrados</button>
                                 </li>
                                 <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#educationGamesTab" type="button" role="tab" aria-selected="false">Pesquisar Catálogos</button>
+                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#searchCatalogs   " type="button" role="tab" aria-selected="false">Pesquisar Catálogos</button>
                                 </li>
                             </ul>
                         </div>
                         <div class="tab-content d-flex flex-column u-box-padding--horizontal-big">
-                            <div class="tab-pane fade show flex-auto" id="newCatalogs" role="tabpanel">
-                                
+                            <div class="tab-pane fade show active flex-auto" id="newCatalogs" role="tabpanel">
+                                <table class="table datatableNewCatalogs">
+                                    <thead>
+                                        <tr>
+                                            <th>Título</th>
+                                            <th>Catálogo</th>
+                                            <th>Solicitação</th>
+                                            <th>Usuário</th>
+                                            <th>Criado em</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
                             </div>
                             <div class="tab-pane fade flex-auto" id="newUsers" role="tabpanel">
                                 <table class="table datatableNewUserRegisters">
@@ -116,12 +135,19 @@ require(dirname(__FILE__) . '/includes/head.php');
                                             <th>Telefone</th>
                                             <th>Email</th>
                                             <th>Criado em</th>
+                                            <th>Ações</th>
                                         </tr>
                                     </thead>
                                     <tbody>
 
                                     </tbody>
                                 </table>
+                            </div>
+                            <div class="tab-pane fade flex-auto" id="registredUsers" role="tabpanel">
+                                
+                            </div>
+                            <div class="tab-pane fade flex-auto" id="searchCatalogs" role="tabpanel">
+                                
                             </div>
                         </div>
                     </div>

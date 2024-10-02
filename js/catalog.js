@@ -17,7 +17,7 @@ $.extend($.fn.dataTable.defaults, {
     }
 });
 
-var dataTableObj = false;
+
 
 buildUserInfo();
 async function buildUserInfo() {
@@ -29,23 +29,32 @@ async function buildUserInfo() {
     }
 }
 
+var dataTableObj1 = false;
+var dataTableObj2 = false;
 async function fetchUserManage() {
-    dataTableObj = $('.datatableNewUserRegisters').DataTable({
-        "data": [['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
-        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
-        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
-        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
-        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
-        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
-        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
-        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
-        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
-        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
-        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
-        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
-        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
-        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024']].map(function (c) {
-            return [c[0], `<a href="https://wa.me/${c[1]}">${c[1]}</a>`, c[2], c[3]];
+    dataTableObj1 = $('.datatableNewCatalogs').DataTable({
+        "data": [['Jogo da Velha', 'Jogo', 'Novo cadastro', 'Victor Osses', '25/08/2024', `ação`]].map(function (c) {
+            return [c[0], c[1], c[2], c[3], c[4], c[5]];
+        }),
+    });
+
+
+    dataTableObj2 = $('.datatableNewUserRegisters').DataTable({
+        "data": [['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações'],
+        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações'],
+        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações'],
+        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações'],
+        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações'],
+        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações'],
+        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações'],
+        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações'],
+        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações'],
+        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações'],
+        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações'],
+        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações'],
+        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações'],
+        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações']].map(function (c) {
+            return [c[0], `<a href="https://wa.me/${c[1]}">${c[1]}</a>`, c[2], c[3], c[4]];
         }),
     });
 }

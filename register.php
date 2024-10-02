@@ -5,13 +5,13 @@ require_once("api/functions.php");
 
 $pageName = 'Cadastro';
 
-// if (isset($_COOKIE['userToken'])) {
-//     $USERDATA = checkToken($_COOKIE['userToken'] ?? []);
-//     if (!empty($USERDATA)) {
-//         header("Location: catalog.php");
-//         exit;
-//     }
-// }
+if (isset($_COOKIE['userToken'])) {
+    $USERDATA = checkToken($_COOKIE['userToken'] ?? []);
+    if (!empty($USERDATA)) {
+        header("Location: catalog.php");
+        exit;
+    }
+}
 
 require(dirname(__FILE__) . '/includes/head.php');
 ?>

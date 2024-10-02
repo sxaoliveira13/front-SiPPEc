@@ -19,10 +19,12 @@ if (empty($USERDATA)) {
 
 require(dirname(__FILE__) . '/includes/head.php');
 ?>
+<link rel="stylesheet" href="<?php echo $CFG['system_url'] ?>assets/css/datatable.min.css">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="<?php echo $CFG['system_url'] ?>assets/js/datatable.min.js"></script>
 <script src="<?php echo $CFG['system_url'] ?>js/catalog.js"></script>
-
 </head>
+
 
 <body>
     <?php require(dirname(__FILE__) . '/includes/authenticatedHeader.php'); ?>
@@ -58,7 +60,6 @@ require(dirname(__FILE__) . '/includes/head.php');
                             <div class="tab-line"></div>
                         </button>
                     </li>
-                    <script>showManageTab();</script>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#articleTab" type="button" role="tab" aria-selected="true"><span>Registrar</span> Artigos
                             <div class="tab-line"></div>
@@ -75,12 +76,28 @@ require(dirname(__FILE__) . '/includes/head.php');
                         </button>
                     </li>
                 </ul>
+   
             </section>
             <section class="main__section--box u-overflow-auto">
                 <div class="tab-content d-flex flex-column" id="catalogTabs">
                     <div class="tab-pane fade flex-auto" id="manageSolicitationsTab" role="tabpanel">
-                    <div class="d-flex flex-wrap align-items-center justify-content-sm-start justify-content-center position-sticky bg-white top-0 u-box-padding--vertical u-box-padding--horizontal-big border-bottom" style="z-index: 2; min-height: 10.7rem">
+                        <div class="d-flex flex-wrap align-items-center justify-content-sm-start justify-content-center position-sticky bg-white top-0 u-box-padding--vertical u-box-padding--horizontal-big border-bottom" style="z-index: 2; min-height: 10.7rem">
                             <h4 class="fs-2 text-center fw-bolder mb-sm-0 mb-0" style="line-height: 1.7">Gerenciamento de Novas Solicitações</h4>
+                        </div>
+                        <div class="u-box-padding--vertical u-box-padding--horizontal-big">
+                            <table class="table datatableNewUserRegisters" style="font-size: 1.5rem;">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Telefone</th>
+                                        <th>Email</th>
+                                        <th>Criado em</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                     <div class="tab-pane fade show flex-auto active" id="articleTab" role="tabpanel">
@@ -439,6 +456,7 @@ require(dirname(__FILE__) . '/includes/head.php');
                     </div>
                 </div>
             </section>
+            <script>showManageTab();</script>
         </section>
     </main>
 

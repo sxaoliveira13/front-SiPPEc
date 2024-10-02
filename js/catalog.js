@@ -1,11 +1,54 @@
 window.addEventListener('DOMContentLoaded', () => {
-    document.getElementById("userName").textContent = userData.userName;
     handleButtonsAndInputs();
-
-    document.getElementById('editCatalogModal').addEventListener('hidden.bs.modal', function () {
+    document.getElementById('editCatalogModal').addEventListener('hidden.bs.modal', () => {
         document.getElementById("catalogDeleteInput").value = "";
     });
 });
+
+$.extend($.fn.dataTable.defaults, {
+    autoWidth: false,
+    dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
+    language: {
+        url: systemUrl + 'assets/json/datatable.pt-BR.json',
+        search: '_INPUT_',
+        searchPlaceholder: 'Pesquisar',
+        lengthMenu: '<span>Exibir:</span> _MENU_',
+        paginate: { 'first': 'Primeiro', 'last': 'Ultimo', 'next': '&rarr;', 'previous': '&larr;' }
+    }
+});
+
+var dataTableObj = false;
+
+buildUserInfo();
+async function buildUserInfo() {
+    await Promise.all([locks['user'], locks['onload']]);
+    document.getElementById("userName").textContent = userData['userName'];
+
+    if (typeof userData['userType'] != "undefined" && userData['userType'] === "2") {
+        fetchUserManage();
+    }
+}
+
+async function fetchUserManage() {
+    dataTableObj = $('.datatableNewUserRegisters').DataTable({
+        "data": [['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
+        ['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
+        ['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
+        ['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
+        ['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
+        ['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
+        ['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
+        ['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
+        ['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
+        ['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
+        ['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
+        ['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
+        ['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024'],
+        ['Nome', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024']].map(function (c) {
+            return [c[0], `<a href="https://wa.me/${c[1]}">${c[1]}</a>`, c[2], c[3]];
+        }),
+    });
+}
 
 function handleButtonsAndInputs() {
     document.getElementById('btnDeleteCatalog').setAttribute("disabled", true);
@@ -22,7 +65,7 @@ function handleButtonsAndInputs() {
         insertCatalog("methodForm", 3, e.target);
     });
 
-    document.getElementById('btnLogout')?.addEventListener('click', (e) => {
+    document.getElementById('btnLogout')?.addEventListener('click', () => {
         logout();
     });
 
@@ -35,7 +78,7 @@ function handleButtonsAndInputs() {
         }
     });
 
-    document.getElementById('btnDeleteCatalog')?.addEventListener('click', (e) => {
+    document.getElementById('btnDeleteCatalog')?.addEventListener('click', () => {
         deleteCatalog();
     });
 }
@@ -96,7 +139,6 @@ function buildCatalogsList(data) {
             </li> 
         `;
 
-        console.log(catalog)
         catalogs[catalogId] = catalog;
 
         document.getElementById("catalogsList").insertAdjacentHTML("beforeend", html);
@@ -175,9 +217,12 @@ async function updateCatalog(btn) {
         });
 }
 
-function showManageTab() {
+async function showManageTab() {
+    await locks['user'];
     if (typeof userData['userType'] != "undefined" && userData['userType'] === "2") {
-        document.getElementById('manageSolicitations').classList.remove('d-none');
+        const tabButton = document.getElementById('manageSolicitations');
+        tabButton.classList.remove('d-none');
+        // tabButton.getElementsByTagName('button')[0].click();
     }
 }
 

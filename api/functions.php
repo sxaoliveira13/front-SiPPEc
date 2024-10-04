@@ -19,11 +19,18 @@ function sanitize($string, string $type = "default")
         return "";
     }
     switch ($type) {
-        case ("default"): {
-                $string = htmlspecialchars($string, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-                return $string;
-            }
+        case "default":
+            return htmlspecialchars($string, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        case "int":
+            return (int) $string;
+        case "email":
+            return filter_var($string, FILTER_SANITIZE_EMAIL);
+        case "url":
+            return filter_var($string, FILTER_SANITIZE_URL);
+        default:
+            return htmlspecialchars($string, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
+
     return "";
 }
 
@@ -97,7 +104,7 @@ function randGen($length, $type = "alphanum")
 }
 
 /**
- * Return a error message and a code
+ * Return a error message and a code to redirect to another page
  * @param string $msg
  * @return int $code
  */

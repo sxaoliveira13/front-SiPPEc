@@ -20,9 +20,13 @@ class CustomError extends Error {
     }
 }
 
+const catalogsDict = { '1': 'Artigo', '2': 'Jogo', '3': 'Método' }
+const catalogSolicitationsDict = { '0': 'ativo', '1': 'cadastro pendente', '2': 'cadastro aprovado', '3': 'cadastro recusado', '4': 'atualização pendente', '5': 'atualização aprovada', '6': 'atualização recusada', '7': 'exclusão pendente', '8': 'exclusão aprovada', '9': 'exclusão recusada' };
+
 window.addEventListener("DOMContentLoaded", () => {
-    clearAllInputs();
     promiseResolveLoad();
+    clearAllInputs();
+    buildMasks();
 });
 
 async function logout() {
@@ -60,7 +64,6 @@ function getFormData(target) {
 
     return data;
 }
-
 
 function inputIsValid(input) {
     const inputType = input.type;
@@ -206,11 +209,66 @@ function forceRedirect(url) {
     window.location.href = url;
 }
 
-function handleErrors(code) {
+function forceRedirectByUserType(type) {
+    switch (type) {
+        case "0":
+        case "3": {
+            if (currentPage !== 'awaitingApproval') {
+                forceRedirect('awaitingApproval.php?r=true');
+            }
+            break;
+        }
+        case "1":
+        case "2": {
+            if (currentPage === 'awaitingApproval') {
+                forceRedirect('catalog.php');
+            }
+            break;
+        }
+    }
+}
+
+function forceRedirectByError(code) {
     switch (code) {
         case 1: {
             forceRedirect('login.php');
             break;
         }
     }
+}
+
+async function buildMasks() {
+    if (typeof $().mask != "function") {
+        await sleep(2000);
+    }
+
+    if (typeof $().mask == "function") {
+        $('.phoneMask').mask('(00) 0000-00000');
+    }
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function formatDate(time, short = false, epoch = false) {
+    return returnDate(time, short, epoch);
+}
+
+function returnDate(time, short = false, epoch = false) {
+    var inputTime = new Date(time);
+    let append = '';
+    if (epoch) {
+        append = `<b style="display: none">!${inputTime.getTime() / 1000}?</b>`;
+    }
+
+    var day = ('0' + inputTime.getDate()).slice(-2);
+    var month = ('0' + (inputTime.getMonth() + 1)).slice(-2);
+    var year = inputTime.getFullYear();
+    var hour = ('0' + inputTime.getHours()).slice(-2);
+    var minute = ('0' + inputTime.getMinutes()).slice(-2);
+    if (short) {
+        return append + day + '/' + month + '/' + year;
+    }
+    return append + day + '/' + month + '/' + year + ' às ' + hour + ':' + minute;
 }

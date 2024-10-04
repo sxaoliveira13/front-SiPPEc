@@ -16,15 +16,21 @@
             <li>
                 <a href="#">Métodos</a>
             </li>
-            <li>
-                <a href="#" class="active">Login</a>
+            <li id="menu_login">
+                <a href="login.php">Login</a>
             </li>
         </ul>
         <div class="header__nav-button d-lg-none d-flex flex-column justify-content-between u-cursor-pointer" onclick="">
-          <span></span>
-          <span></span>
-          <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
     </nav>
 </header>
+<script>
+    if (typeof currentPage == "string" && document.getElementById(`menu_${currentPage}`)) {
+        document.getElementById(`menu_${currentPage}`).getElementsByTagName('a')[0].classList.add('active');
+        document.getElementById(`menu_${currentPage}`).getElementsByTagName('a')[0].href = "#";
+    }
+</script>
 <script src="<?php echo $CFG['system_url'] ?>js/header.js"></script>

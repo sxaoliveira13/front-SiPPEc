@@ -27,7 +27,7 @@ try {
     $stmt->execute();
 
     $rs = $stmt->fetch(PDO::FETCH_ASSOC);
-   
+
     if (empty($rs['id'])) {
         error('Usuário e/ou senha incorretos!');
     }
@@ -53,17 +53,28 @@ try {
     $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
     $stmt->bindParam(':token', $hashPass, PDO::PARAM_STR);
     $stmt->bindParam(':validity', $validity, PDO::PARAM_STR);
-    
+
     $rs = $stmt->execute();
     $tokenId = $CFG['link']->lastInsertId();
-} catch(PDOException $e) {
+} catch (PDOException $e) {
     error($e->getMessage());
-} catch(Exception $e) {
+} catch (Exception $e) {
     error($e->getMessage());
 }
 
-if(!empty($tokenId)) {
-    setcookie('userToken', $tokenId."_".$key, time() + $CFG['sessionValidity'], "/", "", true,true);
+if (!empty($tokenId)) {
+    setcookie(
+        'userToken',
+        $tokenId . "_" . $key,
+        [
+            'expires' => time() + $CFG['sessionValidity'],
+            'path' => '/',
+            'domain' => '',
+            'secure' => true,
+            'httponly' => true,
+            'samesite' => 'Strict'
+        ]
+    );
 }
 
 echo json_encode($out);

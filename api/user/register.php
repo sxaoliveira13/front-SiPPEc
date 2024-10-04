@@ -27,7 +27,7 @@ try {
         error('Este email já está cadastrado!');
     }
 
-    $sql = "INSERT INTO actUser (name, email, phone, type, password) VALUES (:userName, :userEmail, :userPhone, 1, :userPassword)";
+    $sql = "INSERT INTO actUser (name, email, phone, type, password) VALUES (:userName, :userEmail, :userPhone, 0, :userPassword)";
     $stmt = $CFG['link']->prepare($sql);
     $stmt->bindParam(':userName', $data['userName'], PDO::PARAM_STR);
     $stmt->bindParam(':userEmail', $data['userEmail'], PDO::PARAM_STR);

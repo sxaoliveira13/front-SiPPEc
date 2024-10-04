@@ -18,45 +18,131 @@ $.extend($.fn.dataTable.defaults, {
 });
 
 
-
 buildUserInfo();
 async function buildUserInfo() {
     await Promise.all([locks['user'], locks['onload']]);
     document.getElementById("userName").textContent = userData['userName'];
 
     if (typeof userData['userType'] != "undefined" && userData['userType'] === "2") {
-        fetchUserManage();
+        fetchNewUsers();
+        fetchNewCatalogs();
     }
 }
 
-var dataTableObj1 = false;
-var dataTableObj2 = false;
-async function fetchUserManage() {
-    dataTableObj1 = $('.datatableNewCatalogs').DataTable({
-        "data": [['Jogo da Velha', 'Jogo', 'Novo cadastro', 'Victor Osses', '25/08/2024', `ação`]].map(function (c) {
-            return [c[0], c[1], c[2], c[3], c[4], c[5]];
-        }),
-    });
+var dataTableObjNewUsers = false;
+async function fetchNewUsers() {
+    await fetch(`${apiUrl}/user/getNew.php`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }).then((resp) => resp.json())
+        .then(async (resp) => {
+            await locks['onload'];
 
+            if (!resp['success']) {
+                throw new CustomError(resp['msg'], resp['code']);
+            }
 
-    dataTableObj2 = $('.datatableNewUserRegisters').DataTable({
-        "data": [['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações'],
-        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações'],
-        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações'],
-        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações'],
-        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações'],
-        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações'],
-        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações'],
-        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações'],
-        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações'],
-        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações'],
-        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações'],
-        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações'],
-        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações'],
-        ['Valdemar Costa Neto', '(19) 99868-5541', 'victor.costa.osses@gmail.com', '22/10/2024', 'ações']].map(function (c) {
-            return [c[0], `<a href="https://wa.me/${c[1]}">${c[1]}</a>`, c[2], c[3], c[4]];
-        }),
-    });
+            if (resp['data'].length > 0) {
+                document.getElementById('newUsersQuantity').style.display = 'flex';
+                document.getElementById('newUsersQuantity').textContent = resp['data'].length;
+                document.getElementById('totalSolicitationsQuantity').style.opacity = '1';
+                document.getElementById('totalSolicitationsQuantity').textContent = parseInt(document.getElementById('totalSolicitationsQuantity').textContent) + resp['data'].length;
+            }
+
+            if (dataTableObjNewUsers !== false) {
+                dataTableObjNewUsers.destroy();
+            }
+
+            dataTableObjNewUsers = $('.datatableNewUserRegisters').DataTable({
+                "data": resp['data'].map(function (c) {
+                    let actionButtons = `
+                        <div class="d-flex align-items-center justify-content-center">
+                            <img onclick="approveNewUser(${c['id']}, 3)" src="assets/img/close.svg" style="width: 2.6rem;" alt="recusar" class="alert-close-icon img-fluid u-cursor-pointer u-filter--red me-2">
+                            <img onclick="approveNewUser(${c['id']}, 1)" style="width: 2.4rem;" src="assets/img/success2.svg" alt="aprovar" class="alert-close-icon img-fluid u-cursor-pointer u-filter--green ms-2">
+                        </div>
+                    `;
+                    return [c['name'], `<a href="https://wa.me/${c['phone']}">${c['phone']}</a>`, c['email'], formatDate(c['createTime']), actionButtons];
+                }),
+            });
+        }).catch((err) => {
+            if (err instanceof CustomError) {
+                error(err['message']);
+                forceRedirectByError(err['code']);
+            } else {
+                error(err);
+            }
+        });
+}
+
+var dataTableObjNewCatalogs = false;
+async function fetchNewCatalogs() {
+    await fetch(`${apiUrl}/catalog/getNew.php`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }).then((resp) => resp.json())
+        .then(async (resp) => {
+            await locks['onload'];
+
+            if (!resp['success']) {
+                throw new CustomError(resp['msg'], resp['code']);
+            }
+
+            if (resp['data'].length > 0) {
+                document.getElementById('newCatalogsQuantity').style.display = 'flex';
+                document.getElementById('newCatalogsQuantity').textContent = resp['data'].length;
+                document.getElementById('totalSolicitationsQuantity').style.opacity = '1';
+                document.getElementById('totalSolicitationsQuantity').textContent = parseInt(document.getElementById('totalSolicitationsQuantity').textContent) + resp['data'].length;
+            }
+
+            if (dataTableObjNewCatalogs !== false) {
+                dataTableObjNewCatalogs.destroy();
+            }
+
+            dataTableObjNewCatalogs = $('.datatableNewCatalogs').DataTable({
+                "data": resp['data'].map(function (c) {
+                    let actionButton = `a`;
+                    return [c['title'], catalogsDict[c['categoryId']], catalogSolicitationsDict[c['status']], c['userName'], c['createdAt'], actionButton];
+                }),
+            });
+        }).catch((err) => {
+            if (err instanceof CustomError) {
+                error(err['message']);
+                forceRedirectByError(err['code']);
+            } else {
+                error(err);
+            }
+        });
+}
+
+async function approveNewUser(userId, isApproved) {
+    await fetch(`${apiUrl}/user/approve.php`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 'userId': userId, 'isApproved': isApproved }),
+    }).then((resp) => resp.json())
+        .then(async (resp) => {
+            await locks['onload'];
+
+            if (!resp['success']) {
+                throw new CustomError(resp['msg'], resp['code']);
+            }
+
+            success(`Usuário ${isApproved === 1 ? 'aprovado' : 'recusado'} com sucesso!`);
+            fetchNewUsers();
+        }).catch((err) => {
+            if (err instanceof CustomError) {
+                error(err['message']);
+                forceRedirectByError(err['code']);
+            } else {
+                error("Erro ao tentar aprovar/rejeitar usuário");
+            }
+        });
 }
 
 function handleButtonsAndInputs() {
@@ -110,13 +196,13 @@ async function fetchUserCatalogs() {
             }
 
             setTimeout(() => {
-                document.getElementById("catalogsQuantity").textContent = resp['data'].length;
+                document.getElementById("userCatalogsQuantity").textContent = resp['data'].length;
                 buildCatalogsList(resp['data']);
             }, 700);
         }).catch((err) => {
             if (err instanceof CustomError) {
                 error(err['message']);
-                handleErrors(err['code']);
+                forceRedirectByError(err['code']);
             } else {
                 error("Erro ao buscar catálogos!");
             }
@@ -217,7 +303,7 @@ async function updateCatalog(btn) {
         }).catch((err) => {
             if (err instanceof CustomError) {
                 error(err['message']);
-                handleErrors(err['code']);
+                forceRedirectByError(err['code']);
             } else {
                 error("Erro ao tentar atualizar catálogo!");
             }
@@ -267,7 +353,7 @@ async function insertCatalog(formId, categoryId, btn) {
         }).catch((err) => {
             if (err instanceof CustomError) {
                 error(err['message']);
-                handleErrors(err['code']);
+                forceRedirectByError(err['code']);
             } else {
                 error("Erro ao tentar adicionar catálogo!");
             }
@@ -300,7 +386,7 @@ async function deleteCatalog() {
         }).catch((err) => {
             if (err instanceof CustomError) {
                 error(err['message']);
-                handleErrors(err['code']);
+                forceRedirectByError(err['code']);
             } else {
                 error("Erro ao tentar excluir catálogo!");
             }

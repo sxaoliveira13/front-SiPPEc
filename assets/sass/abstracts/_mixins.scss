@@ -19,3 +19,10 @@
         color: lighten($color, 10%);
     }
 }
+
+@mixin badge-size($width, $height, $font-size) {
+    width: $width;
+    height: $height;
+    font-size: $font-size;
+    border-radius: 50%;
+}

@@ -82,3 +82,13 @@
         color: $color-grey-light-3;
     }
 }
+
+.u-filter {
+    &--green {
+        filter: brightness(0) invert(53%) sepia(75%) saturate(1363%) hue-rotate(66deg) brightness(95%) contrast(108%);
+    }
+
+    &--red {
+        filter: brightness(0) invert(10%) sepia(84%) saturate(6939%) hue-rotate(14deg) brightness(91%) contrast(113%);
+    }
+}

@@ -33,8 +33,8 @@ async function registerUser(btn) {
             success("Cadastro bem sucedido!");
 
             setTimeout(() => {
-                window.location.href = `${systemUrl}catalog.php`;
-            }, 600);
+                window.location.href = `${systemUrl}awaitingApproval.php`;
+            }, 1200);
         }).catch((err) => {
             error("Erro ao tentar cadastrar!");
         });

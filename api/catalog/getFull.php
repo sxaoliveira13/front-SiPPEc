@@ -6,8 +6,12 @@ require_once("../functions.php");
 header('Content-Type: application/json; charset=utf-8');
 $USERDATA = checkToken($_COOKIE['userToken']);
 
-if (empty($USERDATA['userId'])) {error("Autenticação inválida ", 1);}
-if ($USERDATA['userType'] != 1 && $USERDATA['userType'] != 2) {error("Você não tem permissão para isso! ", 2);}
+if (empty($USERDATA['userId'])) {
+    error("Autenticação inválida ", 1);
+}
+if ($USERDATA['userType'] != 1 && $USERDATA['userType'] != 2) {
+    error("Você não tem permissão para isso! ", 2);
+}
 
 $out = array('data' => array(), 'success' => true);
 
@@ -18,7 +22,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $json = file_get_contents('php://input');
 $data = json_decode($json, true);
-$data = sanitize($data);
+$userId = sanitize($data['userId'], 'int');
+
+if ($USERDATA['userId'] !== $userId) {
+    http_response_code(401);
+    error("Autenticação inválida", 1);
+}
 
 try {
     $sql = "SELECT c.id as catalogId, c.CategoriaId as categoryId, c.Titulo as title, c.Conteudo as content, 

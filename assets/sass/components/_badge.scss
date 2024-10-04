@@ -13,25 +13,16 @@
         background-color: $color-red;
     }
 
-    &--rounded {
-        border-radius: 50%;
+    &--rounded,
+    &--rounded-big {
+        @include badge-size(3.3rem, 3.3rem, 1.6rem);
+    }
 
-        &-big {
-            width: 3.3rem;
-            height: 3.3rem;
-            font-size: 1.6rem;
-        }
+    &--rounded-medium {
+        @include badge-size(2.5rem, 2.5rem, 1.4rem);
+    }
 
-        &-medium {
-            width: 2.5rem;
-            height: 2.5rem;
-            font-size: 1.4rem;
-        }
-
-        &-small {
-            width: 2rem;
-            height: 2rem;
-            font-size: 1.2rem;
-        }
+    &--rounded-small {
+        @include badge-size(2rem, 2rem, 1.2rem);
     }
 }

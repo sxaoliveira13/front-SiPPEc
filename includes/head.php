@@ -29,13 +29,19 @@ if ($_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '127.0.0.
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <script>
+        const currentPage = '<?php echo $currentPage; ?>';
+        const systemUrl = '<?php echo $CFG['system_url']; ?>';
+    </script>
+
     <script src="<?php echo $CFG['system_url'] ?>assets/js/jquery.min.js"></script>
     <script src="<?php echo $CFG['system_url'] ?>assets/js/bootstrap.bundle.min.js"></script>
     <script src="<?php echo $CFG['system_url'] ?>main.js"></script>
-    <script>const systemUrl = '<?php echo $CFG['system_url'] ?>'; </script>
+
     <?php if (!empty($USERDATA)) : ?>
-    <script>
-        const userData = <?php echo json_encode($USERDATA, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
-        promiseUserLoad();
-    </script>
+        <script>
+            const userData = <?php echo json_encode($USERDATA, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+            promiseUserLoad();
+        </script>
     <?php endif; ?>

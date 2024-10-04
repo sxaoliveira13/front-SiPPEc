@@ -10,36 +10,30 @@ if (empty($USERDATA['userId'])) {
     http_response_code(401);
     error("Autenticação inválida ", 1);
 }
-if ($USERDATA['userType'] != 1 && $USERDATA['userType'] != 2) {
+if ($USERDATA['userType'] != 2) {
     http_response_code(403);
     error("Você não tem permissão para isso!");
 }
 
 $out = array('data' => array(), 'success' => true);
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     http_response_code(405);
     error('Método de requisição inválido');
 }
 
-$json = file_get_contents('php://input');
-$data = json_decode($json, true);
-$userId = sanitize($data['userId'], 'int');
-
-if ((int)$USERDATA['userId'] !== $userId) {
-    http_response_code(401);
-    error("Autenticação inválida", 1);
-}
-
 try {
-    $sql = "SELECT id as catalogId, CategoriaId as categoryId, Titulo as title, Conteudo as content, 
-    Ambiente as ambient, Abordagem as approach, CaminhoDeAcesso as link, createdAt, PublicoAlvoID as publicId, 
-    FerramentaId as toolId, HabilidadeId as abilityId FROM catalogo
-    WHERE userId = :userId AND Status = 1 
-    ORDER BY createdAt DESC";
+    $sql = "SELECT c.id as catalogId, c.CategoriaId as categoryId, c.Titulo as title, Status as status, c.Conteudo as content, 
+    c.Ambiente as ambient, c.Abordagem as approach, c.CaminhoDeAcesso as link, c.createdAt, 
+    a.name as abilityName, t.name as toolName, p.name as publicName, u.id as userId, u.name as userName, u.email as userEmail, u.phone as userPhone, u.createTime as userCreatedAt FROM catalogo c 
+    INNER JOIN ability a ON c.HabilidadeId = a.id 
+    INNER JOIN tool t ON c.FerramentaId = t.id 
+    INNER JOIN public p ON c.PublicoAlvoId = p.id 
+    INNER JOIN actuser u ON c.userId = u.id 
+    WHERE c.Status = 1 
+    ORDER BY c.createdAt DESC";
 
     $stmt = $CFG['link']->prepare($sql);
-    $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
     $stmt->execute();
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $out['data'] = $results;

@@ -10,7 +10,7 @@ if (empty($USERDATA['userId'])) {
     http_response_code(401);
     error("Autenticação inválida ", 1);
 }
-if ($USERDATA['userType'] != 1 && $USERDATA['userType'] != 2) {
+if ($USERDATA['userType'] != 2) {
     http_response_code(403);
     error("Você não tem permissão para isso!");
 }
@@ -25,26 +25,18 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $json = file_get_contents('php://input');
 $data = json_decode($json, true);
 $userId = sanitize($data['userId'], 'int');
-
-if ((int)$USERDATA['userId'] !== $userId) {
-    http_response_code(401);
-    error("Autenticação inválida", 1);
-}
+$isApproved = sanitize($data['isApproved'], 'int');
 
 try {
-    $sql = "SELECT id as catalogId, CategoriaId as categoryId, Titulo as title, Conteudo as content, 
-    Ambiente as ambient, Abordagem as approach, CaminhoDeAcesso as link, createdAt, PublicoAlvoID as publicId, 
-    FerramentaId as toolId, HabilidadeId as abilityId FROM catalogo
-    WHERE userId = :userId AND Status = 1 
-    ORDER BY createdAt DESC";
+    $sql = "UPDATE actuser SET type = :userType WHERE id = :userId";
 
     $stmt = $CFG['link']->prepare($sql);
+    $stmt->bindParam(':userType', $isApproved, PDO::PARAM_INT);
     $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+
     $stmt->execute();
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $out['data'] = $results;
 } catch (PDOException $e) {
-    error($e->getMessage());
+    error('Falha ao tentar aprovar/recusar usuário!');
 } catch (Exception $e) {
     error($e->getMessage());
 }

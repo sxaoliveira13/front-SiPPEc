@@ -50,7 +50,7 @@ body {
   line-height: 1.7;
   color: #2E2E2E;
   padding: 3rem;
-  font-size: 1.7rem;
+  font-size: 1.6rem;
 }
 
 .text-link {
@@ -131,6 +131,13 @@ body {
   color: #C5C5C5;
 }
 
+.u-filter--green {
+  filter: brightness(0) invert(53%) sepia(75%) saturate(1363%) hue-rotate(66deg) brightness(95%) contrast(108%);
+}
+.u-filter--red {
+  filter: brightness(0) invert(10%) sepia(84%) saturate(6939%) hue-rotate(14deg) brightness(91%) contrast(113%);
+}
+
 .badge {
   display: flex;
   justify-content: center;
@@ -144,23 +151,23 @@ body {
 .badge--danger {
   background-color: #D00505;
 }
-.badge--rounded {
-  border-radius: 50%;
-}
-.badge--rounded-big {
+.badge--rounded, .badge--rounded-big {
   width: 3.3rem;
   height: 3.3rem;
   font-size: 1.6rem;
+  border-radius: 50%;
 }
 .badge--rounded-medium {
   width: 2.5rem;
   height: 2.5rem;
   font-size: 1.4rem;
+  border-radius: 50%;
 }
 .badge--rounded-small {
   width: 2rem;
   height: 2rem;
   font-size: 1.2rem;
+  border-radius: 50%;
 }
 
 button {
@@ -509,7 +516,6 @@ select {
   margin-right: 0;
 }
 .header__nav-list li a {
-  font-size: 1.8rem;
   font-weight: 600;
   padding: 1rem 2.5rem;
   transition: all 0.2s ease;

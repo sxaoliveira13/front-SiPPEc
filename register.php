@@ -3,6 +3,7 @@
 require_once("api/config.php");
 require_once("api/functions.php");
 
+$currentPage = 'register';
 $pageName = 'Cadastro';
 
 if (isset($_COOKIE['userToken'])) {
@@ -13,9 +14,11 @@ if (isset($_COOKIE['userToken'])) {
     }
 }
 
+require(dirname(__FILE__) . '/includes/authRedirect.php');
 require(dirname(__FILE__) . '/includes/head.php');
 ?>
 
+<script src="<?php echo $CFG['system_url'] ?>js/jquery.mask.min.js"></script>
 <script src="<?php echo $CFG['system_url'] ?>js/register.js"></script>
 </head>
 

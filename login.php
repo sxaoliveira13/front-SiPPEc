@@ -3,6 +3,7 @@
 require_once("api/config.php");
 require_once("api/functions.php");
 
+$currentPage = 'login';
 $pageName = 'Login';
 
 if (isset($_COOKIE['userToken'])) {
@@ -12,6 +13,7 @@ if (isset($_COOKIE['userToken'])) {
         exit;
     }
 }
+require(dirname(__FILE__) . '/includes/authRedirect.php');
 require(dirname(__FILE__) . '/includes/head.php');
 ?>
 

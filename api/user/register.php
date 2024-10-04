@@ -83,7 +83,7 @@ if (!empty($tokenId)) {
 //     $mail->Host = 'smtp.gmail.com';                       // Servidor SMTP
 //     $mail->SMTPAuth = true;                               // Habilitar autenticação SMTP
 //     $mail->Username = 'victor.costa.osses@gmail.com';               // Seu email
-//     $mail->Password = '@VictorCosta1';                         // Senha de app que eu tenho que criar certinho ainda
+//     $mail->Password = '';                         // Senha de app que eu tenho que criar certinho ainda
 //     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;   // Habilitar TLS
 //     $mail->Port = 587;                                    // Porta do servidor SMTP
 

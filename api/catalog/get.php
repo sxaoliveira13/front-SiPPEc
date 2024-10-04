@@ -35,7 +35,7 @@ try {
     $sql = "SELECT id as catalogId, CategoriaId as categoryId, Titulo as title, Conteudo as content, 
     Ambiente as ambient, Abordagem as approach, CaminhoDeAcesso as link, createdAt, PublicoAlvoID as publicId, 
     FerramentaId as toolId, HabilidadeId as abilityId FROM catalogo
-    WHERE userId = :userId AND Status = 1 
+    WHERE userId = :userId AND Status != 8
     ORDER BY createdAt DESC";
 
     $stmt = $CFG['link']->prepare($sql);

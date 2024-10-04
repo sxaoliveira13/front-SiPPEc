@@ -14,7 +14,6 @@ if (isset($_COOKIE['userToken'])) {
     }
 }
 
-require(dirname(__FILE__) . '/includes/authRedirect.php');
 require(dirname(__FILE__) . '/includes/head.php');
 ?>
 

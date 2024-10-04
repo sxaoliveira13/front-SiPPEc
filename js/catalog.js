@@ -1,3 +1,6 @@
+let numberOfNewCatalogs = 0;
+let numberOfNewUsers = 0;
+
 window.addEventListener('DOMContentLoaded', () => {
     handleButtonsAndInputs();
     document.getElementById('editCatalogModal').addEventListener('hidden.bs.modal', () => {
@@ -16,7 +19,6 @@ $.extend($.fn.dataTable.defaults, {
         paginate: { 'first': 'Primeiro', 'last': 'Ultimo', 'next': '&rarr;', 'previous': '&larr;' }
     }
 });
-
 
 buildUserInfo();
 async function buildUserInfo() {
@@ -45,10 +47,16 @@ async function fetchNewUsers() {
             }
 
             if (resp['data'].length > 0) {
+                numberOfNewUsers = resp['data'].length;
                 document.getElementById('newUsersQuantity').style.display = 'flex';
-                document.getElementById('newUsersQuantity').textContent = resp['data'].length;
+                document.getElementById('newUsersQuantity').textContent = numberOfNewUsers;
+            } else {
+                document.getElementById('newUsersQuantity').setAttribute('style', 'display: none !important');
+            }
+
+            if ((numberOfNewUsers + numberOfNewCatalogs) > 0) {
                 document.getElementById('totalSolicitationsQuantity').style.opacity = '1';
-                document.getElementById('totalSolicitationsQuantity').textContent = parseInt(document.getElementById('totalSolicitationsQuantity').textContent) + resp['data'].length;
+                document.getElementById('totalSolicitationsQuantity').textContent = numberOfNewUsers + numberOfNewCatalogs;
             }
 
             if (dataTableObjNewUsers !== false) {
@@ -92,10 +100,16 @@ async function fetchNewCatalogs() {
             }
 
             if (resp['data'].length > 0) {
+                numberOfNewCatalogs = resp['data'].length;
                 document.getElementById('newCatalogsQuantity').style.display = 'flex';
-                document.getElementById('newCatalogsQuantity').textContent = resp['data'].length;
+                document.getElementById('newCatalogsQuantity').textContent = numberOfNewCatalogs;
+            } else {
+                document.getElementById('newCatalogsQuantity').setAttribute('style', 'display: none !important');
+            }
+
+            if ((numberOfNewUsers + numberOfNewCatalogs) > 0) {
                 document.getElementById('totalSolicitationsQuantity').style.opacity = '1';
-                document.getElementById('totalSolicitationsQuantity').textContent = parseInt(document.getElementById('totalSolicitationsQuantity').textContent) + resp['data'].length;
+                document.getElementById('totalSolicitationsQuantity').textContent = numberOfNewUsers + numberOfNewCatalogs;
             }
 
             if (dataTableObjNewCatalogs !== false) {
@@ -186,7 +200,7 @@ async function fetchUserCatalogs() {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 'userId': userData.userId })
+        body: JSON.stringify({ 'userId': userData['userId'] })
     }).then((resp) => resp.json())
         .then(async (resp) => {
             await locks['onload'];
@@ -195,10 +209,8 @@ async function fetchUserCatalogs() {
                 throw new CustomError(resp['msg'], resp['code']);
             }
 
-            setTimeout(() => {
-                document.getElementById("userCatalogsQuantity").textContent = resp['data'].length;
-                buildCatalogsList(resp['data']);
-            }, 700);
+            document.getElementById("userCatalogsQuantity").textContent = resp['data'].length;
+            buildCatalogsList(resp['data']);
         }).catch((err) => {
             if (err instanceof CustomError) {
                 error(err['message']);

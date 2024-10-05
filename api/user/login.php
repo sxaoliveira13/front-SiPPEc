@@ -34,6 +34,11 @@ try {
 
     $userId = (int)$rs['id'];
     $out['data']['userEmail'] = $rs['email'];
+
+    $updateSql = "UPDATE actUser SET lastAccess = NOW() WHERE id = :userId";
+    $updateStmt = $CFG['link']->prepare($updateSql);
+    $updateStmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+    $updateStmt->execute();
 } catch (PDOException $e) {
     error('Falha ao tentar logar!');
 } catch (Exception $e) {

@@ -178,6 +178,11 @@ function checkToken($tokenCookie)
             unsetcookie('userToken');
             return;
         }
+
+        $sql = "UPDATE actUser SET lastAccess = NOW() WHERE id = :userId";
+        $stmt = $CFG['link']->prepare($sql);
+        $stmt->bindParam(':userId', $rs['userId'], PDO::PARAM_INT);
+        $stmt->execute();
     } catch (Exception $e) {
         return;
     }

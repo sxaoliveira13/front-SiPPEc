@@ -10,6 +10,10 @@ button {
     @include button-styles($color-primary, 1.6rem, #ffffff, .6rem);
 }
 
+.button-danger {
+    @include button-styles($color-red, 1.6rem, #ffffff, .6rem);
+}
+
 .button-dark {
     @include button-styles($color-black, 1.6rem, #ffffff, .6rem);
 }

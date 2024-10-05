@@ -1,6 +1,11 @@
 let numberOfNewCatalogs = 0;
 let numberOfNewUsers = 0;
 
+let newCatalogsData;
+let newUsersData;
+
+let currentCatalog;
+
 window.addEventListener('DOMContentLoaded', () => {
     handleButtonsAndInputs();
     document.getElementById('editCatalogModal').addEventListener('hidden.bs.modal', () => {
@@ -46,6 +51,8 @@ async function fetchNewUsers() {
                 throw new CustomError(resp['msg'], resp['code']);
             }
 
+            newUsersData = resp['data'];
+
             if (resp['data'].length > 0) {
                 numberOfNewUsers = resp['data'].length;
                 document.getElementById('newUsersQuantity').style.display = 'flex';
@@ -86,7 +93,7 @@ async function fetchNewUsers() {
 
 var dataTableObjNewCatalogs = false;
 async function fetchNewCatalogs() {
-    await fetch(`${apiUrl}/catalog/getNew.php`, {
+    await fetch(`${apiUrl}/catalog/getNewSolicitations.php`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -98,6 +105,8 @@ async function fetchNewCatalogs() {
             if (!resp['success']) {
                 throw new CustomError(resp['msg'], resp['code']);
             }
+
+            newCatalogsData = resp['data'];
 
             if (resp['data'].length > 0) {
                 numberOfNewCatalogs = resp['data'].length;
@@ -118,8 +127,8 @@ async function fetchNewCatalogs() {
 
             dataTableObjNewCatalogs = $('.datatableNewCatalogs').DataTable({
                 "data": resp['data'].map(function (c) {
-                    let actionButton = `a`;
-                    return [c['title'], catalogsDict[c['categoryId']], catalogSolicitationsDict[c['status']], c['userName'], c['createdAt'], actionButton];
+                    let actionButton = `<button onclick="buildCatalogSolicitationModal(${c['catalogId']});" class="fs-5 w-auto button-primary px-4 py-2 ms-auto">Ver</button>`;
+                    return [c['title'], catalogsDict[c['categoryId']], `<span class="text-capitalize">${catalogStatusDict[c['status']]}</span>`, c['userName'], c['createdAt'], actionButton];
                 }),
             });
         }).catch((err) => {
@@ -127,6 +136,82 @@ async function fetchNewCatalogs() {
                 error(err['message']);
                 forceRedirectByError(err['code']);
             } else {
+                error(err);
+            }
+        });
+}
+
+async function buildCatalogSolicitationModal(catalogId) {
+    $("#catalogSolicitationModal").modal('show');
+
+    currentCatalog = newCatalogsData.find(catalog => catalog.catalogId == catalogId);
+
+    document.getElementById('catalogSolicitationType').textContent = catalogStatusDict[currentCatalog['status']];
+    document.getElementById('catalogInternalTitle').textContent = currentCatalog['title'];
+    document.getElementById('catalogPublicName').textContent = currentCatalog['publicName'];
+    document.getElementById('catalogContentType').textContent = currentCatalog['content'];
+    document.getElementById('catalogToolName').textContent = currentCatalog['toolName'];
+    document.getElementById('catalogAbilityName').textContent = currentCatalog['abilityName'];
+    document.getElementById('catalogAccessLink').textContent = currentCatalog['link'];
+    document.getElementById('catalogAccessLink').href = currentCatalog['link'];
+
+    if (currentCatalog['ambient']) {
+        document.getElementById('catalogAmbient').textContent = currentCatalog['ambient'];
+    }
+    if (currentCatalog['approach']) {
+        document.getElementById('catalogApproach').textContent = currentCatalog['approach'];
+    }
+
+    document.getElementById('catalogAmbient')
+        .parentElement.classList.toggle('d-none', typeof currentCatalog['ambient'] !== undefined ? false : true);
+    document.getElementById('catalogApproach')
+        .parentElement.classList.toggle('d-none', typeof currentCatalog['approach'] !== undefined ? false : true);
+
+    const userInfo = await getFullUserInfo(currentCatalog['userId']);
+
+    if (userInfo && userInfo.user) {
+        document.getElementById('userFullName').textContent = userInfo.user.name || 'Não disponível';
+        document.getElementById('userMail').textContent = userInfo.user.email || 'Não disponível';
+        document.getElementById('userPhone').textContent = userInfo.user.phone || 'Não disponível';
+        document.getElementById('userCreateTime').textContent = userInfo.user.createTime || 'Não disponível';
+        document.getElementById('userLastAccess').textContent = formatDate(userInfo.user.lastAccess) || 'Não disponível';
+    }
+
+    if (userInfo && userInfo.catalogs) {
+        const catalogCounter = userInfo.catalogs.map((catalog) => {
+            return catalog.catalogCount;
+        });
+
+        document.getElementById('articlesCount').textContent = catalogCounter[0] ?? "0";
+        document.getElementById('gamesCount').textContent = catalogCounter[1] ?? "0";
+        document.getElementById('methodsCount').textContent = catalogCounter[2] ?? "0";
+    }
+}
+
+async function approveCatalog(isApproved) {
+    await fetch(`${apiUrl}/catalog/approve.php`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 'catalogId': currentCatalog['catalogId'], 'currentStatus': currentCatalog['status'], 'isApproved': isApproved }),
+    }).then((resp) => resp.json())
+        .then(async (resp) => {
+            await locks['onload'];
+
+            if (!resp['success']) {
+                throw new CustomError(resp['msg'], resp['code']);
+            }
+
+            success(`Solicitação ${isApproved === 1 ? 'aprovada' : 'recusada'} com sucesso!`);
+            $("#catalogSolicitationModal").modal('hide');
+            fetchNewCatalogs();
+        }).catch((err) => {
+            if (err instanceof CustomError) {
+                error(err['message']);
+                forceRedirectByError(err['code']);
+            } else {
+                error("Erro ao tentar aprovar/rejeitar solicitação");
                 error(err);
             }
         });
@@ -222,23 +307,30 @@ async function fetchUserCatalogs() {
 }
 
 function buildCatalogsList(data) {
-    document.getElementById("catalogsList").innerHTML = "";
+    const catalogsListEl = document.getElementById("catalogsList");
+    catalogsListEl.innerHTML = "";
 
     if (data.length === 0) {
-        document.getElementById("catalogsList").innerHTML = "<h3 style='line-height: 1.7' class='u-text-muted--2 d-flex align-items-center justify-content-center text-center h-100 mt-3 mb-0'>Você não possui catálogos cadastrados</h3>"
+        catalogsListEl.innerHTML = `
+            <h3 style="line-height: 1.7" class="u-text-muted--2 d-flex align-items-center justify-content-center text-center h-100 mt-3 mb-0">
+                Você não possui catálogos cadastrados
+            </h3>`;
+        return;
     }
 
-    data.forEach((catalog) => {
-        const [title, catalogId, createdAt] = [catalog.title, catalog.catalogId, catalog.createdAt];
+    data.forEach(catalog => {
+        const { title, catalogId, createdAt, status } = catalog;
+        const [action, statusLabel] = catalogStatusDict[status].split(' ');
+        const statusClass = catalogStatusColorsDict[statusLabel];
 
-        let html = `
+        const html = `
             <li id="catalog_${catalogId}" class="main__section-catalog">
                 <div class="catalog__header">
                     <h3 id="catalogTitle-${catalogId}" class="catalog__header-title mb-0">${title}</h3>
                     <button class="catalog__header-button" onclick="buildEditModalFields(${catalogId})" data-bs-toggle="modal" data-bs-target="#editCatalogModal">Ver</button>
                 </div>
                 <div class="catalog__body">
-                    <p class="my-3">Solicitação de cadastro <b class="u-text-color u-text-color--green">aprovada</b></p>
+                    <p class="my-3">Solicitação de ${action} <b class="u-text-color ${statusClass}">${statusLabel}</b></p>
                 </div>
                 <div class="catalog__footer">
                     <p class="u-text-color u-text-color--muted mb-0">${beautifyDate(createdAt)}</p>
@@ -247,8 +339,7 @@ function buildCatalogsList(data) {
         `;
 
         catalogs[catalogId] = catalog;
-
-        document.getElementById("catalogsList").insertAdjacentHTML("beforeend", html);
+        catalogsListEl.insertAdjacentHTML("beforeend", html);
     });
 }
 
@@ -331,6 +422,29 @@ async function showManageTab() {
         tabButton.classList.remove('d-none');
         // tabButton.getElementsByTagName('button')[0].click();
     }
+}
+
+async function getFullUserInfo(userId) {
+    return fetch(`${apiUrl}/user/getFull.php`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 'userId': userId })
+    }).then((resp) => resp.json())
+        .then((resp) => {
+            if (!resp['success']) {
+                throw new CustomError(resp['msg', resp['code']]);
+            }
+            return resp['data'];
+        }).catch((err) => {
+            if (err instanceof CustomError) {
+                error(err['message']);
+                forceRedirectByError(err['code']);
+            } else {
+                error("Erro ao tentar buscar informações do usuário");
+            }
+        });
 }
 
 async function insertCatalog(formId, categoryId, btn) {

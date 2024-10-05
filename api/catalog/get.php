@@ -32,7 +32,7 @@ if ((int)$USERDATA['userId'] !== $userId) {
 }
 
 try {
-    $sql = "SELECT id as catalogId, CategoriaId as categoryId, Titulo as title, Conteudo as content, 
+    $sql = "SELECT id as catalogId, CategoriaId as categoryId, Status as status, Titulo as title, Conteudo as content, 
     Ambiente as ambient, Abordagem as approach, CaminhoDeAcesso as link, createdAt, PublicoAlvoID as publicId, 
     FerramentaId as toolId, HabilidadeId as abilityId FROM catalogo
     WHERE userId = :userId AND Status != 8

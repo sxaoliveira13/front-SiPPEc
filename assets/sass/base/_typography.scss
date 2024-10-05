@@ -15,3 +15,7 @@ body {
         color: darken($color-primary, 20%);
     }
 }
+
+.text-primary {
+    color: $color-primary !important;
+}

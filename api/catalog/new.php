@@ -28,18 +28,21 @@ $ambiente = $data['ambiente'] ?? null;
 $abordagem = $data['abordagem'] ?? null;
 
 $status = 1;
+$awaitingResivision = 1;
 if ($USERDATA['userType'] == 2) {
     $status = 2;
+    $awaitingResivision = 0;
 }
 
 try {
-    $sql = "INSERT INTO catalogo (userId, CategoriaId, Titulo, Status, PublicoAlvoId, Conteudo, FerramentaId, HabilidadeId, Ambiente, Abordagem, CaminhoDeAcesso) VALUES (:userId, :categoria, :titulo, :status, :publico, :conteudo, :ferramenta, :habilidade, :ambiente, :abordagem, :link)";
+    $sql = "INSERT INTO catalogo (userId, CategoriaId, Titulo, Status, AguardandoRevisao, PublicoAlvoId, Conteudo, FerramentaId, HabilidadeId, Ambiente, Abordagem, CaminhoDeAcesso) VALUES (:userId, :categoria, :titulo, :status, :aguardandoRevisao, :publico, :conteudo, :ferramenta, :habilidade, :ambiente, :abordagem, :link)";
 
     $stmt = $CFG['link']->prepare($sql);
     $stmt->bindParam(':userId', $data['userId'], PDO::PARAM_INT);
     $stmt->bindParam(':categoria', $data['categoria'], PDO::PARAM_INT);
     $stmt->bindParam(':titulo', $data['titulo'], PDO::PARAM_STR);
     $stmt->bindParam(':status', $status, PDO::PARAM_STR);
+    $stmt->bindParam(':aguardandoRevisao', $awaitingResivision, PDO::PARAM_INT);
     $stmt->bindParam(':publico', $data['publico'], PDO::PARAM_INT);
     $stmt->bindParam(':conteudo', $data['conteudo'], PDO::PARAM_STR);
     $stmt->bindParam(':ferramenta', $data['ferramenta'], PDO::PARAM_INT);
@@ -50,7 +53,8 @@ try {
 
     $stmt->execute();
 } catch (PDOException $e) {
-    error('Falha ao tentar cadastrar!');
+    // error('Falha ao tentar cadastrar!');
+    error($e->getMessage());
 } catch (Exception $e) {
     error($e->getMessage());
 }

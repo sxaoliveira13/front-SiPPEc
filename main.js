@@ -20,9 +20,27 @@ class CustomError extends Error {
     }
 }
 
-const catalogsDict = { '1': 'Artigo', '2': 'Jogo', '3': 'Método' }
-const catalogSolicitationsDict = { '0': 'ativo', '1': 'cadastro pendente', '2': 'cadastro aprovado', '3': 'cadastro recusado', '4': 'atualização pendente', '5': 'atualização aprovada', '6': 'atualização recusada', '7': 'exclusão pendente', '8': 'exclusão aprovada', '9': 'exclusão recusada' };
-
+const catalogsDict = {
+    '1': 'Artigo',
+    '2': 'Jogo',
+    '3': 'Método'
+}
+const catalogStatusDict = {
+    '1': 'cadastro pendente',
+    '2': 'cadastro aprovada',
+    '3': 'cadastro recusada',
+    '4': 'atualização pendente',
+    '5': 'atualização aprovada',
+    '6': 'atualização recusada',
+    '7': 'exclusão pendente',
+    '8': 'exclusão aprovada',
+    '9': 'exclusão recusada'
+};
+const catalogStatusColorsDict = {
+    'pendente': 'u-text-color--yellow',
+    'aprovada': 'u-text-color--green',
+    'recusada': 'u-text-color--red',
+}
 window.addEventListener("DOMContentLoaded", () => {
     promiseResolveLoad();
     clearAllInputs();

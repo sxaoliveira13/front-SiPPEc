@@ -6,8 +6,12 @@ require_once("../functions.php");
 header('Content-Type: application/json; charset=utf-8');
 $USERDATA = checkToken($_COOKIE['userToken']);
 
-if (empty($USERDATA['userId'])) {error("Autenticação inválida ", 1);}
-if ($USERDATA['userType'] != 1 && $USERDATA['userType'] != 2) {error("Você não tem permissão para isso! ", 2);}
+if (empty($USERDATA['userId'])) {
+    error("Autenticação inválida ", 1);
+}
+if ($USERDATA['userType'] != 1 && $USERDATA['userType'] != 2) {
+    error("Você não tem permissão para isso! ", 2);
+}
 
 $out = array('success' => true);
 
@@ -44,7 +48,7 @@ try {
     $stmt->bindParam(':ambiente', $data['ambiente'], PDO::PARAM_STR);
     $stmt->bindParam(':abordagem', $data['abordagem'], PDO::PARAM_STR);
     $stmt->bindParam(':link', $data['link'], PDO::PARAM_STR);
-    $stmt->bindParam(':catalogId', $data['catalogId'], PDO::PARAM_STR);
+    $stmt->bindParam(':catalogId', $data['catalogId'], PDO::PARAM_INT);
 
     $stmt->execute();
 } catch (PDOException $e) {

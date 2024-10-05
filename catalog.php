@@ -44,11 +44,10 @@ require(dirname(__FILE__) . '/includes/head.php');
         </section>
         <section class="main__grid--2 h-100">
             <section class="main__section--box overflow-hidden px-0">
-                <ul class="nav nav-tabs nav-tabs--1 d-flex flex-nowrap" id="myTab" role="tablist">
+                <ul class="nav nav-tabs nav-tabs--1 d-flex flex-nowrap u-box-padding--horizontal" id="myTab" role="tablist">
                     <li class="nav-item d-none" id="manageSolicitations" role="presentation">
                         <button class="nav-link" data-bs-toggle="tab" data-bs-target="#manageSolicitationsTab" type="button" role="tab" aria-selected="false">
-                            <div class="d-flex justify-content-center align-items-center">
-                                <span class="d-md-inline d-none">Gerenciar</span>&nbsp;Solicitações
+                            <div class="d-flex justify-content-center align-items-center">Gerenciamento
                                 <span id="totalSolicitationsQuantity" class="badge badge--danger badge--rounded badge--rounded-medium ms-3" style="opacity: 0;">0</span>
                             </div>
                             <div class="tab-line"></div>
@@ -75,7 +74,7 @@ require(dirname(__FILE__) . '/includes/head.php');
                 <div class="tab-content d-flex flex-column">
                     <div class="tab-pane fade flex-auto" id="manageSolicitationsTab" role="tabpanel">
                         <div class="d-flex flex-wrap align-items-center justify-content-sm-start justify-content-center position-sticky bg-white top-0 u-box-padding--vertical u-box-padding--horizontal-big border-bottom" style="z-index: 2; min-height: 10.7rem">
-                            <h4 class="fs-2 text-center fw-bolder mb-sm-0 mb-0" style="line-height: 1.7">Gerenciamento de Novas Solicitações</h4>
+                            <h4 class="fs-2 text-center fw-bolder mb-sm-0 mb-0" style="line-height: 1.7">Gerenciamento de Cátalogos e Usuários</h4>
                         </div>
                         <div class="u-box-padding--vertical u-box-padding--horizontal-big">
                             <ul class="nav nav-tabs nav-tabs--2 w-100 mb-3">
@@ -90,12 +89,12 @@ require(dirname(__FILE__) . '/includes/head.php');
                                         <span id="newUsersQuantity" class="badge badge--danger badge--rounded badge--rounded-small ms-3" style="display: none !important;">0</span>
                                     </button>
                                 </li>
-                                <li class="nav-item">
+                                <!-- <li class="nav-item">
                                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#registredUsers" type="button" role="tab" aria-selected="false">Usuários Cadastrados</button>
                                 </li>
                                 <li class="nav-item">
                                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#searchCatalogs   " type="button" role="tab" aria-selected="false">Pesquisar Catálogos</button>
-                                </li>
+                                </li> -->
                             </ul>
                         </div>
                         <div class="tab-content d-flex flex-column u-box-padding--horizontal-big">
@@ -105,7 +104,7 @@ require(dirname(__FILE__) . '/includes/head.php');
                                         <tr>
                                             <th>Título</th>
                                             <th>Catálogo</th>
-                                            <th>Solicitação</th>
+                                            <th>Status</th>
                                             <th>Usuário</th>
                                             <th>Criado em</th>
                                             <th>Ações</th>
@@ -651,6 +650,121 @@ require(dirname(__FILE__) . '/includes/head.php');
                 <div class="modal-footer d-flex justify-content-end align-items-center border-0 u-box-padding--vertical u-box-padding--horizontal-big">
                     <button id="btnUpdateCatalog" class="fs-4 w-auto button-dark px-5" data-bs-toggle="modal" data-bs-dismiss="modal">Cancelar</button>
                     <button id="btnUpdateCatalog" onclick="updateCatalog(this);" style="min-width: 200px" class="fs-4 w-auto button-primary px-5">Salvar Alterações</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="catalogSolicitationModal" aria-hidden="true" aria-labelledby="catalogSolicitationModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header u-box-padding--vertical u-box-padding--horizontal-big border-bottom">
+                    <h4 class="fs-2 fw-bolder mb-0">Gerenciamento de Catálogo</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body border-0 u-box-padding--vertical pb-0 u-box-padding--horizontal-big">
+                    <ul class="nav nav-tabs nav-tabs--2 w-100 mb-3">
+                        <li class="nav-item">
+                            <button class="nav-link d-flex align-items-center active" data-bs-toggle="tab" data-bs-target="#catalogInfo" type="button" role="tab" aria-selected="true">
+                                Informações do Catálogo
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link d-flex align-items-center" data-bs-toggle="tab" data-bs-target="#userInfo" type="button" role="tab" aria-selected="false">Informações do Usuário
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content d-flex flex-column u-box-padding--vertical">
+                        <div class="tab-pane fade show active flex-auto" id="catalogInfo" role="tabpanel">
+                            <div class="row">
+                                <div class="d-flex align-items-baseline col-12 mb-5">
+                                    <h3 class="fw-bolder mb-3">Status Atual:</h3>&nbsp;
+                                    <p id="catalogSolicitationType" class="text-uppercase mb-0"></p>
+                                </div>
+                                <div class="col-6 mb-5 border-end pe-5">
+                                    <h3 class="fw-bolder mb-3">Título</h3>
+                                    <p id="catalogInternalTitle" class="mb-0"></p>
+                                </div>
+                                <div class="col-6 mb-5 ps-5">
+                                    <h3 class="fw-bolder mb-3">Público Alvo</h3>
+                                    <p id="catalogPublicName" class="mb-0"></p>
+                                </div>
+                                <div class="col-6 mb-5 border-end pe-5">
+                                    <h3 class="fw-bolder mb-3">Conteúdo</h3>
+                                    <p id="catalogContentType" class="mb-0"></p>
+                                </div>
+                                <div class="col-6 mb-5 ps-5">
+                                    <h3 class="fw-bolder mb-3">Ferramenta</h3>
+                                    <p id="catalogToolName" class="mb-0"></p>
+                                </div>
+                                <div class="col-6 mb-5 border-end pe-5">
+                                    <h3 class="fw-bolder mb-3">Habilidade</h3>
+                                    <p id="catalogAbilityName" class="mb-0"></p>
+                                </div>
+                                <div class="col-6 mb-5 ps-5">
+                                    <h3 class="fw-bolder mb-3">Link de Acesso</h3>
+                                    <a href="#" target="_blank" class="text-link" id="catalogAccessLink" class="mb-0"></a>
+                                </div>
+                                <div class="col-6 mb-5 border-end pe-5 d-none">
+                                    <h3 class="fw-bolder mb-3">Ambiente</h3>
+                                    <p id="catalogAmbient" class="mb-0"></p>
+                                </div>
+                                <div class="col-6 mb-5 ps-5 d-none">
+                                    <h3 class="fw-bolder mb-3">Abordagem</h3>
+                                    <p id="catalogApproach" class="mb-0"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade flex-auto" id="userInfo" role="tabpanel">
+                            <div class="row justify-content-center">
+                                <div class="col-md-4 col-12 mb-5 text-center border-end pe-md-5">
+                                    <h3 class="fw-bolder mb-3">Nome</h3>
+                                    <p id="userFullName" class="mb-0"></p>
+                                </div>
+                                <div class="col-md-4 col-12 mb-5 text-center border-end px-md-5">
+                                    <h3 class="fw-bolder mb-3">Email</h3>
+                                    <p id="userMail" class="mb-0"></p>
+                                </div>
+                                <div class="col-md-4 col-12  mb-5 text-center ps-md-5">
+                                    <h3 class="fw-bolder mb-3">Telefone</h3>
+                                    <p id="userPhone" class="mb-0"></p>
+                                </div>
+                                <div class="col-md-4 col-12  mb-5 text-center border-end pe-md-5">
+                                    <h3 class="fw-bolder mb-3">Criado em</h3>
+                                    <p id="userCreateTime" class="mb-0"></p>
+                                </div>
+                                <div class="col-md-4 col-12 mb-5 text-center ps-md-5">
+                                    <h3 class="fw-bolder mb-3">Último acesso em</h3>
+                                    <p id="userLastAccess" class="mb-0"></p>
+                                </div>
+                            </div>
+                            <div class="row d-flex justify-content-sm-evenly justify-content-center center">
+                                <div class="col-sm-3 col-6 mb-4">
+                                    <div class="d-flex flex-column text-center py-5 px-2 border">
+                                        <h3 id="articlesCount" class="fs-1 fw-bolder text-primary mb-3">0</h3>
+                                        <span class="fs-2 fw-bolder">Artigos</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-6 mb-4">
+                                    <div class="d-flex flex-column text-center py-5 px-2 border">
+                                        <h3 id="gamesCount" class="fs-1 fw-bolder text-primary mb-3">0</h3>
+                                        <span class="fs-2 fw-bolder">Jogos</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-6 mb-4">
+                                    <div class="d-flex flex-column text-center py-5 px-2 border">
+                                        <h3 id="methodsCount" class="fs-1 fw-bolder text-primary mb-3">0</h3>
+                                        <span class="fs-2 fw-bolder">Métodos</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center align-items-center border-0 u-box-padding--vertical u-box-padding--horizontal-big border-top">
+                    <button class="fs-4 w-auto button-dark px-5" data-bs-toggle="modal" data-bs-dismiss="modal">Cancelar</button>
+                    <button style="min-width: 200px" onclick="approveCatalog(0);" class="fs-4 w-auto button-danger px-5">Recusar Solicitação</button>
+                    <button style="min-width: 200px" onclick="approveCatalog(1);" class="fs-4 w-auto button-primary px-5">Aprovar Solicitação</button>
                 </div>
             </div>
         </div>

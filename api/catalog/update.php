@@ -35,6 +35,8 @@ $abordagem = $data['abordagem'] ?? null;
 $status = 5;
 
 try {
+    $CFG['link']->beginTransaction();
+
     $sql = "SELECT id, Status as status FROM catalogo WHERE id = :catalogId AND userId = :userId";
     $stmt = $CFG['link']->prepare($sql);
     $stmt->bindParam(':catalogId', $catalogId, PDO::PARAM_INT);
@@ -61,7 +63,8 @@ try {
                     Ambiente = :ambiente, 
                     Abordagem = :abordagem, 
                     CaminhoDeAcesso = :link,
-                    Status = :status
+                    Status = :status,
+                    Ciclo = Ciclo + 1
                 WHERE id = :catalogId";
 
         $stmt = $CFG['link']->prepare($sql);
@@ -79,7 +82,8 @@ try {
     } else {
         $sql = "UPDATE catalogo 
                 SET Status = 4, 
-                    AguardandoRevisao = 1 
+                    AguardandoRevisao = 1,
+                    Ciclo = Ciclo + 1 
                 WHERE id = :catalogId";
         $stmt = $CFG['link']->prepare($sql);
         $stmt->bindParam(':catalogId', $catalogId, PDO::PARAM_INT);
@@ -101,7 +105,7 @@ try {
                         HabilidadeId = :habilidade, 
                         Ambiente = :ambiente, 
                         Abordagem = :abordagem, 
-                        CaminhoDeAcesso = :link 
+                        CaminhoDeAcesso = :link
                     WHERE CatalogoId = :catalogId";
         } else {
             $sql = "INSERT INTO catalogoAtualizado (CatalogoId, CategoriaId, Titulo, PublicoAlvoId, Conteudo, FerramentaId, HabilidadeId, Ambiente, Abordagem, CaminhoDeAcesso) 
@@ -121,9 +125,12 @@ try {
         $stmt->bindParam(':catalogId', $catalogId, PDO::PARAM_INT);
         $stmt->execute();
     }
+    $CFG['link']->commit();
 } catch (PDOException $e) {
+    $CFG['link']->rollBack();
     error($e->getMessage());
 } catch (Exception $e) {
+    $CFG['link']->rollBack();
     error($e->getMessage());
 }
 

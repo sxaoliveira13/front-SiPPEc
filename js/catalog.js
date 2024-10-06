@@ -4,7 +4,7 @@ let numberOfNewUsers = 0;
 let newCatalogsData;
 let newUsersData;
 
-let currentCatalog;
+let currentCatalog = {};
 
 window.addEventListener('DOMContentLoaded', () => {
     handleButtonsAndInputs();
@@ -158,6 +158,9 @@ async function buildCatalogSolicitationModal(catalogId) {
     document.getElementById('catalogAbilityName').textContent = currentCatalog['abilityName'];
     document.getElementById('catalogAccessLink').textContent = currentCatalog['link'];
     document.getElementById('catalogAccessLink').href = currentCatalog['link'];
+    document.getElementById('catalogApproveMessage').value = '';
+    document.getElementById('catalogType').textContent = catalogsDict[currentCatalog['categoryId']];
+    document.getElementById('catalogIsActive').textContent = currentCatalog['active'] ? 'Sim' : 'Não';
 
     if (currentCatalog['ambient']) {
         document.getElementById('newCatalogAmbient').textContent = currentCatalog['ambient'];
@@ -194,12 +197,19 @@ async function buildCatalogSolicitationModal(catalogId) {
 }
 
 async function approveCatalog(isApproved) {
+    const catalogMessage = document.getElementById('catalogApproveMessage').value ?? '';
+
     await fetch(`${apiUrl}/catalog/approve.php`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 'catalogId': currentCatalog['catalogId'], 'currentStatus': currentCatalog['status'], 'isApproved': isApproved }),
+        body: JSON.stringify({
+            'catalogId': currentCatalog['catalogId'],
+            'currentStatus': currentCatalog['status'],
+            'isApproved': isApproved,
+            'catalogMessage': catalogMessage
+        }),
     }).then((resp) => resp.json())
         .then(async (resp) => {
             await locks['onload'];
@@ -305,7 +315,13 @@ async function fetchUserCatalogs() {
                 catalogs[catalog['catalogId']] = catalog;
             });
 
+
             buildCatalogsList(resp['data']);
+
+            if (currentCatalog['catalogId'] && typeof currentCatalog['catalogId'] !== 'undefined') {
+                buildEditCatalogModal(currentCatalog['catalogId']);
+                console.log("adw")
+            }
         }).catch((err) => {
             if (err instanceof CustomError) {
                 error(err['message']);
@@ -329,7 +345,7 @@ function buildCatalogsList(data) {
     }
 
     data.forEach(catalog => {
-        const { title, catalogId, createdAt, status } = catalog;
+        const { title, catalogId, lastUpdate, status } = catalog;
         const [action, statusLabel] = catalogStatusDict[status].split(' ');
         const statusColor = catalogStatusColorsDict[statusLabel];
 
@@ -343,7 +359,7 @@ function buildCatalogsList(data) {
                     <p class="my-3">Solicitação de ${action} <b class="u-text-color u-text-color--${statusColor}">${statusLabel}</b></p>
                 </div>
                 <div class="catalog__footer">
-                    <p class="u-text-color u-text-color--muted mb-0">${formatDate(createdAt)}</p>
+                    <p class="u-text-color u-text-color--muted mb-0">${formatDate(lastUpdate)}</p>
                 </div>
             </li> 
         `;
@@ -353,8 +369,7 @@ function buildCatalogsList(data) {
 }
 
 function buildEditCatalogModal(catalogId) {
-    const currentCatalog = catalogs[catalogId];
-    console.log(currentCatalog)
+    currentCatalog = catalogs[catalogId];
 
     const catalogStatus = catalogs[catalogId]['status'];
     const currentStatus = catalogStatusDict[catalogStatus].split(' ');
@@ -363,7 +378,14 @@ function buildEditCatalogModal(catalogId) {
 
     document.getElementById('catalogCurrentStatus').classList.remove('u-bg--red', 'u-bg--green', 'u-bg--yellow');
     document.getElementById('catalogCurrentStatus').classList.add(`u-bg--${statusColor}`);
-    document.getElementById('catalogCurrentStatusLabel').innerHTML = `Solicitação de ${statusType} ${statusText}</span>`
+    document.getElementById('catalogCurrentStatusLabel').innerHTML = `Solicitação de ${statusType} ${statusText}</span>`;
+
+    if (currentCatalog['lastMessage']) {
+        document.getElementById('catalogCurrentMessage').classList.remove('d-none');
+        document.getElementById('catalogCurrentMessage').innerHTML = `<p class="fs-4 text-white mb-0" style="font-weight: 500;">"${currentCatalog['lastMessage']}"</p>`;
+    } else {
+        document.getElementById('catalogCurrentMessage').classList.add('d-none');
+    }
 
     document.getElementById("catalogId").value = currentCatalog.catalogId;
     document.getElementById("categoryId").value = currentCatalog.categoryId;
@@ -525,7 +547,6 @@ async function showManageTab() {
     if (typeof userData['userType'] != "undefined" && userData['userType'] === "2") {
         const tabButton = document.getElementById('manageSolicitations');
         tabButton.classList.remove('d-none');
-        // tabButton.getElementsByTagName('button')[0].click();
     }
 }
 

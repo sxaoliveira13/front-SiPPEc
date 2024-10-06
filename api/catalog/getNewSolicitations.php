@@ -28,6 +28,7 @@ try {
             COALESCE(ca.CategoriaId, c.CategoriaId) AS categoryId, 
             COALESCE(ca.Titulo, c.Titulo) AS title, 
             c.Status AS status, 
+            c.Ativo AS active, 
             COALESCE(ca.Conteudo, c.Conteudo) AS content, 
             COALESCE(ca.Ambiente, c.Ambiente) AS ambient, 
             COALESCE(ca.Abordagem, c.Abordagem) AS approach, 

@@ -168,6 +168,10 @@ body {
   -webkit-line-clamp: 2;
 }
 
+.u-break-word {
+  word-wrap: break-word;
+}
+
 .badge {
   display: flex;
   justify-content: center;
@@ -304,7 +308,8 @@ button {
 }
 
 input,
-select {
+select,
+textarea {
   background-color: transparent;
   border: 2px solid #C5C5C5;
   border-radius: 1rem;
@@ -315,7 +320,8 @@ select {
   font-weight: normal;
 }
 input:focus,
-select:focus {
+select:focus,
+textarea:focus {
   outline: none;
   box-shadow: unset;
   border-color: #49AEBE;

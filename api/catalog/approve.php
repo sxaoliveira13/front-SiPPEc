@@ -26,11 +26,13 @@ $data = json_decode($json, true);
 $catalogId = (int)$data['catalogId'];
 $currentStatus = (int)$data['currentStatus'];
 $isApproved = (int)$data['isApproved'];
+$catalogMessage = sanitize($data['catalogMessage']);
 $newStatus = $currentStatus;
 $awaitingApprove = 0;
 $active = 1;
 
 try {
+    $CFG['link']->beginTransaction();
     if ($currentStatus === 4) {
         if ($isApproved === 1) {
             $sql = "UPDATE catalogo 
@@ -43,7 +45,8 @@ try {
                         catalogo.Ambiente = catalogoAtualizado.Ambiente,
                         catalogo.Abordagem = catalogoAtualizado.Abordagem,
                         catalogo.CaminhoDeAcesso = catalogoAtualizado.CaminhoDeAcesso,
-                        catalogo.lastUpdate = NOW()
+                        catalogo.lastUpdate = NOW(),
+                        catalogo.Ciclo = catalogo.Ciclo + 1
                     WHERE catalogo.id = :catalogId";
 
             $stmt = $CFG['link']->prepare($sql);
@@ -51,29 +54,23 @@ try {
             $stmt->bindParam(':awaitingApprove', $awaitingApprove, PDO::PARAM_INT);
             $stmt->bindParam(':ativo', $active, PDO::PARAM_INT);
             $stmt->execute();
-
-            $sql = "DELETE FROM catalogoAtualizado WHERE CatalogoId = :catalogId";
-            $stmt = $CFG['link']->prepare($sql);
-            $stmt->bindParam(':catalogId', $catalogId, PDO::PARAM_INT);
-            $stmt->execute();
         } elseif ($isApproved === 0) {
-            $sql = "DELETE FROM catalogoAtualizado WHERE CatalogoId = :catalogId";
-            $stmt = $CFG['link']->prepare($sql);
-            $stmt->bindParam(':catalogId', $catalogId, PDO::PARAM_INT);
-            $stmt->execute();
-
-            $newStatus = 6;
             $sql = "UPDATE catalogo 
-            SET Status = :newStatus,
+            SET Status = 6,
                 AguardandoRevisao = :awaitingApprove,
-                lastUpdate = NOW()
+                lastUpdate = NOW(),
+                Ciclo = Ciclo + 1
                 WHERE id = :catalogId";
             $stmt = $CFG['link']->prepare($sql);
             $stmt->bindParam(':catalogId', $catalogId, PDO::PARAM_INT);
             $stmt->bindParam(':awaitingApprove', $awaitingApprove, PDO::PARAM_INT);
-            $stmt->bindParam(':newStatus', $newStatus, PDO::PARAM_INT);
             $stmt->execute();
         }
+
+        $sql = "DELETE FROM catalogoAtualizado WHERE CatalogoId = :catalogId";
+        $stmt = $CFG['link']->prepare($sql);
+        $stmt->bindParam(':catalogId', $catalogId, PDO::PARAM_INT);
+        $stmt->execute();
     } else {
         if ($isApproved === 1) {
             $newStatus += 1; // Aprovação
@@ -89,7 +86,8 @@ try {
                 SET Status = :newStatus,
                     AguardandoRevisao = :awaitingApprove,
                     Ativo = :active,
-                    lastUpdate = NOW()
+                    lastUpdate = NOW(),
+                    Ciclo = Ciclo + 1
                 WHERE id = :catalogId";
         $stmt = $CFG['link']->prepare($sql);
         $stmt->bindParam(':catalogId', $catalogId, PDO::PARAM_INT);
@@ -98,9 +96,28 @@ try {
         $stmt->bindParam(':newStatus', $newStatus, PDO::PARAM_INT);
         $stmt->execute();
     }
+
+    $sql = "SELECT Ciclo FROM catalogo WHERE id = :catalogId";
+    $stmt = $CFG['link']->prepare($sql);
+    $stmt->bindParam(':catalogId', $catalogId, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $updatedCiclo = $result['Ciclo'];
+
+    $sql = "INSERT INTO messages (catalogId, message, ciclo) VALUES (:catalogId, :message, :ciclo)";
+    $stmt = $CFG['link']->prepare($sql);
+    $stmt->bindParam(':catalogId', $catalogId, PDO::PARAM_INT);
+    $stmt->bindParam(':message', $catalogMessage, PDO::PARAM_STR);
+    $stmt->bindParam(':ciclo', $updatedCiclo, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $CFG['link']->commit();
 } catch (PDOException $e) {
+    $CFG['link']->rollBack();
     error($e->getMessage());
 } catch (Exception $e) {
+    $CFG['link']->rollBack();
     error($e->getMessage());
 }
 

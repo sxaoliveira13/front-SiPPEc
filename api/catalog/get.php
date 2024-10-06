@@ -33,25 +33,32 @@ if ((int)$USERDATA['userId'] !== (int)$data['userId']) {
 
 try {
     $sql = "SELECT 
-        c.id AS catalogId,  
-        COALESCE(ca.id, NULL) AS updatedCatalogId, 
-        COALESCE(ca.CategoriaId, c.CategoriaId) AS categoryId, 
-        c.Status AS status,
-        c.Ativo AS active,
-        c.lastUpdate AS lastUpdate,
-        COALESCE(ca.Titulo, c.Titulo) AS title, 
-        COALESCE(ca.Conteudo, c.Conteudo) AS content, 
-        COALESCE(ca.Ambiente, c.Ambiente) AS ambient, 
-        COALESCE(ca.Abordagem, c.Abordagem) AS approach, 
-        COALESCE(ca.CaminhoDeAcesso, c.CaminhoDeAcesso) AS link, 
-        COALESCE(ca.createdAt, c.createdAt) AS createdAt, 
-        COALESCE(ca.PublicoAlvoId, c.PublicoAlvoId) AS publicId, 
-        COALESCE(ca.FerramentaId, c.FerramentaId) AS toolId, 
-        COALESCE(ca.HabilidadeId, c.HabilidadeId) AS abilityId 
-    FROM catalogo AS c
-    LEFT JOIN catalogoAtualizado AS ca ON ca.CatalogoId = c.id 
-    WHERE c.userId = :userId AND c.Status != 8
-    ORDER BY c.createdAt DESC";
+            c.id AS catalogId,  
+            COALESCE(ca.id, NULL) AS updatedCatalogId, 
+            COALESCE(ca.CategoriaId, c.CategoriaId) AS categoryId, 
+            c.Status AS status,
+            c.Ativo AS active,
+            c.lastUpdate AS lastUpdate,
+            COALESCE(ca.Titulo, c.Titulo) AS title, 
+            COALESCE(ca.Conteudo, c.Conteudo) AS content, 
+            COALESCE(ca.Ambiente, c.Ambiente) AS ambient, 
+            COALESCE(ca.Abordagem, c.Abordagem) AS approach, 
+            COALESCE(ca.CaminhoDeAcesso, c.CaminhoDeAcesso) AS link, 
+            COALESCE(ca.createdAt, c.createdAt) AS createdAt, 
+            COALESCE(ca.PublicoAlvoId, c.PublicoAlvoId) AS publicId, 
+            COALESCE(ca.FerramentaId, c.FerramentaId) AS toolId, 
+            COALESCE(ca.HabilidadeId, c.HabilidadeId) AS abilityId,
+            (
+                SELECT m.message 
+                FROM messages m 
+                WHERE m.catalogId = c.id AND m.ciclo = c.Ciclo
+                ORDER BY m.createdAt DESC 
+                LIMIT 1
+            ) AS lastMessage
+        FROM catalogo AS c
+        LEFT JOIN catalogoAtualizado AS ca ON ca.CatalogoId = c.id 
+        WHERE c.userId = :userId AND c.Status != 8
+        ORDER BY c.lastUpdate DESC";
 
     $stmt = $CFG['link']->prepare($sql);
     $stmt->bindParam(':userId', $data['userId'], PDO::PARAM_INT);
@@ -63,6 +70,7 @@ try {
 } catch (Exception $e) {
     error($e->getMessage());
 }
+
 
 
 echo json_encode($out);

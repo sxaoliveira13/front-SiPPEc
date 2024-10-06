@@ -510,11 +510,11 @@ require(dirname(__FILE__) . '/includes/head.php');
                 </div>
                 <div class="modal-body border-0 u-box-padding--vertical pb-0 u-box-padding--horizontal-big">
                     <div id="catalogCurrentStatus" class="card shadow-none p-5 mb-5">
-                        <div class="card-header bg-transparent border-0 p-0 mb-4">
+                        <div class="card-header bg-transparent border-0 p-0">
                             <h5 id="catalogCurrentStatusLabel" class="fw-bolder text-uppercase text-white fs-4 mb-0"></h5>
                         </div>
-                        <div class="card-body border-0 p-0">
-                            <p class="fs-4 text-white mb-0" style="font-weight: 500;">"Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officia qui sint, harum cum voluptas, repellendus enim dolore cumque voluptatem dolorem blanditiis! Laudantium, fugiat? Soluta facere quae ab voluptates blanditiis animi!"</p>
+                        <div id="catalogCurrentMessage" class="card-body border-0 p-0 mt-4">
+
                         </div>
                     </div>
                     <form id="editCatalogForm" class="form">
@@ -676,7 +676,7 @@ require(dirname(__FILE__) . '/includes/head.php');
                     </form>
                 </div>
                 <div class="modal-footer d-flex justify-content-end align-items-center border-0 u-box-padding--vertical u-box-padding--horizontal-big">
-                    <button class="fs-4 w-auto button-dark px-5" data-bs-toggle="modal" data-bs-dismiss="modal">Cancelar</button>
+                    <button class="fs-4 w-auto button-dark px-5" data-bs-dismiss="modal">Cancelar</button>
                     <button id="btnRequestRegistrationReview" onclick="requestCatalogRegistrationReview(this);" style="min-width: 200px" class="fs-4 w-auto button-primary px-5 d-none">Solicitar revisão de cadastro</button>
                     <button id="btnCatalogCancelDelete" onclick="" style="min-width: 200px" class="fs-4 w-auto button-danger text-center px-5">Cancelar solicitação de exclusão do catálago</button>
                     <button id="btnUpdateCatalog" onclick="updateCatalog(this);" style="min-width: 200px" class="fs-4 w-auto button-primary px-5">Salvar Alterações</button>
@@ -692,7 +692,7 @@ require(dirname(__FILE__) . '/includes/head.php');
                     <h4 class="fs-2 fw-bolder mb-0">Gerenciamento de Catálogo</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body border-0 u-box-padding--vertical pb-0 u-box-padding--horizontal-big">
+                <div class="modal-body border-0 u-box-padding--vertical pb-0 u-box-padding--horizontal-big pb-0">
                     <ul class="nav nav-tabs nav-tabs--2 w-100 mb-3">
                         <li class="nav-item">
                             <button class="nav-link d-flex align-items-center active" data-bs-toggle="tab" data-bs-target="#catalogInfo" type="button" role="tab" aria-selected="true">
@@ -704,12 +704,20 @@ require(dirname(__FILE__) . '/includes/head.php');
                             </button>
                         </li>
                     </ul>
-                    <div class="tab-content d-flex flex-column u-box-padding--vertical">
+                    <div class="tab-content d-flex flex-column u-box-padding--vertical pb-0">
                         <div class="tab-pane fade show active flex-auto" id="catalogInfo" role="tabpanel">
                             <div class="row">
                                 <div class="d-flex align-items-baseline col-12 mb-5">
                                     <h3 class="fw-bolder mb-3">Status Atual:</h3>&nbsp;
                                     <p id="catalogSolicitationType" class="text-uppercase mb-0"></p>
+                                </div>
+                                <div class="col-6 mb-5 border-end pe-5">
+                                    <h3 class="fw-bolder mb-3">Tipo</h3>
+                                    <p id="catalogType" class=" mb-0"></p>
+                                </div>
+                                <div class="col-6 mb-5 ps-5">
+                                    <h3 class="fw-bolder mb-3">Públicado</h3>
+                                    <p id="catalogIsActive" class="mb-0"></p>
                                 </div>
                                 <div class="col-6 mb-5 border-end pe-5">
                                     <h3 class="fw-bolder mb-3">Título</h3>
@@ -747,41 +755,41 @@ require(dirname(__FILE__) . '/includes/head.php');
                         </div>
                         <div class="tab-pane fade flex-auto" id="userInfo" role="tabpanel">
                             <div class="row justify-content-center">
-                                <div class="col-md-4 col-12 mb-5 text-center border-end pe-md-5">
+                                <div class="col-lg-4 col-6 mb-5 text-center border-start pe-md-5">
                                     <h3 class="fw-bolder mb-3">Nome</h3>
                                     <p id="userFullName" class="mb-0"></p>
                                 </div>
-                                <div class="col-md-4 col-12 mb-5 text-center border-end px-md-5">
+                                <div class="col-lg-4 col-6  mb-5 text-center border-start px-md-5">
                                     <h3 class="fw-bolder mb-3">Email</h3>
-                                    <p id="userMail" class="mb-0"></p>
+                                    <p id="userMail" class="u-break-word mb-0"></p>
                                 </div>
-                                <div class="col-md-4 col-12  mb-5 text-center ps-md-5">
+                                <div class="col-lg-4 col-6 mb-5 text-center border-start ps-md-5">
                                     <h3 class="fw-bolder mb-3">Telefone</h3>
                                     <p id="userPhone" class="mb-0"></p>
                                 </div>
-                                <div class="col-md-4 col-12  mb-5 text-center border-end pe-md-5">
+                                <div class="col-lg-4 col-6 mb-5 text-center border-start pe-md-5">
                                     <h3 class="fw-bolder mb-3">Criado em</h3>
                                     <p id="userCreateTime" class="mb-0"></p>
                                 </div>
-                                <div class="col-md-4 col-12 mb-5 text-center ps-md-5">
+                                <div class="col-lg-4 col-6 mb-5 text-center border-start ps-md-5">
                                     <h3 class="fw-bolder mb-3">Último acesso em</h3>
                                     <p id="userLastAccess" class="mb-0"></p>
                                 </div>
                             </div>
                             <div class="row d-flex justify-content-sm-evenly justify-content-center center">
-                                <div class="col-sm-3 col-6 mb-4">
+                                <div class="col-lg-3 col-6 mb-5">
                                     <div class="d-flex flex-column text-center py-5 px-2 border">
                                         <h3 id="articlesCount" class="fs-1 fw-bolder text-primary mb-3">0</h3>
                                         <span class="fs-2 fw-bolder">Artigos</span>
                                     </div>
                                 </div>
-                                <div class="col-sm-3 col-6 mb-4">
+                                <div class="col-lg-3 col-6 mb-5">
                                     <div class="d-flex flex-column text-center py-5 px-2 border">
                                         <h3 id="gamesCount" class="fs-1 fw-bolder text-primary mb-3">0</h3>
                                         <span class="fs-2 fw-bolder">Jogos</span>
                                     </div>
                                 </div>
-                                <div class="col-sm-3 col-6 mb-4">
+                                <div class="col-lg-3 col-6 mb-5">
                                     <div class="d-flex flex-column text-center py-5 px-2 border">
                                         <h3 id="methodsCount" class="fs-1 fw-bolder text-primary mb-3">0</h3>
                                         <span class="fs-2 fw-bolder">Métodos</span>
@@ -790,9 +798,13 @@ require(dirname(__FILE__) . '/includes/head.php');
                             </div>
                         </div>
                     </div>
+                    <div class="form-group d-flex flex-column mb-5">
+                        <label for="catalogApproveMessage" class="fs-4 fw-bolder mb-2">Mensagem de Aprovação</label>
+                        <textarea class="form-group__input w-100 u-fw-500 py-3" id="catalogApproveMessage" name="catalogApproveMessage" rows="4"></textarea>
+                    </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-center align-items-center border-0 u-box-padding--vertical u-box-padding--horizontal-big border-top">
-                    <button class="fs-4 w-auto button-dark px-5" data-bs-toggle="modal" data-bs-dismiss="modal">Cancelar</button>
+                    <button class="fs-4 w-auto button-dark px-5" data-bs-dismiss="modal">Cancelar</button>
                     <button style="min-width: 200px" onclick="approveCatalog(0);" class="fs-4 w-auto button-danger px-5">Recusar Solicitação</button>
                     <button style="min-width: 200px" onclick="approveCatalog(1);" class="fs-4 w-auto button-primary px-5">Aprovar Solicitação</button>
                 </div>

@@ -48,7 +48,8 @@ try {
     $sql = "UPDATE catalogo 
     SET Status = :status,
     AguardandoRevisao = :awaitingRevision,
-    Ativo = :active
+    Ativo = :active,
+    Ciclo = Ciclo + 1
     WHERE id = :catalogId";
     $stmt = $CFG['link']->prepare($sql);
     $stmt->bindParam(':status', $status, PDO::PARAM_INT);

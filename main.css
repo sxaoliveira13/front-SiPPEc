@@ -165,11 +165,16 @@ body {
   -webkit-box-orient: vertical;
 }
 .u-text-ellipsis--2-lines {
+  line-clamp: 2;
   -webkit-line-clamp: 2;
 }
 
 .u-break-word {
   word-wrap: break-word;
+}
+
+.u-min-w-300 {
+  min-width: 300px;
 }
 
 .badge {

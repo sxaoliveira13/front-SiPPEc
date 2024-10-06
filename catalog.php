@@ -716,7 +716,7 @@ require(dirname(__FILE__) . '/includes/head.php');
                                     <p id="catalogType" class=" mb-0"></p>
                                 </div>
                                 <div class="col-6 mb-5 ps-5">
-                                    <h3 class="fw-bolder mb-3">Públicado</h3>
+                                    <h3 class="fw-bolder mb-3">Publicado</h3>
                                     <p id="catalogIsActive" class="mb-0"></p>
                                 </div>
                                 <div class="col-6 mb-5 border-end pe-5">

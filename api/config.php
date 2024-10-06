@@ -35,4 +35,5 @@ $CFG['db_options'] = array(
     PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
 );
 
-$CFG['link'] = new PDO("mysql:host={$CFG['host_mysql']};dbname={$CFG['db']};charset=UTF8",$CFG['user_mysql'],$CFG['pass_mysql'],$CFG['db_options']);
+$CFG['link'] = new PDO("mysql:host={$CFG['host_mysql']};dbname={$CFG['db']};charset=UTF8", $CFG['user_mysql'], $CFG['pass_mysql'], $CFG['db_options']);
+date_default_timezone_set('America/Sao_Paulo');

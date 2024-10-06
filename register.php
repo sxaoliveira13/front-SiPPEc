@@ -17,7 +17,7 @@ if (isset($_COOKIE['userToken'])) {
 require(dirname(__FILE__) . '/includes/head.php');
 ?>
 
-<script src="<?php echo $CFG['system_url'] ?>js/jquery.mask.min.js"></script>
+<script src="<?php echo $CFG['system_url'] ?>assets/js/jquery.mask.min.js"></script>
 <script src="<?php echo $CFG['system_url'] ?>js/register.js"></script>
 </head>
 

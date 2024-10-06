@@ -23,15 +23,36 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 
 try {
-    $sql = "SELECT c.id as catalogId, c.CategoriaId as categoryId, c.Titulo as title, Status as status, c.Conteudo as content, 
-    c.Ambiente as ambient, c.Abordagem as approach, c.CaminhoDeAcesso as link, c.createdAt, c.AguardandoRevisao,
-    a.name as abilityName, t.name as toolName, p.name as publicName, u.id as userId, u.name as userName, u.email as userEmail, u.phone as userPhone, u.createTime as userCreatedAt FROM catalogo c 
-    INNER JOIN ability a ON c.HabilidadeId = a.id 
-    INNER JOIN tool t ON c.FerramentaId = t.id 
-    INNER JOIN public p ON c.PublicoAlvoId = p.id 
-    INNER JOIN actuser u ON c.userId = u.id 
-    WHERE c.AguardandoRevisao = 1
-    ORDER BY c.createdAt DESC";
+    $sql = "SELECT 
+            c.id AS catalogId, 
+            COALESCE(ca.CategoriaId, c.CategoriaId) AS categoryId, 
+            COALESCE(ca.Titulo, c.Titulo) AS title, 
+            c.Status AS status, 
+            COALESCE(ca.Conteudo, c.Conteudo) AS content, 
+            COALESCE(ca.Ambiente, c.Ambiente) AS ambient, 
+            COALESCE(ca.Abordagem, c.Abordagem) AS approach, 
+            COALESCE(ca.CaminhoDeAcesso, c.CaminhoDeAcesso) AS link, 
+            c.createdAt, 
+            c.AguardandoRevisao, 
+            COALESCE(aAtualizado.name, a.name) AS abilityName, 
+            COALESCE(tAtualizado.name, t.name) AS toolName, 
+            COALESCE(pAtualizado.name, p.name) AS publicName, 
+            u.id AS userId, 
+            u.name AS userName, 
+            u.email AS userEmail, 
+            u.phone AS userPhone, 
+            u.createTime AS userCreatedAt 
+        FROM catalogo c 
+        LEFT JOIN catalogoAtualizado ca ON ca.CatalogoId = c.id 
+        LEFT JOIN ability aAtualizado ON ca.HabilidadeId = aAtualizado.id
+        LEFT JOIN tool tAtualizado ON ca.FerramentaId = tAtualizado.id
+        LEFT JOIN public pAtualizado ON ca.PublicoAlvoId = pAtualizado.id
+        INNER JOIN ability a ON c.HabilidadeId = a.id 
+        INNER JOIN tool t ON c.FerramentaId = t.id 
+        INNER JOIN public p ON c.PublicoAlvoId = p.id 
+        INNER JOIN actuser u ON c.userId = u.id 
+        WHERE c.AguardandoRevisao = 1
+        ORDER BY c.createdAt DESC";
 
     $stmt = $CFG['link']->prepare($sql);
     $stmt->execute();

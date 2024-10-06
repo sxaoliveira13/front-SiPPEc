@@ -502,153 +502,183 @@ require(dirname(__FILE__) . '/includes/head.php');
     </main>
 
     <div class="modal fade" id="editCatalogModal" aria-hidden="true" aria-labelledby="editCatalogModalLabel" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header u-box-padding--vertical u-box-padding--horizontal-big border-bottom">
                     <h4 class="fs-1 fw-bolder mb-0">Informações do Catálogo</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body border-0 u-box-padding--vertical pb-0 u-box-padding--horizontal-big">
+                    <div id="catalogCurrentStatus" class="card shadow-none p-5 mb-5">
+                        <div class="card-header bg-transparent border-0 p-0 mb-4">
+                            <h5 id="catalogCurrentStatusLabel" class="fw-bolder text-uppercase text-white fs-4 mb-0"></h5>
+                        </div>
+                        <div class="card-body border-0 p-0">
+                            <p class="fs-4 text-white mb-0" style="font-weight: 500;">"Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officia qui sint, harum cum voluptas, repellendus enim dolore cumque voluptatem dolorem blanditiis! Laudantium, fugiat? Soluta facere quae ab voluptates blanditiis animi!"</p>
+                        </div>
+                    </div>
                     <form id="editCatalogForm" class="form">
-                        <input class="form-group__input form-group__input--line" type="hidden" id="catalogId" name="catalogId">
-                        <input class="form-group__input form-group__input--line" type="hidden" id="categoryId" name="categoryId">
-                        <div class="form-group">
-                            <label class="form-group__label" for="catalogTitle">Título <span class="text-danger">*</span></label>
-                            <div class="position-relative">
-                                <input class="form-group__input form-group__input--line" type="text" placeholder="Informe o título" id="catalogTitle" name="titulo" required="" maxlength="200" autocomplete="off">
+                        <div class="row">
+                            <input class="form-group__input form-group__input--line" type="hidden" id="categoryId" name="categoryId">
+                            <input class="form-group__input form-group__input--line" type="hidden" id="catalogId" name="catalogId">
+                            <div class="col-12 mb-5">
+                                <div class="form-group">
+                                    <label class="form-group__label" for="catalogTitle">Título <span class="text-danger">*</span></label>
+                                    <div class="position-relative">
+                                        <input class="form-group__input form-group__input--line" type="text" placeholder="Informe o título" id="catalogTitle" name="titulo" required="" maxlength="200" autocomplete="off">
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-group__label" for="catalogContent">Conteúdo <span class="text-danger">*</span></label>
-                            <select class="form-group__input form-group__input" id="catalogContent" name="conteudo" required="">
-                                <option value="Computação Física; ComFAPOO; Arduino; C++; Avaliações">Computação Física; ComFAPOO; Arduino; C++; Avaliações</option>
-                                <option value="Computação “Desplugada” (CD); Jogos Digitais (JD); Linguagem de Programação (LP); Linguagem de Programação Visual (LPV); Robótica Pedagógica (RP)">Computação “Desplugada” (CD); Jogos Digitais (JD); Linguagem de Programação (LP); Linguagem de Programação Visual (LPV); Robótica Pedagógica (RP)</option>
-                                <option value="Scratch; Code.Org; Era uma vez">Scratch; Code.Org; Era uma vez</option>
-                                <option value="Computação Física; Arduino">Computação Física; Arduino</option>
-                                <option value="Arduino; Makey Makey; Lego Mindstorms; LilyPad Arduino">Arduino; Makey Makey; Lego Mindstorms; LilyPad Arduino</option>
-                                <option value="Computação Física; ComFAPOO">Computação Física; ComFAPOO</option>
-                                <option value="Apresentação Gradativa; Jogos Digitais; Novas Linguagens; Mapas Conceituais; Metodologias Ativas; PBL;Recursos Multimídias; Robótica Pedagógicas; Scratch">Apresentação Gradativa; Jogos Digitais; Novas Linguagens; Mapas Conceituais; Metodologias Ativas; PBL;Recursos Multimídias; Robótica Pedagógicas; Scratch</option>
-                                <option value="Arduino; Robotica; Plataformas Diversas, Atividades Desplugadas; Programação em Blocos">Arduino; Robotica; Plataformas Diversas, Atividades Desplugadas; Programação em Blocos</option>
-                                <option value="Thinkertank; Unity; Linguagem C#">Thinkertank; Unity; Linguagem C#</option>
-                                <option value="Gestão de projetos; PMBOK; Braindraw; Avaliação Heurística">Gestão de projetos; PMBOK; Braindraw; Avaliação Heurística</option>
-                                <option value="Arduino; Gogo Board; Scratch; Robomid; Robocode">Arduino; Gogo Board; Scratch; Robomid; Robocode</option>
-                                <option value="HTML5; Javascript">HTML5; Javascript</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-group__label" for="catalogTool">Ferramenta <span class="text-danger">*</span></label>
-                            <select class="form-group__input form-group__input" type="text" id="catalogTool" name="ferramenta" required="">
-                                <option value="1">GNU</option>
-                                <option value="2">Estilo BSD</option>
-                                <option value="3">Papel e lápis</option>
-                                <option value="4">Scratch</option>
-                                <option value="5">App Inventor</option>
-                                <option value="6">Computação Física</option>
-                                <option value="7">HTML</option>
-                                <option value="8">HTML / CSS</option>
-                                <option value="9">Python</option>
-                                <option value="10">Robótica Educacional</option>
-                                <option value="11">Programação</option>
-                                <option value="12">MIT</option>
-                                <option value="13">Apache</option>
-                                <option value="14">WTFPL</option>
-                                <option value="15">Geogebra</option>
-                                <option value="16">D. Público</option>
-                                <option value="17">Não se aplica</option>
-                                <option value="18">Beer License</option>
-                                <option value="19">MirOS</option>
-                                <option value="20">ISC</option>
-                                <option value="21">EPL</option>
-                                <option value="22">XSkat</option>
-                                <option value="23">Computação Física; ComFAPOO; Arduino; C++; Avaliações</option>
-                                <option value="24">Computação “Desplugada” (CD); Jogos Digitais (JD); Linguagem de Programação (LP); Linguagem de Programação Visual (LPV); Robótica Pedagógica (RP)</option>
-                                <option value="25">Scratch; Code.Org; Era uma vez</option>
-                                <option value="26">Computação Física; Arduino</option>
-                                <option value="27">Arduino; Makey Makey; Lego Mindstorms; LilyPad Arduino</option>
-                                <option value="28">Computação Física; ComFAPOO</option>
-                                <option value="29">Apresentação Gradativa; Jogos Digitais; Novas Linguagens; Mapas Conceituais; Metodologias Ativas; PBL;Recursos Multimídias; Robótica Pedagógicas; Scratch</option>
-                                <option value="30">Arduino; Robotica; Plataformas Diversas, Atividades Desplugadas; Programação em Blocos</option>
-                                <option value="31">Thinkertank; Unity; Linguagem C#</option>
-                                <option value="32">Gestão de projetos; PMBOK; Braindraw; Avaliação Heurística</option>
-                                <option value="33">Arduino; Gogo Board; Scratch; Robomid; Robocode</option>
-                                <option value="34">HTML5; Javascript</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-group__label" for="catalogPublic">Público Alvo <span class="text-danger">*</span></label>
-                            <select class="form-group__input form-group__input" type="text" id="catalogPublic" name="publico" required="">
-                                <option value="1">Ensino Infantil</option>
-                                <option value="2">Ensino Fundamental I</option>
-                                <option value="3">Ensino Fundamental II</option>
-                                <option value="4">Ensino Médio</option>
-                                <option value="5">Formação para professores</option>
-                                <option value="6">Educação especial</option>
-                                <option value="7">Ensino Técnico</option>
-                                <option value="8">Ensino Superior</option>
-                                <option value="9">Fundamental II / Formação para professores / Ensino Médio / Ensino Técnico / Ensino Superior</option>
-                                <option value="10">Fundamental II / Ensino Médio / Ensino Técnico / Ensino Superior</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-group__label" for="catalogAbility">Habilidade Desenvolvida <span class="text-danger">*</span></label>
-                            <select class="form-group__input form-group__input" type="text" id="catalogAbility" name="habilidade" required="">
-                                <option value="1">Pensamento Lógico</option>
-                                <option value="2">Criatividade</option>
-                                <option value="3">Resolução de problemas</option>
-                                <option value="4">Programação</option>
-                                <option value="5">Não se aplica</option>
-                                <option value="6">Raciocínio lógico</option>
-                                <option value="7">Colaboração</option>
-                                <option value="8">Conhecimento computacional</option>
-                                <option value="9">Lógica</option>
-                                <option value="10">Sustentabilidade</option>
-                                <option value="11">Abstração</option>
-                                <option value="12">Resolução de problemas / Raciocínio Lógico / Criatividade / Colaboração / Programação / Lógica / Conhecimento computacional</option>
-                            </select>
-                        </div>
-                        <div id="catalogAmbientBox" class="form-group">
-                            <label class="form-group__label" for="catalogAmbient">Ambiente do Jogo <span class="text-danger">*</span></label>
-                            <select class="form-group__input form-group__input" type="text" id="catalogAmbient" name="ambiente" required="">
-                                <option value="Extracurricular">Extracurricular</option>
-                                <option value="Intracurricular">Intracurricular</option>
-                            </select>
-                        </div>
-                        <div id="catalogApproachBox" class="form-group">
-                            <label class="form-group__label" for="catalogApproach">Abordagem <span class="text-danger">*</span></label>
-                            <select class="form-group__input form-group__input" type="text" id="catalogApproach" name="abordagem" required="">
-                                <option value="Instrucionista">Instrucionista</option>
-                                <option value="Intracurricular">Construcionista</option>
-                                <option value="Construtivista">Construtivista</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-group__label" for="catalogLink">Link de Acesso <span class="text-danger">*</span></label>
-                            <div class="position-relative">
-                                <input class="form-group__input form-group__input--line" type="text" placeholder="Informe o link de acesso" id="catalogLink" name="link" required="" maxlength="200" autocomplete="off">
+                            <div class="col-xl-6 col-md-12 mb-5">
+                                <div class="form-group">
+                                    <label class="form-group__label" for="catalogContent">Conteúdo <span class="text-danger">*</span></label>
+                                    <select class="form-group__input form-group__input" id="catalogContent" name="conteudo" required="">
+                                        <option value="Computação Física; ComFAPOO; Arduino; C++; Avaliações">Computação Física; ComFAPOO; Arduino; C++; Avaliações</option>
+                                        <option value="Computação “Desplugada” (CD); Jogos Digitais (JD); Linguagem de Programação (LP); Linguagem de Programação Visual (LPV); Robótica Pedagógica (RP)">Computação “Desplugada” (CD); Jogos Digitais (JD); Linguagem de Programação (LP); Linguagem de Programação Visual (LPV); Robótica Pedagógica (RP)</option>
+                                        <option value="Scratch; Code.Org; Era uma vez">Scratch; Code.Org; Era uma vez</option>
+                                        <option value="Computação Física; Arduino">Computação Física; Arduino</option>
+                                        <option value="Arduino; Makey Makey; Lego Mindstorms; LilyPad Arduino">Arduino; Makey Makey; Lego Mindstorms; LilyPad Arduino</option>
+                                        <option value="Computação Física; ComFAPOO">Computação Física; ComFAPOO</option>
+                                        <option value="Apresentação Gradativa; Jogos Digitais; Novas Linguagens; Mapas Conceituais; Metodologias Ativas; PBL;Recursos Multimídias; Robótica Pedagógicas; Scratch">Apresentação Gradativa; Jogos Digitais; Novas Linguagens; Mapas Conceituais; Metodologias Ativas; PBL;Recursos Multimídias; Robótica Pedagógicas; Scratch</option>
+                                        <option value="Arduino; Robotica; Plataformas Diversas, Atividades Desplugadas; Programação em Blocos">Arduino; Robotica; Plataformas Diversas, Atividades Desplugadas; Programação em Blocos</option>
+                                        <option value="Thinkertank; Unity; Linguagem C#">Thinkertank; Unity; Linguagem C#</option>
+                                        <option value="Gestão de projetos; PMBOK; Braindraw; Avaliação Heurística">Gestão de projetos; PMBOK; Braindraw; Avaliação Heurística</option>
+                                        <option value="Arduino; Gogo Board; Scratch; Robomid; Robocode">Arduino; Gogo Board; Scratch; Robomid; Robocode</option>
+                                        <option value="HTML5; Javascript">HTML5; Javascript</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="position-relative">
-                                <input class="form-group__input form-group__input--delete u-fw-500" type="text" placeholder='Digite "excluir" sem as aspas para remover o catálogo' id="catalogDeleteInput" name="catalogDeleteInput" maxlength="7" autocomplete="off">
-                                <button id="btnDeleteCatalog" type="button" disabled="" class="form-group__button form-group__button--delete">
-                                    <svg class="w-50 h-50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                        <g id="SVGRepo_iconCarrier">
-                                            <path d="M20.5001 6H3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"></path>
-                                            <path d="M18.8332 8.5L18.3732 15.3991C18.1962 18.054 18.1077 19.3815 17.2427 20.1907C16.3777 21 15.0473 21 12.3865 21H11.6132C8.95235 21 7.62195 21 6.75694 20.1907C5.89194 19.3815 5.80344 18.054 5.62644 15.3991L5.1665 8.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"></path>
-                                            <path d="M9.5 11L10 16" stroke="#fff" stroke-width="1.5" stroke-linecap="round"></path>
-                                            <path d="M14.5 11L14 16" stroke="#fff" stroke-width="1.5" stroke-linecap="round"></path>
-                                            <path d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6" stroke="#fff" stroke-width="2"></path>
-                                        </g>
-                                    </svg>
-                                </button>
+                            <div class="col-xl-6 col-md-12 mb-5">
+                                <div class="form-group">
+                                    <label class="form-group__label" for="catalogTool">Ferramenta <span class="text-danger">*</span></label>
+                                    <select class="form-group__input form-group__input" type="text" id="catalogTool" name="ferramenta" required="">
+                                        <option value="1">GNU</option>
+                                        <option value="2">Estilo BSD</option>
+                                        <option value="3">Papel e lápis</option>
+                                        <option value="4">Scratch</option>
+                                        <option value="5">App Inventor</option>
+                                        <option value="6">Computação Física</option>
+                                        <option value="7">HTML</option>
+                                        <option value="8">HTML / CSS</option>
+                                        <option value="9">Python</option>
+                                        <option value="10">Robótica Educacional</option>
+                                        <option value="11">Programação</option>
+                                        <option value="12">MIT</option>
+                                        <option value="13">Apache</option>
+                                        <option value="14">WTFPL</option>
+                                        <option value="15">Geogebra</option>
+                                        <option value="16">D. Público</option>
+                                        <option value="17">Não se aplica</option>
+                                        <option value="18">Beer License</option>
+                                        <option value="19">MirOS</option>
+                                        <option value="20">ISC</option>
+                                        <option value="21">EPL</option>
+                                        <option value="22">XSkat</option>
+                                        <option value="23">Computação Física; ComFAPOO; Arduino; C++; Avaliações</option>
+                                        <option value="24">Computação “Desplugada” (CD); Jogos Digitais (JD); Linguagem de Programação (LP); Linguagem de Programação Visual (LPV); Robótica Pedagógica (RP)</option>
+                                        <option value="25">Scratch; Code.Org; Era uma vez</option>
+                                        <option value="26">Computação Física; Arduino</option>
+                                        <option value="27">Arduino; Makey Makey; Lego Mindstorms; LilyPad Arduino</option>
+                                        <option value="28">Computação Física; ComFAPOO</option>
+                                        <option value="29">Apresentação Gradativa; Jogos Digitais; Novas Linguagens; Mapas Conceituais; Metodologias Ativas; PBL;Recursos Multimídias; Robótica Pedagógicas; Scratch</option>
+                                        <option value="30">Arduino; Robotica; Plataformas Diversas, Atividades Desplugadas; Programação em Blocos</option>
+                                        <option value="31">Thinkertank; Unity; Linguagem C#</option>
+                                        <option value="32">Gestão de projetos; PMBOK; Braindraw; Avaliação Heurística</option>
+                                        <option value="33">Arduino; Gogo Board; Scratch; Robomid; Robocode</option>
+                                        <option value="34">HTML5; Javascript</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-md-12 mb-5">
+                                <div class="form-group">
+                                    <label class="form-group__label" for="catalogPublic">Público Alvo <span class="text-danger">*</span></label>
+                                    <select class="form-group__input form-group__input" type="text" id="catalogPublic" name="publico" required="">
+                                        <option value="1">Ensino Infantil</option>
+                                        <option value="2">Ensino Fundamental I</option>
+                                        <option value="3">Ensino Fundamental II</option>
+                                        <option value="4">Ensino Médio</option>
+                                        <option value="5">Formação para professores</option>
+                                        <option value="6">Educação especial</option>
+                                        <option value="7">Ensino Técnico</option>
+                                        <option value="8">Ensino Superior</option>
+                                        <option value="9">Fundamental II / Formação para professores / Ensino Médio / Ensino Técnico / Ensino Superior</option>
+                                        <option value="10">Fundamental II / Ensino Médio / Ensino Técnico / Ensino Superior</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-md-12 mb-5">
+                                <div class="form-group">
+                                    <label class="form-group__label" for="catalogAbility">Habilidade Desenvolvida <span class="text-danger">*</span></label>
+                                    <select class="form-group__input form-group__input" type="text" id="catalogAbility" name="habilidade" required="">
+                                        <option value="1">Pensamento Lógico</option>
+                                        <option value="2">Criatividade</option>
+                                        <option value="3">Resolução de problemas</option>
+                                        <option value="4">Programação</option>
+                                        <option value="5">Não se aplica</option>
+                                        <option value="6">Raciocínio lógico</option>
+                                        <option value="7">Colaboração</option>
+                                        <option value="8">Conhecimento computacional</option>
+                                        <option value="9">Lógica</option>
+                                        <option value="10">Sustentabilidade</option>
+                                        <option value="11">Abstração</option>
+                                        <option value="12">Resolução de problemas / Raciocínio Lógico / Criatividade / Colaboração / Programação / Lógica / Conhecimento computacional</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="catalogAmbientBox" class="col-xl-6 col-md-12 mb-5">
+                                <div class="form-group">
+                                    <label class="form-group__label" for="catalogAmbient">Ambiente do Jogo <span class="text-danger">*</span></label>
+                                    <select class="form-group__input form-group__input" type="text" id="catalogAmbient" name="ambiente" required="">
+                                        <option value="Extracurricular">Extracurricular</option>
+                                        <option value="Intracurricular">Intracurricular</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="catalogApproachBox" class="col-xl-6 col-md-12 mb-5">
+                                <div class="form-group">
+                                    <label class="form-group__label" for="catalogApproach">Abordagem <span class="text-danger">*</span></label>
+                                    <select class="form-group__input form-group__input" type="text" id="catalogApproach" name="abordagem" required="">
+                                        <option value="Instrucionista">Instrucionista</option>
+                                        <option value="Intracurricular">Construcionista</option>
+                                        <option value="Construtivista">Construtivista</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 mb-5">
+                                <div class="form-group">
+                                    <label class="form-group__label" for="catalogLink">Link de Acesso <span class="text-danger">*</span></label>
+                                    <div class="position-relative">
+                                        <input class="form-group__input form-group__input--line" type="text" placeholder="Informe o link de acesso" id="catalogLink" name="link" required="" maxlength="200" autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="catalogDeleteInputBox" class="col-12 mb-5">
+                                <div class="form-group">
+                                    <div class="position-relative">
+                                        <input class="form-group__input form-group__input--delete u-fw-500" type="text" placeholder='Digite "excluir" sem as aspas para remover o catálogo' id="catalogDeleteInput" name="catalogDeleteInput" maxlength="7" autocomplete="off">
+                                        <button id="btnDeleteCatalog" type="button" disabled="" class="form-group__button form-group__button--delete">
+                                            <svg class="w-50 h-50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                                <g id="SVGRepo_iconCarrier">
+                                                    <path d="M20.5001 6H3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"></path>
+                                                    <path d="M18.8332 8.5L18.3732 15.3991C18.1962 18.054 18.1077 19.3815 17.2427 20.1907C16.3777 21 15.0473 21 12.3865 21H11.6132C8.95235 21 7.62195 21 6.75694 20.1907C5.89194 19.3815 5.80344 18.054 5.62644 15.3991L5.1665 8.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"></path>
+                                                    <path d="M9.5 11L10 16" stroke="#fff" stroke-width="1.5" stroke-linecap="round"></path>
+                                                    <path d="M14.5 11L14 16" stroke="#fff" stroke-width="1.5" stroke-linecap="round"></path>
+                                                    <path d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6" stroke="#fff" stroke-width="2"></path>
+                                                </g>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer d-flex justify-content-end align-items-center border-0 u-box-padding--vertical u-box-padding--horizontal-big">
-                    <button id="btnUpdateCatalog" class="fs-4 w-auto button-dark px-5" data-bs-toggle="modal" data-bs-dismiss="modal">Cancelar</button>
+                    <button class="fs-4 w-auto button-dark px-5" data-bs-toggle="modal" data-bs-dismiss="modal">Cancelar</button>
+                    <button id="btnRequestRegistrationReview" onclick="requestCatalogRegistrationReview(this);" style="min-width: 200px" class="fs-4 w-auto button-primary px-5 d-none">Solicitar revisão de cadastro</button>
+                    <button id="btnCatalogCancelDelete" onclick="" style="min-width: 200px" class="fs-4 w-auto button-danger text-center px-5">Cancelar solicitação de exclusão do catálago</button>
                     <button id="btnUpdateCatalog" onclick="updateCatalog(this);" style="min-width: 200px" class="fs-4 w-auto button-primary px-5">Salvar Alterações</button>
                 </div>
             </div>
@@ -707,11 +737,11 @@ require(dirname(__FILE__) . '/includes/head.php');
                                 </div>
                                 <div class="col-6 mb-5 border-end pe-5 d-none">
                                     <h3 class="fw-bolder mb-3">Ambiente</h3>
-                                    <p id="catalogAmbient" class="mb-0"></p>
+                                    <p id="newCatalogAmbient" class="mb-0"></p>
                                 </div>
                                 <div class="col-6 mb-5 ps-5 d-none">
                                     <h3 class="fw-bolder mb-3">Abordagem</h3>
-                                    <p id="catalogApproach" class="mb-0"></p>
+                                    <p id="newCatalogApproach" class="mb-0"></p>
                                 </div>
                             </div>
                         </div>

@@ -52,9 +52,9 @@ async function fetchNewUsers() {
             }
 
             newUsersData = resp['data'];
+            numberOfNewUsers = resp['data'].length;
 
             if (resp['data'].length > 0) {
-                numberOfNewUsers = resp['data'].length;
                 document.getElementById('newUsersQuantity').style.display = 'flex';
                 document.getElementById('newUsersQuantity').textContent = numberOfNewUsers;
             } else {
@@ -64,6 +64,8 @@ async function fetchNewUsers() {
             if ((numberOfNewUsers + numberOfNewCatalogs) > 0) {
                 document.getElementById('totalSolicitationsQuantity').style.opacity = '1';
                 document.getElementById('totalSolicitationsQuantity').textContent = numberOfNewUsers + numberOfNewCatalogs;
+            } else {
+                document.getElementById('totalSolicitationsQuantity').style.opacity = '0';
             }
 
             if (dataTableObjNewUsers !== false) {
@@ -107,9 +109,9 @@ async function fetchNewCatalogs() {
             }
 
             newCatalogsData = resp['data'];
+            numberOfNewCatalogs = resp['data'].length;
 
             if (resp['data'].length > 0) {
-                numberOfNewCatalogs = resp['data'].length;
                 document.getElementById('newCatalogsQuantity').style.display = 'flex';
                 document.getElementById('newCatalogsQuantity').textContent = numberOfNewCatalogs;
             } else {
@@ -119,6 +121,8 @@ async function fetchNewCatalogs() {
             if ((numberOfNewUsers + numberOfNewCatalogs) > 0) {
                 document.getElementById('totalSolicitationsQuantity').style.opacity = '1';
                 document.getElementById('totalSolicitationsQuantity').textContent = numberOfNewUsers + numberOfNewCatalogs;
+            } else {
+                document.getElementById('totalSolicitationsQuantity').style.opacity = '0';
             }
 
             if (dataTableObjNewCatalogs !== false) {
@@ -156,16 +160,17 @@ async function buildCatalogSolicitationModal(catalogId) {
     document.getElementById('catalogAccessLink').href = currentCatalog['link'];
 
     if (currentCatalog['ambient']) {
-        document.getElementById('catalogAmbient').textContent = currentCatalog['ambient'];
+        document.getElementById('newCatalogAmbient').textContent = currentCatalog['ambient'];
     }
     if (currentCatalog['approach']) {
-        document.getElementById('catalogApproach').textContent = currentCatalog['approach'];
+        document.getElementById('newCatalogApproach').textContent = currentCatalog['approach'];
     }
 
-    document.getElementById('catalogAmbient')
-        .parentElement.classList.toggle('d-none', typeof currentCatalog['ambient'] !== undefined ? false : true);
-    document.getElementById('catalogApproach')
-        .parentElement.classList.toggle('d-none', typeof currentCatalog['approach'] !== undefined ? false : true);
+    console.log(currentCatalog['ambient'] ? false : true)
+    document.getElementById('newCatalogAmbient')
+        .parentElement.classList.toggle('d-none', currentCatalog['ambient'] ? false : true);
+    document.getElementById('newCatalogApproach')
+        .parentElement.classList.toggle('d-none', currentCatalog['approach'] ? false : true);
 
     const userInfo = await getFullUserInfo(currentCatalog['userId']);
 
@@ -173,7 +178,7 @@ async function buildCatalogSolicitationModal(catalogId) {
         document.getElementById('userFullName').textContent = userInfo.user.name || 'Não disponível';
         document.getElementById('userMail').textContent = userInfo.user.email || 'Não disponível';
         document.getElementById('userPhone').textContent = userInfo.user.phone || 'Não disponível';
-        document.getElementById('userCreateTime').textContent = userInfo.user.createTime || 'Não disponível';
+        document.getElementById('userCreateTime').textContent = formatDate(userInfo.user.createTime) || 'Não disponível';
         document.getElementById('userLastAccess').textContent = formatDate(userInfo.user.lastAccess) || 'Não disponível';
     }
 
@@ -280,7 +285,7 @@ function handleButtonsAndInputs() {
 let catalogs = {};
 fetchUserCatalogs();
 async function fetchUserCatalogs() {
-    fetch(`${apiUrl}/catalog/get.php`, {
+    await fetch(`${apiUrl}/catalog/get.php`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -295,6 +300,11 @@ async function fetchUserCatalogs() {
             }
 
             document.getElementById("userCatalogsQuantity").textContent = resp['data'].length;
+
+            resp['data'].forEach(catalog => {
+                catalogs[catalog['catalogId']] = catalog;
+            });
+
             buildCatalogsList(resp['data']);
         }).catch((err) => {
             if (err instanceof CustomError) {
@@ -321,30 +331,39 @@ function buildCatalogsList(data) {
     data.forEach(catalog => {
         const { title, catalogId, createdAt, status } = catalog;
         const [action, statusLabel] = catalogStatusDict[status].split(' ');
-        const statusClass = catalogStatusColorsDict[statusLabel];
+        const statusColor = catalogStatusColorsDict[statusLabel];
 
         const html = `
             <li id="catalog_${catalogId}" class="main__section-catalog">
                 <div class="catalog__header">
-                    <h3 id="catalogTitle-${catalogId}" class="catalog__header-title mb-0">${title}</h3>
-                    <button class="catalog__header-button" onclick="buildEditModalFields(${catalogId})" data-bs-toggle="modal" data-bs-target="#editCatalogModal">Ver</button>
+                    <h3 id="catalogTitle-${catalogId}" class="catalog__header-title u-text-ellipsis u-text-ellipsis--2-lines pe-3 mb-0" title="${title}">${title}</h3>
+                    <button class="catalog__header-button" onclick="buildEditCatalogModal(${catalogId})" data-bs-toggle="modal" data-bs-target="#editCatalogModal">Ver</button>
                 </div>
                 <div class="catalog__body">
-                    <p class="my-3">Solicitação de ${action} <b class="u-text-color ${statusClass}">${statusLabel}</b></p>
+                    <p class="my-3">Solicitação de ${action} <b class="u-text-color u-text-color--${statusColor}">${statusLabel}</b></p>
                 </div>
                 <div class="catalog__footer">
-                    <p class="u-text-color u-text-color--muted mb-0">${beautifyDate(createdAt)}</p>
+                    <p class="u-text-color u-text-color--muted mb-0">${formatDate(createdAt)}</p>
                 </div>
             </li> 
         `;
 
-        catalogs[catalogId] = catalog;
         catalogsListEl.insertAdjacentHTML("beforeend", html);
     });
 }
 
-function buildEditModalFields(catalogId) {
+function buildEditCatalogModal(catalogId) {
     const currentCatalog = catalogs[catalogId];
+    console.log(currentCatalog)
+
+    const catalogStatus = catalogs[catalogId]['status'];
+    const currentStatus = catalogStatusDict[catalogStatus].split(' ');
+    const [statusType, statusText] = [currentStatus[0], currentStatus[1]];
+    const statusColor = catalogStatusColorsDict[currentStatus[1]];
+
+    document.getElementById('catalogCurrentStatus').classList.remove('u-bg--red', 'u-bg--green', 'u-bg--yellow');
+    document.getElementById('catalogCurrentStatus').classList.add(`u-bg--${statusColor}`);
+    document.getElementById('catalogCurrentStatusLabel').innerHTML = `Solicitação de ${statusType} ${statusText}</span>`
 
     document.getElementById("catalogId").value = currentCatalog.catalogId;
     document.getElementById("categoryId").value = currentCatalog.categoryId;
@@ -368,6 +387,43 @@ function buildEditModalFields(catalogId) {
     } else {
         document.getElementById("catalogApproachBox").classList.add("d-none");
     }
+
+    buildEditCatalogModalButtons(catalogStatus);
+}
+
+function buildEditCatalogModalButtons(status) {
+    document.getElementById('btnUpdateCatalog').classList.remove('d-none');
+    document.getElementById('catalogDeleteInputBox').classList.remove('d-none');
+    document.getElementById('btnRequestRegistrationReview').classList.add('d-none');
+    document.getElementById('btnCatalogCancelDelete').classList.add('d-none');
+
+    switch (status) {
+        case '1':
+        case '2':
+        case '5':
+        case '6': {
+            document.getElementById('btnRequestRegistrationReview').classList.add('d-none');
+            break;
+        }
+        case '3': {
+            document.getElementById('btnUpdateCatalog').classList.add('d-none');
+            document.getElementById('btnRequestRegistrationReview').classList.remove('d-none');
+            break;
+        }
+        case '4': {
+            document.getElementById('catalogDeleteInputBox').classList.add('d-none');
+            break;
+        }
+        case '7': {
+            document.getElementById('btnUpdateCatalog').classList.add('d-none');
+            document.getElementById('catalogDeleteInputBox').classList.add('d-none');
+            document.getElementById('btnCatalogCancelDelete').classList.remove('d-none');
+        }
+        case '9': {
+            document.getElementById('btnUpdateCatalog').classList.add('d-none');
+            document.getElementById('catalogDeleteInputBox').classList.add('d-none');
+        }
+    }
 }
 
 async function updateCatalog(btn) {
@@ -381,6 +437,7 @@ async function updateCatalog(btn) {
     }
 
     delete data['catalogDeleteInput'];
+    data['userId'] = userData['userId'];
 
     btn.disabled = false;
     btn.textContent = 'SALVANDO...';
@@ -403,6 +460,7 @@ async function updateCatalog(btn) {
             document.getElementById(`catalogTitle-${data['catalogId']}`).textContent = data['titulo'];
             success('Catálogo atualizado com sucesso!');
             fetchUserCatalogs();
+            buildEditCatalogModal(data['catalogId']);
         }).catch((err) => {
             if (err instanceof CustomError) {
                 error(err['message']);
@@ -412,6 +470,53 @@ async function updateCatalog(btn) {
             }
             btn.disabled = false;
             btn.textContent = 'Salvar Alterações';
+        });
+}
+
+async function requestCatalogRegistrationReview(btn) {
+    const data = getFormData("editCatalogForm");
+
+    if (typeof data === "undefined") return;
+
+    if (data['categoryId'] != "2") {
+        data['ambiente'] = null;
+        data['abordagem'] = null;
+    }
+
+    delete data['catalogDeleteInput'];
+    data['userId'] = userData['userId'];
+
+    btn.disabled = false;
+    btn.textContent = 'SALVANDO...';
+
+    fetch(`${apiUrl}/catalog/reviewRegistration.php`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    }).then((resp) => resp.json())
+        .then(async (resp) => {
+            btn.disabled = false;
+            btn.textContent = 'Solicitar revisão de cadastro';
+
+            if (!resp['success']) {
+                throw new CustomError(resp['msg', resp['code']]);
+            }
+
+            document.getElementById(`catalogTitle-${data['catalogId']}`).textContent = data['titulo'];
+            success('Solicitação feita com sucesso!');
+            await fetchUserCatalogs();
+            buildEditCatalogModal(data['catalogId']);
+        }).catch((err) => {
+            if (err instanceof CustomError) {
+                error(err['message']);
+                forceRedirectByError(err['code']);
+            } else {
+                error("Erro ao tentar solicitar cadastro!");
+            }
+            btn.disabled = false;
+            btn.textContent = 'Solicitar revisão de cadastro';
         });
 }
 
@@ -474,7 +579,7 @@ async function insertCatalog(formId, categoryId, btn) {
                 throw new CustomError(resp['msg', resp['code']]);
             }
 
-            success("Catálogo adicionado com sucesso!");
+            success("Solicitação feita com sucesso!");
             fetchUserCatalogs();
         }).catch((err) => {
             if (err instanceof CustomError) {
@@ -506,9 +611,9 @@ async function deleteCatalog() {
             document.getElementById(`catalog_${catalogId}`).remove();
 
             fetchUserCatalogs();
-            success("Catálogo excluído com sucesso!");
+            success("Solicitação feita com sucesso!");
 
-            $("#editCatalogModal").modal('hide');
+            // $("#editCatalogModal").modal('hide');
         }).catch((err) => {
             if (err instanceof CustomError) {
                 error(err['message']);

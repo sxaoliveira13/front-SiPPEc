@@ -65,7 +65,7 @@
     transition: all .2s ease;
 
     &--primary:hover {
-        filter: invert(66%) sepia(18%) saturate(1200%) hue-rotate(140deg) brightness(90%) contrast(90%);
+        filter: brightness(0) invert(66%) sepia(18%) saturate(1200%) hue-rotate(140deg) brightness(90%) contrast(90%);
     }
 }
 
@@ -90,5 +90,32 @@
 
     &--red {
         filter: brightness(0) invert(10%) sepia(84%) saturate(6939%) hue-rotate(14deg) brightness(91%) contrast(113%);
+    }
+}
+
+.u-bg--red {
+    background-color: rgba($color-red, .7) !important;
+}
+
+.u-bg--yellow {
+    background-color: #FFA500 !important;
+}
+
+.u-bg--green {
+    background-color: rgba($color-green, .7) !important;
+}
+
+.u-text-overflow {
+    text-overflow: ellipsis;
+}
+
+.u-text-ellipsis {
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+
+    &--2-lines {
+        -webkit-line-clamp: 2;
     }
 }

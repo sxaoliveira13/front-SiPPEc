@@ -37,9 +37,9 @@ const catalogStatusDict = {
     '9': 'exclusão recusada'
 };
 const catalogStatusColorsDict = {
-    'pendente': 'u-text-color--yellow',
-    'aprovada': 'u-text-color--green',
-    'recusada': 'u-text-color--red',
+    'pendente': 'yellow',
+    'aprovada': 'green',
+    'recusada': 'red',
 }
 window.addEventListener("DOMContentLoaded", () => {
     promiseResolveLoad();
@@ -261,32 +261,4 @@ function returnDate(time, short = false, epoch = false) {
         return append + day + '/' + month + '/' + year;
     }
     return append + day + '/' + month + '/' + year + ' às ' + hour + ':' + minute;
-}
-
-function beautifyDate(datetimeString, options = {}) {
-    const date = new Date(datetimeString);
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear();
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const seconds = date.getSeconds().toString().padStart(2, '0');
-
-    const longMonthNames = [
-        "janeiro", "fevereiro", "março", "abril", "maio", "junho",
-        "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"
-    ];
-
-    let formattedDate = '';
-    if (options.full) {
-        formattedDate = `${day} de ${longMonthNames[date.getMonth()]} de ${year}`;
-    } else {
-        formattedDate = `${day}/${month}/${year}`;
-    }
-
-    if (options.withTime) {
-        formattedDate += ` ${hours}:${minutes}:${seconds}`;
-    }
-
-    return formattedDate;
 }

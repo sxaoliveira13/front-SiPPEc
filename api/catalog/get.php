@@ -24,22 +24,37 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $json = file_get_contents('php://input');
 $data = json_decode($json, true);
-$userId = sanitize($data['userId'], 'int');
+$data = sanitize($data);
 
-if ((int)$USERDATA['userId'] !== $userId) {
+if ((int)$USERDATA['userId'] !== (int)$data['userId']) {
     http_response_code(401);
     error("Autenticação inválida", 1);
 }
 
 try {
-    $sql = "SELECT id as catalogId, CategoriaId as categoryId, Status as status, Titulo as title, Conteudo as content, 
-    Ambiente as ambient, Abordagem as approach, CaminhoDeAcesso as link, createdAt, PublicoAlvoID as publicId, 
-    FerramentaId as toolId, HabilidadeId as abilityId FROM catalogo
-    WHERE userId = :userId AND Status != 8
-    ORDER BY createdAt DESC";
+    $sql = "SELECT 
+        c.id AS catalogId,  
+        COALESCE(ca.id, NULL) AS updatedCatalogId, 
+        COALESCE(ca.CategoriaId, c.CategoriaId) AS categoryId, 
+        c.Status AS status,
+        c.Ativo AS active,
+        c.lastUpdate AS lastUpdate,
+        COALESCE(ca.Titulo, c.Titulo) AS title, 
+        COALESCE(ca.Conteudo, c.Conteudo) AS content, 
+        COALESCE(ca.Ambiente, c.Ambiente) AS ambient, 
+        COALESCE(ca.Abordagem, c.Abordagem) AS approach, 
+        COALESCE(ca.CaminhoDeAcesso, c.CaminhoDeAcesso) AS link, 
+        COALESCE(ca.createdAt, c.createdAt) AS createdAt, 
+        COALESCE(ca.PublicoAlvoId, c.PublicoAlvoId) AS publicId, 
+        COALESCE(ca.FerramentaId, c.FerramentaId) AS toolId, 
+        COALESCE(ca.HabilidadeId, c.HabilidadeId) AS abilityId 
+    FROM catalogo AS c
+    LEFT JOIN catalogoAtualizado AS ca ON ca.CatalogoId = c.id 
+    WHERE c.userId = :userId AND c.Status != 8
+    ORDER BY c.createdAt DESC";
 
     $stmt = $CFG['link']->prepare($sql);
-    $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+    $stmt->bindParam(':userId', $data['userId'], PDO::PARAM_INT);
     $stmt->execute();
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $out['data'] = $results;
@@ -48,5 +63,6 @@ try {
 } catch (Exception $e) {
     error($e->getMessage());
 }
+
 
 echo json_encode($out);

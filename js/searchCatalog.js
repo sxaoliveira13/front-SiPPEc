@@ -11,11 +11,15 @@ $.extend($.fn.dataTable.defaults, {
 });
 
 buildCatalogsDatatable();
-var catalogsDatatableObj = false;
+let catalogsDatatableObj1 = null;
+let catalogsDatatableObj2 = null;
+
 async function buildCatalogsDatatable() {
     await locks['onload'];
 
     document.getElementById('loader').classList.remove('d-none');
+    document.getElementById('searchDatatable1').classList.add('d-none');
+    document.getElementById('searchDatatable2').classList.add('d-none');
 
     const filters = getCatalogFilters();
 
@@ -25,7 +29,8 @@ async function buildCatalogsDatatable() {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ 'filters': filters })
-    }).then((resp) => resp.json())
+    })
+        .then((resp) => resp.json())
         .then((resp) => {
             if (!resp['success']) {
                 error(resp['msg']);
@@ -33,36 +38,69 @@ async function buildCatalogsDatatable() {
             }
 
             document.getElementById('loader').classList.add('d-none');
-            document.getElementById('searchDatatable').classList.remove('d-none');
 
-            resp['data'].forEach(data => {
-                delete data['categoryId'];
-                delete data['active'];
-                delete data['status'];
-            });
 
-            if (catalogsDatatableObj !== false) {
-                catalogsDatatableObj.destroy();
+            if (catalogsDatatableObj1) {
+                catalogsDatatableObj1.destroy();
+                catalogsDatatableObj1 = null;
             }
 
-            console.log(resp['data'])
+            if (catalogsDatatableObj2) {
+                catalogsDatatableObj2.destroy();
+                catalogsDatatableObj2 = null;
+            }
 
-            catalogsDatatableObj = $('.datatableCatalogs').DataTable({
-                "data": resp['data'].map(function (c) {
-                    const link = `<a class="text-link" href="${c['link']}" target="_blank">${c['link']}</a>`
-                    if (c['approach'] || c['ambient']) {
-                        return [c['title'], c['publicName'], c['content'], c['toolName'], c['abilityName'], link, c['approach'], c['ambient']];
+            let selectedTable;
+            let tableData;
 
-                    } else {
-                        return [c['title'], c['publicName'], c['content'], c['toolName'], c['abilityName'], link];
-                    }
-                }),
-                "pageLength": 25
-            });
+            if (filters.catalogType === '2') {
+                selectedTable = 'searchDatatable2';
+                tableData = resp['data'].map(function (c) {
+                    const link = `<a class="text-link" href="${c['link']}" target="_blank">${c['link']}</a>`;
+                    return [c['title'], c['publicName'], c['content'], c['toolName'], c['abilityName'], c['ambient'], c['approach'], link];
+                });
+            } else {
+                selectedTable = 'searchDatatable1';
+                tableData = resp['data'].map(function (c) {
+                    const link = `<a class="text-link" href="${c['link']}" target="_blank">${c['link']}</a>`;
+                    return [c['title'], c['publicName'], c['content'], c['toolName'], c['abilityName'], link];
+                });
+            }
 
-            document.getElementsByClassName('datatableCatalogs')[0].classList.remove('d-none');
-        }).catch((err) => {
-            error("Falha ao tentar carregar catalagos");
+            document.getElementById(selectedTable).classList.remove('d-none');
+
+            if (filters.catalogType === '2') {
+                catalogsDatatableObj2 = $('#catalogTableType2').DataTable({
+                    data: tableData,
+                    columns: [
+                        { title: "Título" },
+                        { title: "Público Alvo" },
+                        { title: "Conteúdo" },
+                        { title: "Ferramenta" },
+                        { title: "Habilidade" },
+                        { title: "Ambiente" },
+                        { title: "Abordagem" },
+                        { title: "Link" }
+                    ],
+                    pageLength: 25
+                });
+            } else {
+                catalogsDatatableObj1 = $('#catalogTableType1').DataTable({
+                    data: tableData,
+                    columns: [
+                        { title: "Título" },
+                        { title: "Nome Público" },
+                        { title: "Conteúdo" },
+                        { title: "Ferramenta" },
+                        { title: "Habilidade" },
+                        { title: "Link" }
+                    ],
+                    pageLength: 25
+                });
+            }
+        })
+        .catch((err) => {
+            error(err);
         });
 }
 
@@ -86,7 +124,6 @@ function getCatalogFilters() {
 }
 
 function toggleFieldsVisibility(catalogType) {
-    console.log(catalogType)
     switch (catalogType) {
         case '1':
         case '3': {

@@ -193,23 +193,39 @@ require(dirname(__FILE__) . '/includes/head.php');
             </div>
         </form>
         <span id="loader" class="loader my-auto"></span>
-        <div id="searchDatatable" class="w-100 mt-5 mb-auto">
-            <table class="table datatableCatalogs d-none">
+        <div id="searchDatatable1" class="w-100 mt-5 mb-auto d-none">
+            <table id="catalogTableType1" class="table">
                 <thead>
-                    <tr id="datatableColumns">
+                    <tr>
                         <th>Título</th>
-                        <th>Público Alvo</th>
+                        <th>Nome Público</th>
                         <th>Conteúdo</th>
                         <th>Ferramenta</th>
                         <th>Habilidade</th>
                         <th>Link</th>
                     </tr>
                 </thead>
-                <tbody>
-
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
+        <div id="searchDatatable2" class="w-100 mt-5 mb-auto d-none">
+            <table id="catalogTableType2" class="table">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Público Alvo</th>
+                        <th>Conteúdo</th>
+                        <th>Ferramenta</th>
+                        <th>Habilidade</th>
+                        <th>Ambiente</th>
+                        <th>Abordagem</th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
     </main>
     <?php require(dirname(__FILE__) . '/includes/footer.php'); ?>
 </body>

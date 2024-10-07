@@ -350,9 +350,9 @@ function buildCatalogsList(data) {
         const statusColor = catalogStatusColorsDict[statusLabel];
 
         const html = `
-            <li id="catalog_${catalogId}" class="main__section-catalog">
+            <li id="catalog_${catalogId}" class="main__section-catalog searchable">
                 <div class="catalog__header">
-                    <h3 id="catalogTitle-${catalogId}" class="catalog__header-title u-text-ellipsis u-text-ellipsis--2-lines pe-3 mb-0" title="${title}">${title}</h3>
+                    <h3 id="catalogTitle-${catalogId}" class="catalog__header-title searchableText u-text-ellipsis u-text-ellipsis--2-lines pe-3 mb-0" title="${title}">${title}</h3>
                     <button class="catalog__header-button" onclick="buildEditCatalogModal(${catalogId})" data-bs-toggle="modal" data-bs-target="#editCatalogModal">Ver</button>
                 </div>
                 <div class="catalog__body">

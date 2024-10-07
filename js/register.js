@@ -1,3 +1,5 @@
+
+
 window.addEventListener('DOMContentLoaded', () => {
     clearAllInputs();
 });
@@ -7,12 +9,37 @@ async function registerUser(btn) {
 
     if (typeof data === "undefined") return;
 
-    if (data['userPassword'] !== data['userConfirmePassword']) {
-        warning("As senhas não são iguais!");
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!validatePattern(data.userEmail, emailPattern)) {
+        error('Por favor, insira um email válido.');
         return;
     }
 
-    data['userType'] = 1;
+    if (data['userPassword'] !== data['userConfirmePassword']) {
+        error("As senhas não são iguais!");
+        return;
+    }
+
+    if (data.userPassword.length < 6) {
+        error('A senha deve ter pelo menos 6 caracteres.');
+        return;
+    }
+    if (!/[A-Z]/.test(data.userPassword)) {
+        error('A senha deve incluir pelo menos uma letra maiúscula.');
+        return;
+    }
+    if (!/[a-z]/.test(data.userPassword)) {
+        error('A senha deve incluir pelo menos uma letra minúscula.');
+        return;
+    }
+    if (!/[0-9]/.test(data.userPassword)) {
+        error('A senha deve incluir pelo menos um número.');
+        return;
+    }
+    if (!/[\W_]/.test(data.userPassword)) {
+        error('A senha deve incluir pelo menos um caractere especial.');
+        return;
+    }
 
     btn.disabled = true;
     btn.textContent = 'CADASTRANDO...';
@@ -34,7 +61,7 @@ async function registerUser(btn) {
 
             setTimeout(() => {
                 window.location.href = `${systemUrl}awaitingApproval.php`;
-            }, 1200);
+            }, 1000);
         }).catch((err) => {
             error("Erro ao tentar cadastrar!");
         });

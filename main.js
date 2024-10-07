@@ -194,6 +194,73 @@ function handlerAlertMessage(type, msg, timeout = 2500) {
     });
 }
 
+function togglePasswordVisibility(eyeBox) {
+    const input = eyeBox.parentElement.getElementsByTagName('input')[0];
+
+    const eyes = {
+        'closedEye': `
+        <svg class="form-group__input-icon form-group__input-icon--right" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.54199 1L19.542 19M8.38627 7.91364C7.86363 8.4536 7.54199 9.1892 7.54199 10C7.54199 11.6569 8.88517 13 10.542 13C11.3645 13 12.1097 12.669 12.6516 12.133M5.04199 4.64715C3.14269 5.90034 1.69602 7.78394 1 10C2.27425 14.0571 6.06456 17 10.5422 17C12.5311 17 14.3844 16.4194 15.9418 15.4184M9.54197 3.04939C9.87097 3.01673 10.2047 3 10.5422 3C15.0199 3 18.8102 5.94291 20.0844 10C19.8037 10.894 19.4007 11.7338 18.8952 12.5" stroke="#686868" stroke- width="1.7" stroke - linecap="round" stroke - linejoin="round"/>
+        </svg>`,
+        'openedEye': `
+        <svg xmlns="http://www.w3.org/2000/svg"  fill="none" class="form-group__input-icon form-group__input-icon--right" viewBox="0 0 21 20"><g stroke="#686868" stroke- width="1.5" stroke - linecap="round" stroke - linejoin="round"><path d="M15 12c0 1.6569-1.3431 3-3 3s-3-1.3431-3-3 1.3431-3 3-3 3 1.3431 3 3Z"/><path stroke-linejoin="round" d="M6.94975 7.05025c2.73367-2.73367 7.16585-2.73367 9.89945 0l2.1214 2.12132c1.3333 1.33333 2 2.00003 2 2.82843 0 .8284-.6667 1.4951-2 2.8284l-2.1214 2.1213c-2.7336 2.7337-7.16578 2.7337-9.89945 0l-2.12132-2.1213c-1.33334-1.3333-2-2-2-2.8284 0-.8284.66666-1.4951 2-2.82843l2.12132-2.12132Z"/></g></svg>`
+    };
+
+
+    switch (input.type.toLowerCase()) {
+        case 'text': {
+            input.type = 'password';
+            eyeBox.innerHTML = eyes['closedEye'];
+            break;
+        }
+        case 'password': {
+            input.type = 'text';
+            eyeBox.innerHTML = eyes['openedEye'];
+            break;
+        }
+    }
+}
+function search(containerId, searchText) {
+    const container = document.getElementById(containerId);
+    const searchElements = container.querySelectorAll('.searchable');
+    let hasResults = false;
+
+    searchElements.forEach((el) => {
+        const searchableText = el.querySelector('.searchableText').textContent;
+
+        if (searchableText.includes(searchText)) {
+            el.classList.remove('d-none');
+            hasResults = true;
+        } else {
+            el.classList.add('d-none');
+        }
+    });
+
+    toggleNoResultsMessage(container, hasResults);
+}
+
+function toggleNoResultsMessage(container, hasResults) {
+    const noResultsId = 'noResultsText';
+    const noResultsHtml = `<h3 id="${noResultsId}" style="line-height: 1.7" class="u-text-muted--2 d-flex align-items-center justify-content-center text-center h-100 mt-3 mb-0">Nenhum resultado encontrado para sua pesquisa</h3>`;
+    const noResultsElement = document.getElementById(noResultsId);
+
+    if (!hasResults) {
+        if (!noResultsElement) {
+            container.insertAdjacentHTML('beforeend', noResultsHtml);
+        } else {
+            noResultsElement.classList.remove('d-none');
+        }
+    } else {
+        if (noResultsElement) {
+            noResultsElement.classList.add('d-none');
+        }
+    }
+}
+
+
+function validatePattern(value, pattern) {
+    return pattern.test(value);
+}
+
 function forceRedirect(url) {
     url = systemUrl + url;
     window.location.href = url;
@@ -249,7 +316,8 @@ function returnDate(time, short = false, epoch = false) {
     var inputTime = new Date(time);
     let append = '';
     if (epoch) {
-        append = `<b style="display: none">!${inputTime.getTime() / 1000}?</b>`;
+        append = `< b style="display: none" > !${inputTime.getTime() / 1000
+            }?</ > `;
     }
 
     var day = ('0' + inputTime.getDate()).slice(-2);

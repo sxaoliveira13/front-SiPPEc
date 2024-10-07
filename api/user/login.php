@@ -111,49 +111,13 @@ try {
     }
 
     $CFG['link']->commit();
+    newUserToken($userId);
 } catch (PDOException $e) {
     $CFG['link']->rollBack();
-    error($e->getMessage());
+    error("Falha ao tentar realizar login.");
 } catch (Exception $e) {
     $CFG['link']->rollBack();
-    error($e->getMessage());
-}
-
-try {
-    $key = randGen(69, "alphanum");
-    $validity = date("Y-m-d H:i:s", (time() + $CFG['sessionValidity']));
-    $hashPass = hashPass($key);
-
-    $sql = "INSERT INTO actUserToken (id, userId, token, validity) 
-                        VALUES (NULL, :userId, :token, :validity)";
-
-    $stmt = $CFG['link']->prepare($sql);
-
-    $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
-    $stmt->bindParam(':token', $hashPass, PDO::PARAM_STR);
-    $stmt->bindParam(':validity', $validity, PDO::PARAM_STR);
-
-    $rs = $stmt->execute();
-    $tokenId = $CFG['link']->lastInsertId();
-} catch (PDOException $e) {
-    error($e->getMessage());
-} catch (Exception $e) {
-    error($e->getMessage());
-}
-
-if (!empty($tokenId)) {
-    setcookie(
-        'userToken',
-        $tokenId . "_" . $key,
-        [
-            'expires' => time() + $CFG['sessionValidity'],
-            'path' => '/',
-            'domain' => '',
-            'secure' => true,
-            'httponly' => true,
-            'samesite' => 'Strict'
-        ]
-    );
+    error("Falha ao tentar realizar login.");
 }
 
 echo json_encode($out);

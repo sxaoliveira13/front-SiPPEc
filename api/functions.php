@@ -67,6 +67,122 @@ function hashPass($pass)
 }
 
 /**
+ * Checks if the password recovery token exists and is valid
+ * @param string $token
+ * @return boolean
+ */
+function checkRecoverPasswordToken($token)
+{
+    global $CFG;
+
+    try {
+        $sql = "SELECT id, validated, expiresAt FROM passwordRecover WHERE token = :token";
+        $stmt = $CFG['link']->prepare($sql);
+        $stmt->bindParam(':token', $token, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $recover = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$recover) {
+            return ['success' => false, 'message' => 'Link de recuperação inválido.'];
+        }
+
+        $currentDateTime = new DateTime();
+        $expiresAt = new DateTime($recover['expiresAt']);
+
+        if ($currentDateTime > $expiresAt) {
+            return ['success' => false, 'message' => 'O Link de recuperação expirou.'];
+        }
+
+        return ['success' => true, 'message' => 'Token válido.', 'id' => $recover['id'], 'validated' => $recover['validated']];
+    } catch (PDOException $e) {
+        return ['success' => false, 'message' => 'Erro ao verificar link de recuperação.'];
+    }
+}
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+/**
+ * Send an email to destination
+ * @param string $destination
+ * @param string $subject
+ * @param string $body
+ */
+function sendMail($destination, $subject, $body, $altBody = '')
+{
+    $mail = new PHPMailer(true);
+
+    try {
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'victor.costa.osses@gmail.com';
+        $mail->Password = 'wwkw afyy xqtc pfaz';
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
+        $mail->CharSet = 'UTF-8';
+
+        $mail->setFrom('victor.costa.osses@gmail.com');
+        $mail->addAddress($destination);
+
+        $mail->isHTML(true);
+        $mail->Subject = $subject;
+        $mail->Body    = $body;
+        $mail->AltBody = $altBody;
+
+        $mail->send();
+    } catch (Exception $e) {
+        error("Falha ao tentar enviar email de recuperação.");
+    }
+}
+
+function newUserToken($userId)
+{
+    global $CFG;
+
+    try {
+        $key = randGen(69, "alphanum");
+        $validity = date("Y-m-d H:i:s", (time() + $CFG['sessionValidity']));
+        $hashPass = hashPass($key);
+
+        $sql = "INSERT INTO actUserToken (id, userId, token, validity) 
+                            VALUES (NULL, :userId, :token, :validity)";
+
+        $stmt = $CFG['link']->prepare($sql);
+
+        $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $stmt->bindParam(':token', $hashPass, PDO::PARAM_STR);
+        $stmt->bindParam(':validity', $validity, PDO::PARAM_STR);
+
+        $stmt->execute();
+        $tokenId = $CFG['link']->lastInsertId();
+    } catch (PDOException $e) {
+        error($e->getMessage());
+    } catch (Exception $e) {
+        error($e->getMessage());
+    }
+
+    if (!empty($tokenId)) {
+        setcookie(
+            'userToken',
+            $tokenId . "_" . $key,
+            [
+                'expires' => time() + $CFG['sessionValidity'],
+                'path' => '/',
+                'domain' => '',
+                'secure' => true,
+                'httponly' => true,
+                'samesite' => 'Strict'
+            ]
+        );
+    }
+}
+
+
+/**
  * Generate random string by length and type
  * @param int $length
  * @param string $type

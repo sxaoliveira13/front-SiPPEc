@@ -16,7 +16,7 @@ require(dirname(__FILE__) . '/includes/head.php');
 <body>
     <?php require(dirname(__FILE__) . '/includes/header.php'); ?>
     <main class="main u-container u-flex-auto">
-        <section class="main__section d-flex flex-column" style="max-width: 1000px">
+        <section class="main__section d-flex flex-column" style="max-width: 1200px">
             <span id="loader" class="loader"></span>
             <div id="registerStatusBox" class="card bg-transparent shadow-none border-0 d-none">
                 <div class="card-header text-center border-bottom-0 p-5">

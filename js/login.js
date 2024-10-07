@@ -29,10 +29,52 @@ async function checkLogin(btn) {
             }
 
             window.location.href = `${systemUrl}catalog.php`;
-            return;
         }).catch((err) => {
             btn.disabled = false;
             btn.textContent = 'Acessar Conta';
             error("Falha ao tentar fazer login");
+        });
+}
+
+
+function forgotMyPassword() {
+    document.getElementById('authBox').classList.add('d-none');
+    document.getElementById('recoverPasswordBox').classList.remove('d-none');
+}
+
+function recoveryPassword(btn) {
+    const data = getFormData('recoverPasswordForm');
+
+    if (typeof data === "undefined") return;
+
+    btn.disabled = true;
+    btn.textContent = 'Enviando código...';
+
+    fetch(`${apiUrl}/user/newPasswordRecover.php`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    }).then((resp) => resp.json())
+        .then((resp) => {
+            btn.disabled = false;
+            btn.textContent = 'Enviar código';
+
+            if (!resp['success']) {
+                error(resp['msg']);
+                return;
+            }
+
+            if (!resp['data']['token']) {
+                error("Falha ao gerar código de recuperação.");
+                return;
+            }
+
+            window.location.href = `${systemUrl}recoverPassword.php?t=${resp['data']['token']}`;
+        }).catch((err) => {
+            btn.disabled = false;
+            btn.textContent = 'Enviar código';
+            error("Falha ao tentar enviar código");
         });
 }

@@ -2,23 +2,6 @@ header.u-container {
     margin-bottom: 3rem;
 }
 
-.datatable {
-    &-scroll {
-        overflow: auto;
-        max-height: 230px;
-
-        thead {
-            font-size: 1.45rem;
-            position: sticky;
-            top: 0;
-        }
-
-        tbody {
-            font-size: 1.4rem;
-        }
-    }
-}
-
 .main {
     &__section {
         &--box {

@@ -54,11 +54,11 @@ body {
 }
 
 .text-link {
-  color: #49AEBE;
+  color: #2a6c77;
   transition: all 0.2s ease;
 }
 .text-link:hover {
-  color: #2a6c77;
+  color: #10282b;
 }
 
 .text-primary {
@@ -357,6 +357,15 @@ select {
   margin-bottom: 0;
   line-height: 1;
 }
+.form-group__input--big {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  min-height: 6rem;
+  margin-top: 0.5rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .form-group__input::placeholder {
   color: #838383;
 }
@@ -535,8 +544,22 @@ select {
   text-align: center;
   margin: 0 0.6rem;
 }
+.datatable-scroll {
+  overflow: auto;
+}
+.datatable-scroll--catalog {
+  max-height: 230px;
+}
+.datatable-scroll thead {
+  font-size: 1.45rem;
+  position: sticky;
+  top: 0;
+}
 .datatable-scroll thead tr {
   background-color: #EDEDED;
+}
+.datatable-scroll tbody {
+  font-size: 1.4rem;
 }
 .datatable-footer {
   display: flex;
@@ -709,19 +732,6 @@ select {
 
 header.u-container {
   margin-bottom: 3rem;
-}
-
-.datatable-scroll {
-  overflow: auto;
-  max-height: 230px;
-}
-.datatable-scroll thead {
-  font-size: 1.45rem;
-  position: sticky;
-  top: 0;
-}
-.datatable-scroll tbody {
-  font-size: 1.4rem;
 }
 
 @media (max-width: 1200px) {

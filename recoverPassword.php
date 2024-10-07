@@ -47,7 +47,7 @@ require(dirname(__FILE__) . '/includes/head.php');
                 </h2>
             </div>
             <div class="auth-card__body">
-                <form id="recoverPasswordForm" class="form">
+                <form id="recoverPasswordForm" class="form" onsubmit="return false">
                     <div class="form-group">
                         <label class="form-group__label" for="code">Código de Recuperação <span class="text-danger">*</span></label>
                         <div class="position-relative">
@@ -55,10 +55,20 @@ require(dirname(__FILE__) . '/includes/head.php');
                         </div>
                     </div>
                 </form>
-                <button id="btnRecoverMyPassword" onclick="recoverPassword(this);" class="button-primary mt-5">Verificar código</button>
+                <button type="button" id="btnRecoverMyPassword" onclick="recoverPassword(this);" class="button-primary mt-5">Verificar código</button>
             </div>
         </div>
     </main>
+
+    <script>
+        document.getElementById('recoverPasswordForm').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                recoverPassword(document.getElementById('btnRecoverMyPassword'));
+            }
+        });
+    </script>
+
     <?php require(dirname(__FILE__) . '/includes/footer.php'); ?>
 </body>
 

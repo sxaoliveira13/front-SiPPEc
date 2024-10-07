@@ -81,6 +81,16 @@ require(dirname(__FILE__) . '/includes/head.php');
             </div>
         </section>
     </main>
+
+    <script>
+        document.getElementById('recoverPasswordForm').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                recoverPassword(document.getElementById('btnRecoverMyPassword'));
+            }
+        });
+    </script>
+
     <?php require(dirname(__FILE__) . '/includes/footer.php'); ?>
 </body>
 

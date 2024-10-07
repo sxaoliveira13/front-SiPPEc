@@ -44,6 +44,16 @@ select {
         }
 
         &__input {
+            &--big {
+                appearance: none;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                min-height: 6rem;
+                margin-top: .5rem;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
             &::placeholder {
                 color: $color-grey-light-1;
             }

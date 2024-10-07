@@ -15,7 +15,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 $.extend($.fn.dataTable.defaults, {
     autoWidth: false,
-    dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
+    dom: '<"datatable-header"fl><"datatable-scroll datatable-scroll--catalog"t><"datatable-footer"ip>',
     language: {
         url: systemUrl + 'assets/json/datatable.pt-BR.json',
         search: '_INPUT_',

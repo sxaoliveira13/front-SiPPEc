@@ -42,7 +42,7 @@ function forgotMyPassword() {
     document.getElementById('recoverPasswordBox').classList.remove('d-none');
 }
 
-function recoveryPassword(btn) {
+function recoverPassword(btn) {
     const data = getFormData('recoverPasswordForm');
 
     if (typeof data === "undefined") return;
@@ -71,7 +71,11 @@ function recoveryPassword(btn) {
                 return;
             }
 
-            window.location.href = `${systemUrl}recoverPassword.php?t=${resp['data']['token']}`;
+            success("Código enviado com sucesso");
+
+            setTimeout(() => {
+                window.location.href = `${systemUrl}recoverPassword.php?t=${resp['data']['token']}`;
+            }, 1000)
         }).catch((err) => {
             btn.disabled = false;
             btn.textContent = 'Enviar código';

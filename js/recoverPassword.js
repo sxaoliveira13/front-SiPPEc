@@ -24,7 +24,11 @@ function recoverPassword(btn) {
                 return;
             }
 
-            window.location.href = `${systemUrl}newPassword.php?t=${token}`;
+            success("Código verificado com sucesso!");
+
+            setTimeout(() => {
+                window.location.href = `${systemUrl}newPassword.php?t=${token}`;
+            }, 1000);
         }).catch((err) => {
             btn.disabled = false;
             btn.textContent = 'Verificar código';

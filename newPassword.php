@@ -1,7 +1,5 @@
 <?php
 
-use function PHPSTORM_META\type;
-
 require_once("api/config.php");
 require_once("api/functions.php");
 
@@ -17,18 +15,18 @@ if (isset($_COOKIE['userToken'])) {
 }
 
 if (!isset($_GET['t'])) {
-    header("Location: login.php");
+    header("Location: login.php?e=1");
 }
 
 $token = sanitize($_GET['t']);
 $response = checkRecoverPasswordToken($token);
 
 if (!$response['success']) {
-    header("Location: login.php");
+    header("Location: login.php?e=2");
 }
 
 if ($response['validated'] === '0') {
-    header("Location: login.php");
+    header("Location: login.php?e=3");
 }
 
 require(dirname(__FILE__) . '/includes/head.php');
@@ -53,7 +51,7 @@ require(dirname(__FILE__) . '/includes/head.php');
                 </h2>
             </div>
             <div class="auth-card__body">
-                <form id="newPasswordForm" class="form">
+                <form id="newPasswordForm" class="form" onsubmit="return false">
                     <div class="form-group">
                         <label class="form-group__label" for="userPassword">Nova Senha <span class="text-danger">*</span></label>
                         <div class="position-relative">
@@ -77,10 +75,19 @@ require(dirname(__FILE__) . '/includes/head.php');
                         </div>
                     </div>
                 </form>
-                <button id="btnRecoverMyPassword" onclick="registerNewPassword(this);" class="button-primary mt-5">Cadastrar nova senha</button>
+                <button type="button" id="btnRecoverMyPassword" onclick="registerNewPassword(this);" class="button-primary mt-5">Cadastrar nova senha</button>
             </div>
         </div>
     </main>
+
+    <script>
+        document.getElementById('newPasswordForm').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                registerNewPassword(document.getElementById('btnRecoverMyPassword'));
+            }
+        });
+    </script>
     <?php require(dirname(__FILE__) . '/includes/footer.php'); ?>
 </body>
 

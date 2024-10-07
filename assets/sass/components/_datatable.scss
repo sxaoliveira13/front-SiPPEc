@@ -27,10 +27,24 @@
     }
 
     &-scroll {
+        overflow: auto;
+
+        &--catalog {
+            max-height: 230px;
+        }
+
         thead {
+            font-size: 1.45rem;
+            position: sticky;
+            top: 0;
+
             tr {
                 background-color: #EDEDED;
             }
+        }
+
+        tbody {
+            font-size: 1.4rem;
         }
     }
 

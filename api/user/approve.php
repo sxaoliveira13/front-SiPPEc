@@ -38,7 +38,7 @@ try {
 } catch (PDOException $e) {
     error('Falha ao tentar aprovar/recusar usuário!');
 } catch (Exception $e) {
-    error($e->getMessage());
+    error('Falha ao tentar aprovar/recusar usuário!');
 }
 
 echo json_encode($out);

@@ -248,6 +248,7 @@ async function approveNewUser(userId, isApproved) {
             }
 
             success(`Usuário ${isApproved === 1 ? 'aprovado' : 'recusado'} com sucesso!`);
+            sendUserApproveMail(userId);
             fetchNewUsers();
         }).catch((err) => {
             if (err instanceof CustomError) {
@@ -255,6 +256,27 @@ async function approveNewUser(userId, isApproved) {
                 forceRedirectByError(err['code']);
             } else {
                 error("Erro ao tentar aprovar/rejeitar usuário");
+            }
+        });
+}
+
+async function sendUserApproveMail(userId) {
+    fetch(`${apiUrl}/user/sendApproveMail.php`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 'userId': userId }),
+    }).then((resp) => resp.json())
+        .then((resp) => {
+            if (!resp['success']) {
+                throw new CustomError(resp['msg'], resp['code']);
+            }
+        }).catch((err) => {
+            if (err instanceof CustomError) {
+                console.error(err['message']);
+            } else {
+                console.error("Erro ao tentar enviar email de confirmação/rejeição de cadastro para o usuário");
             }
         });
 }

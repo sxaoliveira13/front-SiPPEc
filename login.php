@@ -76,7 +76,9 @@ require(dirname(__FILE__) . '/includes/head.php');
                             </div>
                         </div>
                     </form>
-                    <button id="btnRecoverMyPassword" onclick="recoveryPassword(this);" href="#" class="button-primary mt-5">Enviar código</button>
+                    <button id="btnRecoverMyPassword" onclick="recoverPassword(this);" class="button-primary mt-5">Enviar código</button>
+                    <button onclick="forgotMyPassword()" class="button-dark mt-3">Voltar</button>
+
                 </div>
             </div>
         </section>
@@ -84,9 +86,12 @@ require(dirname(__FILE__) . '/includes/head.php');
 
     <script>
         document.getElementById('recoverPasswordForm').addEventListener('keydown', function(event) {
+
             if (event.key === 'Enter') {
                 event.preventDefault();
-                recoverPassword(document.getElementById('btnRecoverMyPassword'));
+                if (!document.getElementById('btnRecoverMyPassword').disabled) {
+                    recoverPassword(document.getElementById('btnRecoverMyPassword'));
+                }
             }
         });
     </script>

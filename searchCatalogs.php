@@ -198,7 +198,7 @@ require(dirname(__FILE__) . '/includes/head.php');
                 <thead>
                     <tr>
                         <th>Título</th>
-                        <th>Nome Público</th>
+                        <th>Público Alvo</th>
                         <th>Conteúdo</th>
                         <th>Ferramenta</th>
                         <th>Habilidade</th>

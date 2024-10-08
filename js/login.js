@@ -38,8 +38,8 @@ async function checkLogin(btn) {
 
 
 function forgotMyPassword() {
-    document.getElementById('authBox').classList.add('d-none');
-    document.getElementById('recoverPasswordBox').classList.remove('d-none');
+    document.getElementById('authBox').classList.toggle('d-none');
+    document.getElementById('recoverPasswordBox').classList.toggle('d-none');
 }
 
 function recoverPassword(btn) {
@@ -47,7 +47,7 @@ function recoverPassword(btn) {
 
     if (typeof data === "undefined") return;
 
-    btn.disabled = true;
+    btn.setAttribute('disabled', '');
     btn.textContent = 'Enviando código...';
 
     fetch(`${apiUrl}/user/newPasswordRecover.php`, {
@@ -58,10 +58,10 @@ function recoverPassword(btn) {
         body: JSON.stringify(data)
     }).then((resp) => resp.json())
         .then((resp) => {
-            btn.disabled = false;
             btn.textContent = 'Enviar código';
 
             if (!resp['success']) {
+                btn.removeAttribute('disabled');
                 error(resp['msg']);
                 return;
             }
@@ -75,9 +75,9 @@ function recoverPassword(btn) {
 
             setTimeout(() => {
                 window.location.href = `${systemUrl}recoverPassword.php?t=${resp['data']['token']}`;
-            }, 1000)
+            }, 1000);
         }).catch((err) => {
-            btn.disabled = false;
+            btn.removeAttribute('disabled');
             btn.textContent = 'Enviar código';
             error("Falha ao tentar enviar código");
         });

@@ -89,7 +89,7 @@ async function buildCatalogsDatatable() {
                     data: tableData,
                     columns: [
                         { title: "Título" },
-                        { title: "Nome Público" },
+                        { title: "Público Alvo" },
                         { title: "Conteúdo" },
                         { title: "Ferramenta" },
                         { title: "Habilidade" },

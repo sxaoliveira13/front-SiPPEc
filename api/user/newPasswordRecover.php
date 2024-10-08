@@ -26,7 +26,7 @@ try {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (empty($user)) {
-        error('O email informado não está cadastrado.');
+        error('Falha ao tentar enviar email de recuperação.');
     }
 
     $recoverCode = random_int(100000, 999999);

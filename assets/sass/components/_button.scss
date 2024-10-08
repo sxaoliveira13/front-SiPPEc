@@ -6,6 +6,12 @@ button {
     box-shadow: unset
 }
 
+button:disabled {
+    pointer-events: none;
+    cursor: inherit;
+    opacity: .7;
+}
+
 .button-primary {
     @include button-styles($color-primary, 1.6rem, #ffffff, .6rem);
 }

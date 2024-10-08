@@ -15,6 +15,12 @@ async function registerUser(btn) {
         return;
     }
 
+    let cleanedPhone = data.userPhone.replace(/[^\d]/g, '');
+    if (!/^\d{11}$/.test(cleanedPhone)) {
+        error('Telefone inválido. Informe um número correto.');
+        return;
+    }
+
     if (data['userPassword'] !== data['userConfirmePassword']) {
         error("As senhas não são iguais!");
         return;
@@ -52,7 +58,10 @@ async function registerUser(btn) {
         body: JSON.stringify(data)
     }).then((resp) => resp.json())
         .then((resp) => {
+            btn.textContent = 'Criar Conta';
+
             if (!resp['success']) {
+                btn.disabled = false;
                 error(resp['msg']);
                 return;
             }
@@ -63,9 +72,8 @@ async function registerUser(btn) {
                 window.location.href = `${systemUrl}awaitingApproval.php`;
             }, 1000);
         }).catch((err) => {
+            btn.disabled = false;
+            btn.textContent = 'Criar Conta';
             error("Erro ao tentar cadastrar!");
         });
-
-    btn.disabled = false;
-    btn.textContent = 'Criar Conta';
 }

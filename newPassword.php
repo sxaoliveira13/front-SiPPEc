@@ -15,18 +15,21 @@ if (isset($_COOKIE['userToken'])) {
 }
 
 if (!isset($_GET['t'])) {
-    header("Location: login.php?e=1");
+    header("Location: login.php");
+    exit;
 }
 
 $token = sanitize($_GET['t']);
 $response = checkRecoverPasswordToken($token);
 
 if (!$response['success']) {
-    header("Location: login.php?e=2");
+    header("Location: login.php");
+    exit;
 }
 
 if ($response['validated'] === '0') {
-    header("Location: login.php?e=3");
+    header("Location: login.php");
+    exit;
 }
 
 require(dirname(__FILE__) . '/includes/head.php');

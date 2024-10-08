@@ -16,6 +16,7 @@ if (isset($_COOKIE['userToken'])) {
 
 if (!isset($_GET['t'])) {
     header("Location: login.php");
+    exit;
 }
 
 $token = sanitize($_GET['t']);
@@ -23,6 +24,7 @@ $response = checkRecoverPasswordToken($token);
 
 if (!$response['success']) {
     header("Location: login.php");
+    exit;
 }
 
 require(dirname(__FILE__) . '/includes/head.php');
@@ -64,7 +66,9 @@ require(dirname(__FILE__) . '/includes/head.php');
         document.getElementById('recoverPasswordForm').addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
                 event.preventDefault();
-                recoverPassword(document.getElementById('btnRecoverMyPassword'));
+                if (!document.getElementById('btnRecoverMyPassword').disabled) {
+                    recoverPassword(document.getElementById('btnRecoverMyPassword'));
+                }
             }
         });
     </script>

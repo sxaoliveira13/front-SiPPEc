@@ -1,14 +1,14 @@
-function recoverPassword(btn) {
+async function recoverPassword(btn) {
     const data = getFormData('recoverPasswordForm');
 
     if (typeof data === "undefined") return;
 
     data['token'] = token;
 
-    btn.disabled = true;
+    btn.setAttribute('disabled', '');
     btn.textContent = 'Verificando código...';
 
-    fetch(`${apiUrl}/user/checkRecoverPasswordCode.php`, {
+    await fetch(`${apiUrl}/user/checkRecoverPasswordCode.php`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -16,10 +16,10 @@ function recoverPassword(btn) {
         body: JSON.stringify(data)
     }).then((resp) => resp.json())
         .then((resp) => {
-            btn.disabled = false;
             btn.textContent = 'Verificar código';
 
             if (!resp['success']) {
+                btn.removeAttribute('disabled');
                 error(resp['msg']);
                 return;
             }
@@ -30,11 +30,10 @@ function recoverPassword(btn) {
                 window.location.href = `${systemUrl}newPassword.php?t=${token}`;
             }, 1000);
         }).catch((err) => {
-            btn.disabled = false;
+            btn.removeAttribute('disabled');
             btn.textContent = 'Verificar código';
             error("Falha ao verificar código de recuperação.");
         });
-
 }
 
 async function registerNewPassword(btn) {
@@ -73,7 +72,7 @@ async function registerNewPassword(btn) {
         return;
     }
 
-    btn.disabled = true;
+    btn.setAttribute('disabled', '');
     btn.textContent = 'Atualizando senha...';
 
     await fetch(`${apiUrl}/user/newPassword.php`, {
@@ -84,20 +83,23 @@ async function registerNewPassword(btn) {
         body: JSON.stringify(data)
     }).then((resp) => resp.json())
         .then((resp) => {
+            btn.textContent = 'Cadastrar nova senha';
+
             if (!resp['success']) {
+                btn.removeAttribute('disabled', '');
                 error(resp['msg']);
                 return;
             }
 
             success("Senha atualizada com sucesso!");
+            btn.setAttribute('disabled', '');
 
             setTimeout(() => {
                 window.location.href = `${systemUrl}login.php`;
             }, 1000);
         }).catch((err) => {
+            btn.removeAttribute('disabled');
+            btn.textContent = 'Cadastrar nova senha';
             error("Erro ao tentar atualizar a senha.");
         });
-
-    btn.disabled = false;
-    btn.textContent = 'Criar Conta';
 }

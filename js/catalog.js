@@ -7,7 +7,24 @@ let newUsersData;
 let currentCatalog = {};
 
 window.addEventListener('DOMContentLoaded', () => {
-    handleButtonsAndInputs();
+    document.getElementById('btnDeleteCatalog').setAttribute("disabled", true);
+
+    document.getElementById('btnNewArticle')?.addEventListener('click', (e) => {
+        insertCatalog(e.target, "articleForm", 1);
+    });
+
+    document.getElementById('btnNewGame')?.addEventListener('click', (e) => {
+        insertCatalog(e.target, "gameForm", 2);
+    });
+
+    document.getElementById('btnNewMethod')?.addEventListener('click', (e) => {
+        insertCatalog(e.target, "methodForm", 3);
+    });
+
+    document.getElementById('btnLogout')?.addEventListener('click', () => {
+        logout();
+    });
+
     document.getElementById('editCatalogModal').addEventListener('hidden.bs.modal', () => {
         document.getElementById("catalogDeleteInput").value = "";
     });
@@ -76,8 +93,8 @@ async function fetchNewUsers() {
                 "data": resp['data'].map(function (c) {
                     let actionButtons = `
                         <div class="d-flex align-items-center justify-content-center">
-                            <img onclick="approveNewUser(${c['id']}, 3)" src="assets/img/close.svg" style="width: 2.6rem;" alt="recusar" class="alert-close-icon img-fluid u-cursor-pointer u-filter--red me-2">
-                            <img onclick="approveNewUser(${c['id']}, 1)" style="width: 2.4rem;" src="assets/img/success2.svg" alt="aprovar" class="alert-close-icon img-fluid u-cursor-pointer u-filter--green ms-2">
+                            <img onclick="approveNewUser(this, ${c['id']}, 3)" src="assets/img/close.svg" style="width: 2.6rem;" alt="recusar" class="alert-close-icon img-fluid u-cursor-pointer u-filter--red me-2">
+                            <img onclick="approveNewUser(this, ${c['id']}, 1)" style="width: 2.4rem;" src="assets/img/success2.svg" alt="aprovar" class="alert-close-icon img-fluid u-cursor-pointer u-filter--green ms-2">
                         </div>
                     `;
                     return [c['name'], `<a href="https://wa.me/${c['phone']}">${c['phone']}</a>`, c['email'], formatDate(c['createTime']), actionButtons];
@@ -160,7 +177,7 @@ async function buildCatalogSolicitationModal(catalogId) {
     document.getElementById('catalogAccessLink').href = currentCatalog['link'];
     document.getElementById('catalogApproveMessage').value = '';
     document.getElementById('catalogType').textContent = catalogsDict[currentCatalog['categoryId']];
-    document.getElementById('catalogIsActive').textContent = currentCatalog['active'] ? 'Sim' : 'Não';
+    document.getElementById('catalogIsActive').textContent = currentCatalog['active'] === '1' ? 'Sim' : 'Não';
 
     if (currentCatalog['ambient']) {
         document.getElementById('newCatalogAmbient').textContent = currentCatalog['ambient'];
@@ -169,7 +186,6 @@ async function buildCatalogSolicitationModal(catalogId) {
         document.getElementById('newCatalogApproach').textContent = currentCatalog['approach'];
     }
 
-    console.log(currentCatalog['ambient'] ? false : true)
     document.getElementById('newCatalogAmbient')
         .parentElement.classList.toggle('d-none', currentCatalog['ambient'] ? false : true);
     document.getElementById('newCatalogApproach')
@@ -194,10 +210,23 @@ async function buildCatalogSolicitationModal(catalogId) {
         document.getElementById('gamesCount').textContent = catalogCounter[1] ?? "0";
         document.getElementById('methodsCount').textContent = catalogCounter[2] ?? "0";
     }
+
+    if (typeof currentCatalog['catalogHasUpdated'] !== "undefined") {
+        document.getElementById('catalogHasUpdated').classList.remove('d-none');
+        document.getElementById('catalogHasUpdated2').classList.remove('d-none');
+    } else {
+        document.getElementById('catalogHasUpdated').classList.add('d-none');
+        document.getElementById('catalogHasUpdated2').classList.add('d-none');
+    }
 }
 
-async function approveCatalog(isApproved) {
+async function approveCatalog(btn, isApproved) {
+    if (typeof currentCatalog['catalogId'] === "undefined" || !currentCatalog['catalogId']) {
+        return;
+    }
+
     const catalogMessage = document.getElementById('catalogApproveMessage').value ?? '';
+    btn.setAttribute('disabled', '');
 
     await fetch(`${apiUrl}/catalog/approve.php`, {
         method: 'POST',
@@ -208,20 +237,34 @@ async function approveCatalog(isApproved) {
             'catalogId': currentCatalog['catalogId'],
             'currentStatus': currentCatalog['status'],
             'isApproved': isApproved,
-            'catalogMessage': catalogMessage
+            'catalogMessage': catalogMessage,
+            'cycle': currentCatalog['cycle']
         }),
     }).then((resp) => resp.json())
         .then(async (resp) => {
             await locks['onload'];
+            btn.removeAttribute('disabled');
 
             if (!resp['success']) {
                 throw new CustomError(resp['msg'], resp['code']);
+            }
+
+            if (resp['catalogData']) {
+                error("Os dados do catálago carregado na página não correspondem aos dados armazenados.");
+                resp['catalogData']['catalogHasUpdated'] = 1;
+                const catalogIndex = newCatalogsData.findIndex(catalog => catalog.catalogId == resp['catalogData']['catalogId']);
+                console.log(newCatalogsData[catalogIndex])
+                newCatalogsData[catalogIndex] = resp['catalogData'];
+                console.log(newCatalogsData[catalogIndex])
+                buildCatalogSolicitationModal(currentCatalog['catalogId']);
+                return;
             }
 
             success(`Solicitação ${isApproved === 1 ? 'aprovada' : 'recusada'} com sucesso!`);
             $("#catalogSolicitationModal").modal('hide');
             fetchNewCatalogs();
         }).catch((err) => {
+            btn.removeAttribute('disabled');
             if (err instanceof CustomError) {
                 error(err['message']);
                 forceRedirectByError(err['code']);
@@ -232,7 +275,13 @@ async function approveCatalog(isApproved) {
         });
 }
 
-async function approveNewUser(userId, isApproved) {
+async function approveNewUser(btn, userId, isApproved) {
+    if (typeof userId === "undefined" || userId == null) {
+        return;
+    }
+
+    btn.classList.add('u-disabled');
+
     await fetch(`${apiUrl}/user/approve.php`, {
         method: 'POST',
         headers: {
@@ -242,6 +291,7 @@ async function approveNewUser(userId, isApproved) {
     }).then((resp) => resp.json())
         .then(async (resp) => {
             await locks['onload'];
+            btn.classList.remove('u-disabled');
 
             if (!resp['success']) {
                 throw new CustomError(resp['msg'], resp['code']);
@@ -251,6 +301,7 @@ async function approveNewUser(userId, isApproved) {
             sendUserApproveMail(userId);
             fetchNewUsers();
         }).catch((err) => {
+            btn.classList.remove('u-disabled');
             if (err instanceof CustomError) {
                 error(err['message']);
                 forceRedirectByError(err['code']);
@@ -261,6 +312,10 @@ async function approveNewUser(userId, isApproved) {
 }
 
 async function sendUserApproveMail(userId) {
+    if (typeof userId === "undefined" || userId == null) {
+        return;
+    }
+
     fetch(`${apiUrl}/user/sendApproveMail.php`, {
         method: 'POST',
         headers: {
@@ -281,37 +336,15 @@ async function sendUserApproveMail(userId) {
         });
 }
 
-function handleButtonsAndInputs() {
-    document.getElementById('btnDeleteCatalog').setAttribute("disabled", true);
 
-    document.getElementById('btnNewArticle')?.addEventListener('click', (e) => {
-        insertCatalog("articleForm", 1, e.target);
-    });
 
-    document.getElementById('btnNewGame')?.addEventListener('click', (e) => {
-        insertCatalog("gameForm", 2, e.target);
-    });
-
-    document.getElementById('btnNewMethod')?.addEventListener('click', (e) => {
-        insertCatalog("methodForm", 3, e.target);
-    });
-
-    document.getElementById('btnLogout')?.addEventListener('click', () => {
-        logout();
-    });
-
-    document.getElementById('catalogDeleteInput')?.addEventListener('keyup', (e) => {
-        if (e.target.value === "excluir") {
-            document.getElementById('btnDeleteCatalog').removeAttribute("disabled");
-        }
-        else {
-            document.getElementById('btnDeleteCatalog').setAttribute("disabled", true);
-        }
-    });
-
-    document.getElementById('btnDeleteCatalog')?.addEventListener('click', () => {
-        deleteCatalog();
-    });
+function checkDeleteInputText(value) {
+    if (value === "excluir") {
+        document.getElementById('btnDeleteCatalog').removeAttribute("disabled");
+    }
+    else {
+        document.getElementById('btnDeleteCatalog').setAttribute("disabled", '');
+    }
 }
 
 let catalogs = {};
@@ -337,12 +370,10 @@ async function fetchUserCatalogs() {
                 catalogs[catalog['catalogId']] = catalog;
             });
 
-
             buildCatalogsList(resp['data']);
 
             if (currentCatalog['catalogId'] && typeof currentCatalog['catalogId'] !== 'undefined') {
                 buildEditCatalogModal(currentCatalog['catalogId']);
-                console.log("adw")
             }
         }).catch((err) => {
             if (err instanceof CustomError) {
@@ -363,9 +394,10 @@ function buildCatalogsList(data) {
             <h3 style="line-height: 1.7" class="u-text-muted--2 d-flex align-items-center justify-content-center text-center h-100 mt-3 mb-0">
                 Você não possui catálogos cadastrados
             </h3>`;
+        document.getElementById('filterCatalog').setAttribute('disabled', '');
         return;
     }
-
+    document.getElementById('filterCatalog').removeAttribute('disabled');
     data.forEach(catalog => {
         const { title, catalogId, lastUpdate, status } = catalog;
         const [action, statusLabel] = catalogStatusDict[status].split(' ');
@@ -417,6 +449,8 @@ function buildEditCatalogModal(catalogId) {
     document.getElementById("catalogPublic").value = currentCatalog.publicId;
     document.getElementById("catalogAbility").value = currentCatalog.abilityId;
     document.getElementById("catalogLink").value = currentCatalog.link;
+    document.getElementById("catalogIsActiveText").textContent = currentCatalog.active === '1' ? 'ATIVO' : 'INATIVO';
+    document.getElementById("catalogIsActiveText").className = currentCatalog.active === '1' ? 'u-text-color--green' : 'u-text-color--red';
 
     if (currentCatalog.ambient) {
         document.getElementById("catalogAmbientBox").classList.remove("d-none");
@@ -432,7 +466,45 @@ function buildEditCatalogModal(catalogId) {
         document.getElementById("catalogApproachBox").classList.add("d-none");
     }
 
+    document.getElementById('catalogDeleteInput').value = '';
+    checkDeleteInputText(document.getElementById('catalogDeleteInput').value);
     buildEditCatalogModalButtons(catalogStatus);
+}
+
+async function cancelCatalogDeletion(btn) {
+    if (typeof currentCatalog['catalogId'] !== "undefined" || !currentCatalog['catalogId']) {
+        return;
+    }
+
+    btn.setAttribute('disabled', '');
+
+    fetch(`${apiUrl}/catalog/cancelDelete.php`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 'catalogId': currentCatalog['catalogId'] })
+    }).then((resp) => resp.json())
+        .then(async (resp) => {
+            btn.removeAttribute('disabled');
+
+            if (!resp['success']) {
+                throw new CustomError(resp['msg'], resp['code']);
+            }
+
+            success("Exclusão cancelada com sucesso.");
+            document.getElementById('catalogDeleteInput').value = '';
+            checkDeleteInputText(document.getElementById('catalogDeleteInput').value);
+            fetchUserCatalogs();
+        }).catch((err) => {
+            btn.removeAttribute('disabled');
+            if (err instanceof CustomError) {
+                error(err['message']);
+                forceRedirectByError(err['code']);
+            } else {
+                error("Erro ao tentar cancelar exclusão de catálago.");
+            }
+        });
 }
 
 function buildEditCatalogModalButtons(status) {
@@ -481,9 +553,14 @@ async function updateCatalog(btn) {
     }
 
     delete data['catalogDeleteInput'];
+
+    if (typeof userData['userId'] === "undefined" || userData['userId'] === null) {
+        return;
+    }
+
     data['userId'] = userData['userId'];
 
-    btn.disabled = false;
+    btn.setAttribute('disabled', '');
     btn.textContent = 'SALVANDO...';
 
     fetch(`${apiUrl}/catalog/update.php`, {
@@ -494,11 +571,11 @@ async function updateCatalog(btn) {
         body: JSON.stringify(data)
     }).then((resp) => resp.json())
         .then((resp) => {
-            btn.disabled = false;
+            btn.removeAttribute('disabled');
             btn.textContent = 'Salvar Alterações';
 
             if (!resp['success']) {
-                throw new CustomError(resp['msg', resp['code']]);
+                throw new CustomError(resp['msg'], resp['code']);
             }
 
             document.getElementById(`catalogTitle-${data['catalogId']}`).textContent = data['titulo'];
@@ -506,14 +583,15 @@ async function updateCatalog(btn) {
             fetchUserCatalogs();
             buildEditCatalogModal(data['catalogId']);
         }).catch((err) => {
+            btn.removeAttribute('disabled');
+            btn.textContent = 'Salvar Alterações';
+
             if (err instanceof CustomError) {
                 error(err['message']);
                 forceRedirectByError(err['code']);
             } else {
                 error("Erro ao tentar atualizar catálogo!");
             }
-            btn.disabled = false;
-            btn.textContent = 'Salvar Alterações';
         });
 }
 
@@ -528,9 +606,14 @@ async function requestCatalogRegistrationReview(btn) {
     }
 
     delete data['catalogDeleteInput'];
+
+    if (typeof userData['userId'] === "undefined" || userData['userId'] === null) {
+        return;
+    }
+
     data['userId'] = userData['userId'];
 
-    btn.disabled = false;
+    btn.setAttribute('disabled', '');
     btn.textContent = 'SALVANDO...';
 
     fetch(`${apiUrl}/catalog/reviewRegistration.php`, {
@@ -541,11 +624,11 @@ async function requestCatalogRegistrationReview(btn) {
         body: JSON.stringify(data)
     }).then((resp) => resp.json())
         .then(async (resp) => {
-            btn.disabled = false;
+            btn.removeAttribute('disabled');
             btn.textContent = 'Solicitar revisão de cadastro';
 
             if (!resp['success']) {
-                throw new CustomError(resp['msg', resp['code']]);
+                throw new CustomError(resp['msg'], resp['code']);
             }
 
             document.getElementById(`catalogTitle-${data['catalogId']}`).textContent = data['titulo'];
@@ -553,14 +636,14 @@ async function requestCatalogRegistrationReview(btn) {
             await fetchUserCatalogs();
             buildEditCatalogModal(data['catalogId']);
         }).catch((err) => {
+            btn.removeAttribute('disabled');
+            btn.textContent = 'Solicitar revisão de cadastro';
             if (err instanceof CustomError) {
                 error(err['message']);
                 forceRedirectByError(err['code']);
             } else {
                 error("Erro ao tentar solicitar cadastro!");
             }
-            btn.disabled = false;
-            btn.textContent = 'Solicitar revisão de cadastro';
         });
 }
 
@@ -582,7 +665,7 @@ async function getFullUserInfo(userId) {
     }).then((resp) => resp.json())
         .then((resp) => {
             if (!resp['success']) {
-                throw new CustomError(resp['msg', resp['code']]);
+                throw new CustomError(resp['msg'], resp['code']);
             }
             return resp['data'];
         }).catch((err) => {
@@ -595,16 +678,18 @@ async function getFullUserInfo(userId) {
         });
 }
 
-async function insertCatalog(formId, categoryId, btn) {
+async function insertCatalog(btn, formId, categoryId) {
     const data = getFormData(formId);
 
-    if (typeof data === "undefined") return;
+    if (typeof data === "undefined") {
+        return;
+    }
 
     data['categoria'] = categoryId;
     data['userId'] = userData.userId;
 
     const lastBtnText = btn.textContent;
-    btn.disabled = true;
+    btn.setAttribute('disabled', '');
     btn.textContent = 'ENVIANDO...';
 
     return fetch(`${apiUrl}/catalog/new.php`, {
@@ -615,29 +700,33 @@ async function insertCatalog(formId, categoryId, btn) {
         body: JSON.stringify(data)
     }).then((resp) => resp.json())
         .then((resp) => {
-            btn.disabled = false;
+            btn.removeAttribute('disabled');
             btn.textContent = lastBtnText;
 
             if (!resp['success']) {
-                throw new CustomError(resp['msg', resp['code']]);
+                throw new CustomError(resp['msg'], resp['code']);
             }
 
             success("Solicitação feita com sucesso!");
             fetchUserCatalogs();
         }).catch((err) => {
+            btn.removeAttribute('disabled');
+            btn.textContent = lastBtnText;
             if (err instanceof CustomError) {
                 error(err['message']);
                 forceRedirectByError(err['code']);
             } else {
                 error("Erro ao tentar adicionar catálogo!");
             }
-            btn.disabled = false;
-            btn.textContent = lastBtnText;
         });
 }
 
 async function deleteCatalog() {
     const catalogId = document.getElementById("catalogId").value;
+
+    if (typeof catalogId === 'undefined' || catalogId === null) {
+        return;
+    }
 
     fetch(`${apiUrl}/catalog/delete.php`, {
         method: 'POST',
@@ -647,18 +736,23 @@ async function deleteCatalog() {
         body: JSON.stringify({ 'catalogId': catalogId })
     }).then((resp) => resp.json())
         .then(async (resp) => {
-            if (!resp['success']) {
-                throw new CustomError(resp['msg', resp['code']]);
+            if (typeof resp['success'] !== "undefined" && !resp['success']) {
+                throw new CustomError(resp['msg'], resp['code']);
             }
 
             document.getElementById(`catalog_${catalogId}`).remove();
 
-            fetchUserCatalogs();
-            success("Solicitação feita com sucesso!");
+            if (currentCatalog['status'] === '1') {
+                success("Catálago excluído com sucesso!");
+                $("#editCatalogModal").modal('hide');
+            } else {
+                success("Solicitação feita com sucesso!");
+            }
 
-            // $("#editCatalogModal").modal('hide');
+            fetchUserCatalogs();
         }).catch((err) => {
             if (err instanceof CustomError) {
+                console.log(err['message'])
                 error(err['message']);
                 forceRedirectByError(err['code']);
             } else {

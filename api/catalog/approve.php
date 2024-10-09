@@ -26,13 +26,79 @@ $data = json_decode($json, true);
 $catalogId = (int)$data['catalogId'];
 $currentStatus = (int)$data['currentStatus'];
 $isApproved = (int)$data['isApproved'];
+$cycle = (int)$data['cycle'];
 $catalogMessage = sanitize($data['catalogMessage']);
 $newStatus = $currentStatus;
 $awaitingApprove = 0;
 $active = 1;
 
+
 try {
     $CFG['link']->beginTransaction();
+
+    $sql = "SELECT Ciclo as cycle, Status as status FROM catalogo WHERE id = :catalogId AND Status != 8";
+    $stmt = $CFG['link']->prepare($sql);
+    $stmt->bindParam(':catalogId', $catalogId, PDO::PARAM_INT);
+    $stmt->execute();
+    $catalog = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (empty($catalog)) {
+        error('Catálogo não encontrado. Atualize a página.');
+    }
+
+    $currentCycle = (int)$catalog['cycle'];
+    $catalogStatus = (int)$catalog['status'];
+
+    if ($cycle !== $currentCycle) {
+        if ($catalogStatus === 4) {
+            $sql = "SELECT 
+                        c.id AS catalogId, 
+                        COALESCE(ca.CategoriaId, c.CategoriaId) AS categoryId, 
+                        COALESCE(ca.Titulo, c.Titulo) AS title, 
+                        c.Status AS status, 
+                        c.Ativo AS active, 
+                        c.Ciclo AS cycle,
+                        COALESCE(ca.Conteudo, c.Conteudo) AS content, 
+                        COALESCE(ca.Ambiente, c.Ambiente) AS ambient, 
+                        COALESCE(ca.Abordagem, c.Abordagem) AS approach, 
+                        COALESCE(ca.CaminhoDeAcesso, c.CaminhoDeAcesso) AS link, 
+                        c.createdAt, 
+                        c.AguardandoRevisao, 
+                        COALESCE(aAtualizado.name, a.name) AS abilityName, 
+                        COALESCE(tAtualizado.name, t.name) AS toolName, 
+                        COALESCE(pAtualizado.name, p.name) AS publicName, 
+                        u.id AS userId, 
+                        u.name AS userName, 
+                        u.email AS userEmail, 
+                        u.phone AS userPhone, 
+                        u.createTime AS userCreatedAt 
+                    FROM catalogo c 
+                    LEFT JOIN catalogoAtualizado ca ON ca.CatalogoId = c.id 
+                    LEFT JOIN ability aAtualizado ON ca.HabilidadeId = aAtualizado.id
+                    LEFT JOIN tool tAtualizado ON ca.FerramentaId = tAtualizado.id
+                    LEFT JOIN public pAtualizado ON ca.PublicoAlvoId = pAtualizado.id
+                    INNER JOIN ability a ON c.HabilidadeId = a.id 
+                    INNER JOIN tool t ON c.FerramentaId = t.id 
+                    INNER JOIN public p ON c.PublicoAlvoId = p.id 
+                    INNER JOIN actuser u ON c.userId = u.id 
+                    WHERE c.id = :catalogId AND c.Status = 4
+                    ORDER BY c.createdAt DESC";
+
+            $stmt = $CFG['link']->prepare($sql);
+            $stmt->bindParam(':catalogId', $catalogId, PDO::PARAM_INT);
+            $stmt->execute();
+            $catalogUpdated = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($catalogUpdated) {
+                $out['catalogData'] = $catalogUpdated;
+                echo json_encode($out);
+                exit;
+            }
+        } else {
+            error('O catálago foi alterado pelo usuário. Atualize a página.');
+        }
+    }
+
     if ($currentStatus === 4) {
         if ($isApproved === 1) {
             $sql = "UPDATE catalogo 
@@ -47,7 +113,7 @@ try {
                         catalogo.CaminhoDeAcesso = catalogoAtualizado.CaminhoDeAcesso,
                         catalogo.lastUpdate = NOW(),
                         catalogo.Ciclo = catalogo.Ciclo + 1
-                    WHERE catalogo.id = :catalogId";
+                    WHERE catalogo.id = :catalogId AND catalogo.Status != 8";
 
             $stmt = $CFG['link']->prepare($sql);
             $stmt->bindParam(':catalogId', $catalogId, PDO::PARAM_INT);
@@ -60,7 +126,7 @@ try {
                 AguardandoRevisao = :awaitingApprove,
                 lastUpdate = NOW(),
                 Ciclo = Ciclo + 1
-                WHERE id = :catalogId";
+                WHERE id = :catalogId AND Status != 8";
             $stmt = $CFG['link']->prepare($sql);
             $stmt->bindParam(':catalogId', $catalogId, PDO::PARAM_INT);
             $stmt->bindParam(':awaitingApprove', $awaitingApprove, PDO::PARAM_INT);
@@ -88,7 +154,7 @@ try {
                     Ativo = :active,
                     lastUpdate = NOW(),
                     Ciclo = Ciclo + 1
-                WHERE id = :catalogId";
+                WHERE id = :catalogId AND Status != '8'";
         $stmt = $CFG['link']->prepare($sql);
         $stmt->bindParam(':catalogId', $catalogId, PDO::PARAM_INT);
         $stmt->bindParam(':awaitingApprove', $awaitingApprove, PDO::PARAM_INT);
@@ -97,28 +163,21 @@ try {
         $stmt->execute();
     }
 
-    $sql = "SELECT Ciclo FROM catalogo WHERE id = :catalogId";
-    $stmt = $CFG['link']->prepare($sql);
-    $stmt->bindParam(':catalogId', $catalogId, PDO::PARAM_INT);
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    $updatedCiclo = $result['Ciclo'];
-
+    $currentCycle += 1;
     $sql = "INSERT INTO messages (catalogId, message, ciclo) VALUES (:catalogId, :message, :ciclo)";
     $stmt = $CFG['link']->prepare($sql);
     $stmt->bindParam(':catalogId', $catalogId, PDO::PARAM_INT);
     $stmt->bindParam(':message', $catalogMessage, PDO::PARAM_STR);
-    $stmt->bindParam(':ciclo', $updatedCiclo, PDO::PARAM_INT);
+    $stmt->bindParam(':ciclo', $currentCycle, PDO::PARAM_INT);
     $stmt->execute();
 
     $CFG['link']->commit();
 } catch (PDOException $e) {
     $CFG['link']->rollBack();
-    error($e->getMessage());
+    error("Falha ao tentar aprovar/rejeitar catálogo");
 } catch (Exception $e) {
     $CFG['link']->rollBack();
-    error($e->getMessage());
+    error("Falha ao tentar aprovar/rejeitar catálogo");
 }
 
 echo json_encode($out);

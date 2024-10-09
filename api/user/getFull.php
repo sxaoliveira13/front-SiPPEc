@@ -52,9 +52,9 @@ try {
         $out['error'] = "Usuário não encontrado";
     }
 } catch (PDOException $e) {
-    error($e->getMessage());
+    error("Falha ao tentar recuperar dados do usuário.");
 } catch (Exception $e) {
-    error($e->getMessage());
+    error("Falha ao tentar recuperar dados do usuário.");
 }
 
 

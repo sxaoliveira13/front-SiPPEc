@@ -128,10 +128,10 @@ try {
     $CFG['link']->commit();
 } catch (PDOException $e) {
     $CFG['link']->rollBack();
-    error($e->getMessage());
+    error("Falha ao tentar atualizar catálogo");
 } catch (Exception $e) {
     $CFG['link']->rollBack();
-    error($e->getMessage());
+    error("Falha ao tentar atualizar catálogo");
 }
 
 

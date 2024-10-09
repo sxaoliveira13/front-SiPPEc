@@ -75,9 +75,9 @@ try {
     $stmt->bindParam(':awaitingRevision', $awaitingRevision, PDO::PARAM_INT);
     $stmt->execute();
 } catch (PDOException $e) {
-    error($e->getMessage());
+    error("Falha ao tentar solicitar recadastro do catálogo");
 } catch (Exception $e) {
-    error($e->getMessage());
+    error("Falha ao tentar solicitar recadastro do catálogo");
 }
 
 

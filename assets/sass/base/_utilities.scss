@@ -61,6 +61,12 @@
     }
 }
 
+.u-disabled {
+    pointer-events: none;
+    cursor: inherit;
+    opacity: .7;
+}
+
 .u-hover-svg {
     transition: all .2s ease;
 

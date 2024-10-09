@@ -118,6 +118,12 @@ body {
   color: #A5A5A5;
 }
 
+.u-disabled {
+  pointer-events: none;
+  cursor: inherit;
+  opacity: 0.7;
+}
+
 .u-hover-svg {
   transition: all 0.2s ease;
 }

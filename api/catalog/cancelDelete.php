@@ -22,13 +22,9 @@ $out = array('success' => true);
 $json = file_get_contents('php://input');
 $data = json_decode($json, true);
 $catalogId = sanitize($data['catalogId'], 'int');
-$status = 7;
-$awaitingRevision = 1;
-$active = 1;
 
 try {
-    $sql = "SELECT id, Ativo as active, Status as status FROM catalogo WHERE 
-    id = :catalogId AND userId = :userId AND AguardandoRevisao = '0'";
+    $sql = "SELECT id, Status as status FROM catalogo WHERE id = :catalogId AND userId = :userId AND Status = '7'";
     $stmt = $CFG['link']->prepare($sql);
     $stmt->bindParam(':catalogId', $catalogId, PDO::PARAM_INT);
     $stmt->bindParam(':userId', $USERDATA['userId'], PDO::PARAM_INT);
@@ -40,28 +36,23 @@ try {
         error("Você não tem permissão para alterar este catálogo!");
     }
 
-    if ($catalog['active'] == '0' || $USERDATA['userType'] == 2) {
-        $status = 8;
-        $awaitingRevision = 0;
-        $active = 0;
-    }
+    $status = 2;
+    $awaitingRevision = 0;
 
     $sql = "UPDATE catalogo 
     SET Status = :status,
     AguardandoRevisao = :awaitingRevision,
-    Ativo = :active,
     Ciclo = Ciclo + 1
     WHERE id = :catalogId";
     $stmt = $CFG['link']->prepare($sql);
     $stmt->bindParam(':status', $status, PDO::PARAM_INT);
-    $stmt->bindParam(':active', $active, PDO::PARAM_INT);
     $stmt->bindParam(':catalogId', $catalogId, PDO::PARAM_INT);
     $stmt->bindParam(':awaitingRevision', $awaitingRevision, PDO::PARAM_INT);
     $stmt->execute();
 } catch (PDOException $e) {
-    error("Falha ao tentar solicitar exclusão do catálago");
+    error("Falha ao tentar cancelar exclusão do catálogo");
 } catch (Exception $e) {
-    error("Falha ao tentar solicitar exclusão do catálago");
+    error("Falha ao tentar cancelar exclusão do catálogo");
 }
 
 echo json_encode($out);

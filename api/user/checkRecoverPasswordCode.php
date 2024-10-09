@@ -34,9 +34,9 @@ try {
     $stmt->bindParam(':code', $code, PDO::PARAM_STR);
     $stmt->execute();
 } catch (PDOException $e) {
-    error($e->getMessage());
+    error("Não foi possível verificar o código de verificação.");
 } catch (Exception $e) {
-    error($e->getMessage());
+    error("Não foi possível verificar o código de verificação.");
 }
 
 echo json_encode($out);

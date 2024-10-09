@@ -29,6 +29,7 @@ try {
             COALESCE(ca.Titulo, c.Titulo) AS title, 
             c.Status AS status, 
             c.Ativo AS active, 
+            c.Ciclo AS cycle,
             COALESCE(ca.Conteudo, c.Conteudo) AS content, 
             COALESCE(ca.Ambiente, c.Ambiente) AS ambient, 
             COALESCE(ca.Abordagem, c.Abordagem) AS approach, 
@@ -60,9 +61,9 @@ try {
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $out['data'] = $results;
 } catch (PDOException $e) {
-    error($e->getMessage());
+    error("Falha ao tentar obter novas solicitações de catálogos");
 } catch (Exception $e) {
-    error($e->getMessage());
+    error("Falha ao tentar obter novas solicitações de catálogos");
 }
 
 echo json_encode($out);

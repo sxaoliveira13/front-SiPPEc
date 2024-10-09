@@ -66,9 +66,9 @@ try {
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $out['data'] = $results;
 } catch (PDOException $e) {
-    error($e->getMessage());
+    error("Falha ao tentar obter seus catálogos");
 } catch (Exception $e) {
-    error($e->getMessage());
+    error("Falha ao tentar obter seus catálogos");
 }
 
 

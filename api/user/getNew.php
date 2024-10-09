@@ -29,9 +29,9 @@ try {
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $out['data'] = $results;
 } catch (PDOException $e) {
-    error($e->getMessage());
+    error("Falha ao tentar recuperar solicitações de cadastro de usuários.");
 } catch (Exception $e) {
-    error($e->getMessage());
+    error("Falha ao tentar recuperar solicitações de cadastro de usuários.");
 }
 
 echo json_encode($out);

@@ -42,7 +42,7 @@ require(dirname(__FILE__) . '/includes/head.php');
                 <div id="catalogListLoader" class="position-absolute top-50 start-50 translate-middle">
                     <span class="loader"></span>
                 </div>
-                <h3 id="noResultsText" style="line-height: 1.7" class="u-text-muted--2 d-flex align-items-center justify-content-center text-center h-100 mt-3 mb-0">
+                <h3 id="noResultsText" style="line-height: 1.7" class="u-text-muted--2 d-flex align-items-center justify-content-center text-center d-none h-100 mt-3 mb-0">
                     Nenhum resultado encontrado para sua pesquisa
                 </h3>
             </ul>
@@ -201,12 +201,18 @@ require(dirname(__FILE__) . '/includes/head.php');
                             <input class="form-group__input form-group__input--line" type="hidden" id="catalogId" name="catalogId">
                             <div class="col-12 mb-5">
                                 <div class="form-group">
+                                    <label class="form-group__label" for="catalogContent">Este catálogo atualmente está <span id="catalogIsActiveText"></span></label>
+                                </div>
+                            </div>
+                            <div class="col-12 mb-5">
+                                <div class="form-group">
                                     <label class="form-group__label" for="catalogTitle">Título <span class="text-danger">*</span></label>
                                     <div class="position-relative">
                                         <input class="form-group__input form-group__input--line" type="text" placeholder="Informe o título" id="catalogTitle" name="titulo" required="" maxlength="200" autocomplete="off">
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-xl-6 col-md-12 mb-5">
                                 <div class="form-group">
                                     <label class="form-group__label" for="catalogContent">Conteúdo <span class="text-danger">*</span></label>
@@ -333,8 +339,8 @@ require(dirname(__FILE__) . '/includes/head.php');
                             <div id="catalogDeleteInputBox" class="col-12 mb-5">
                                 <div class="form-group">
                                     <div class="position-relative">
-                                        <input class="form-group__input form-group__input--delete u-fw-500" type="text" placeholder='Digite "excluir" sem as aspas para remover o catálogo' id="catalogDeleteInput" name="catalogDeleteInput" maxlength="7" autocomplete="off">
-                                        <button id="btnDeleteCatalog" type="button" disabled="" class="form-group__button form-group__button--delete">
+                                        <input class="form-group__input form-group__input--delete u-fw-500" type="text" placeholder='Digite "excluir" sem as aspas para remover o catálogo' id="catalogDeleteInput" name="catalogDeleteInput" maxlength="7" autocomplete="off" onkeyup="checkDeleteInputText(this.value);">
+                                        <button id="btnDeleteCatalog" type="button" disabled="" onclick="deleteCatalog(this);" class="form-group__button form-group__button--delete">
                                             <svg class="w-50 h-50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -356,7 +362,7 @@ require(dirname(__FILE__) . '/includes/head.php');
                 <div class="modal-footer d-flex justify-content-end align-items-center border-0 u-box-padding--vertical u-box-padding--horizontal-big">
                     <button class="fs-4 w-auto button-dark px-5" data-bs-dismiss="modal">Cancelar</button>
                     <button id="btnRequestRegistrationReview" onclick="requestCatalogRegistrationReview(this);" style="min-width: 200px" class="fs-4 w-auto button-primary px-5 d-none">Solicitar revisão de cadastro</button>
-                    <button id="btnCatalogCancelDelete" onclick="" style="min-width: 200px" class="fs-4 w-auto button-danger text-center px-5">Cancelar solicitação de exclusão do catálago</button>
+                    <button id="btnCatalogCancelDelete" onclick="cancelCatalogDeletion(this);" style="min-width: 200px" class="fs-4 w-auto button-danger text-center px-5">Cancelar solicitação de exclusão do catálago</button>
                     <button id="btnUpdateCatalog" onclick="updateCatalog(this);" style="min-width: 200px" class="fs-4 w-auto button-primary px-5">Salvar Alterações</button>
                 </div>
             </div>
@@ -384,6 +390,14 @@ require(dirname(__FILE__) . '/includes/head.php');
                     </ul>
                     <div class="tab-content d-flex flex-column u-box-padding--vertical pb-0">
                         <div class="tab-pane fade show active flex-auto" id="catalogInfo" role="tabpanel">
+                            <div id="catalogHasUpdated" class="card shadow-none p-5 mb-5 u-bg--red">
+                                <div class="card-header bg-transparent border-0 p-0">
+                                    <h5 class="fw-bolder text-uppercase text-white fs-4 mb-0">O CATÁLAGO SOFREU ALTERAÇÕES</h5>
+                                </div>
+                                <div class="card-body border-0 p-0 mt-4">
+                                    <p class="fs-4 text-white mb-0" style="font-weight: 500;">Uma nova solicitação de atualização de dados do catálago foi recebida enquanto você aprovava o catálogo. Os novos dados já foram carregados abaixo. Por favor, analise novamente as informações antes de aprovar o catálago.</p>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="d-flex align-items-baseline col-12 mb-5">
                                     <h3 class="fw-bolder mb-3">Status Atual:</h3>&nbsp;
@@ -432,6 +446,14 @@ require(dirname(__FILE__) . '/includes/head.php');
                             </div>
                         </div>
                         <div class="tab-pane fade flex-auto" id="userInfo" role="tabpanel">
+                            <div id="catalogHasUpdated2" class="card shadow-none p-5 mb-5 u-bg--red">
+                                <div class="card-header bg-transparent border-0 p-0">
+                                    <h5 class="fw-bolder text-uppercase text-white fs-4 mb-0">O CATÁLAGO SOFREU ALTERAÇÕES</h5>
+                                </div>
+                                <div class="card-body border-0 p-0 mt-4">
+                                    <p class="fs-4 text-white mb-0" style="font-weight: 500;">Uma nova solicitação de atualização de dados do catálago foi recebida enquanto você aprovava o catálogo. Os novos dados já foram carregados abaixo. Por favor, analise novamente as informações antes de aprovar o catálago.</p>
+                                </div>
+                            </div>
                             <div class="row justify-content-center">
                                 <div class="col-lg-4 col-6 mb-5 text-center border-start pe-md-5">
                                     <h3 class="fw-bolder mb-3">Nome</h3>
@@ -477,14 +499,14 @@ require(dirname(__FILE__) . '/includes/head.php');
                         </div>
                     </div>
                     <div class="form-group d-flex flex-column mb-5">
-                        <label for="catalogApproveMessage" class="fs-4 fw-bolder mb-2">Mensagem de Aprovação</label>
-                        <textarea class="form-group__input w-100 u-fw-500 py-3" id="catalogApproveMessage" name="catalogApproveMessage" rows="4"></textarea>
+                        <label for="catalogApproveMessage" class="fs-4 fw-bolder mb-2">Mensagem de Aviso</label>
+                        <textarea class="form-group__input w-100 u-fw-500 py-3" id="catalogApproveMessage" name="catalogApproveMessage" rows="4" maxlength="1024"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-center align-items-center border-0 u-box-padding--vertical u-box-padding--horizontal-big border-top">
                     <button class="fs-4 w-auto button-dark px-5" data-bs-dismiss="modal">Cancelar</button>
-                    <button style="min-width: 200px" onclick="approveCatalog(0);" class="fs-4 w-auto button-danger px-5">Recusar Solicitação</button>
-                    <button style="min-width: 200px" onclick="approveCatalog(1);" class="fs-4 w-auto button-primary px-5">Aprovar Solicitação</button>
+                    <button style="min-width: 200px" onclick="approveCatalog(this,0);" class="fs-4 w-auto button-danger px-5">Recusar Solicitação</button>
+                    <button style="min-width: 200px" onclick="approveCatalog(this,1);" class="fs-4 w-auto button-primary px-5">Aprovar Solicitação</button>
                 </div>
             </div>
         </div>

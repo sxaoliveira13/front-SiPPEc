@@ -61,10 +61,9 @@ try {
 
     $stmt->execute();
 } catch (PDOException $e) {
-    // error('Falha ao tentar cadastrar!');
-    error($e->getMessage());
+    error("Falha ao tentar cadastrar catálogo");
 } catch (Exception $e) {
-    error($e->getMessage());
+    error("Falha ao tentar cadastrar catálogo");
 }
 
 echo json_encode($out);

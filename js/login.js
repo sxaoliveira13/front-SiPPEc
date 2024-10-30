@@ -9,6 +9,16 @@ async function checkLogin(btn) {
 
     if (typeof data === "undefined") return;
 
+    if (data['userEmail'].length === 0) {
+        error('Informe um email!');
+        return;
+    }
+
+    if (data['userPassword'].length === 0) {
+        error('Informe uma senha!');
+        return;
+    }
+
     btn.disabled = true;
     btn.textContent = 'CARREGANDO...';
 

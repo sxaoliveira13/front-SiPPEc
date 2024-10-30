@@ -3,6 +3,7 @@
 // ini_set('display_errors', '1');
 
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once("functions.php");
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
@@ -35,5 +36,12 @@ $CFG['db_options'] = array(
     PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
 );
 
-$CFG['link'] = new PDO("mysql:host={$CFG['host_mysql']};dbname={$CFG['db']};charset=UTF8", $CFG['user_mysql'], $CFG['pass_mysql'], $CFG['db_options']);
+try {
+    $CFG['link'] = new PDO("mysql:host={$CFG['host_mysql']};dbname={$CFG['db']};charset=UTF8", $CFG['user_mysql'], $CFG['pass_mysql'], $CFG['db_options']);
+} catch (PDOException $e) {
+    error('Falha ao tentar realizar a conexão com o banco de dados');
+} catch (Exception $e) {
+    error('Falha ao tentar realizar a conexão com o banco de dados');
+}
+
 date_default_timezone_set('America/Sao_Paulo');

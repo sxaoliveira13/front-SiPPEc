@@ -1,15 +1,18 @@
-const apiUrl = 'http://localhost/sippec/api';
+const locks = {};
 
-var locks = {};
-
-var promiseResolveLoad;
+let promiseResolveLoad;
 locks['onload'] = new Promise(function (resolve, reject) {
     promiseResolveLoad = resolve;
 });
 
-var promiseUserLoad;
+let promiseUserLoad;
 locks['user'] = new Promise(function (resolve, reject) {
     promiseUserLoad = resolve;
+});
+
+let promiseHeaderLoad;
+locks['header'] = new Promise(function (resolve, reject) {
+    promiseHeaderLoad = resolve;
 });
 
 class CustomError extends Error {
@@ -41,6 +44,7 @@ const catalogStatusColorsDict = {
     'aprovada': 'green',
     'recusada': 'red',
 }
+
 window.addEventListener("DOMContentLoaded", () => {
     promiseResolveLoad();
     clearAllInputs();
@@ -205,7 +209,6 @@ function togglePasswordVisibility(eyeBox) {
         <svg xmlns="http://www.w3.org/2000/svg"  fill="none" class="form-group__input-icon form-group__input-icon--right" viewBox="0 0 21 20"><g stroke="#686868" stroke- width="1.5" stroke - linecap="round" stroke - linejoin="round"><path d="M15 12c0 1.6569-1.3431 3-3 3s-3-1.3431-3-3 1.3431-3 3-3 3 1.3431 3 3Z"/><path stroke-linejoin="round" d="M6.94975 7.05025c2.73367-2.73367 7.16585-2.73367 9.89945 0l2.1214 2.12132c1.3333 1.33333 2 2.00003 2 2.82843 0 .8284-.6667 1.4951-2 2.8284l-2.1214 2.1213c-2.7336 2.7337-7.16578 2.7337-9.89945 0l-2.12132-2.1213c-1.33334-1.3333-2-2-2-2.8284 0-.8284.66666-1.4951 2-2.82843l2.12132-2.12132Z"/></g></svg>`
     };
 
-
     switch (input.type.toLowerCase()) {
         case 'text': {
             input.type = 'password';
@@ -219,43 +222,47 @@ function togglePasswordVisibility(eyeBox) {
         }
     }
 }
+
 function search(containerId, searchText) {
     const container = document.getElementById(containerId);
     const searchElements = container.querySelectorAll('.searchable');
-    let hasResults = false;
+    searchText = searchText.toLowerCase().trim();
+
+    if (searchText.length === 0) {
+        searchElements.forEach((el) => el.classList.remove('d-none'));
+        container.getElementsByClassName('search-result-text')[0]?.remove();
+        return;
+    }
+
+    let occurrenceCount = 0;
 
     searchElements.forEach((el) => {
         const searchableText = el.querySelector('.searchableText').textContent;
 
         if (searchableText.includes(searchText)) {
             el.classList.remove('d-none');
-            hasResults = true;
+            occurrenceCount++;
         } else {
             el.classList.add('d-none');
         }
     });
 
-    toggleNoResultsMessage(container, hasResults);
+    searchResultsMessage(container, occurrenceCount);
 }
 
-function toggleNoResultsMessage(container, hasResults) {
-    const noResultsId = 'noResultsText';
-    const noResultsHtml = `<h3 id="${noResultsId}" style="line-height: 1.7" class="u-text-muted--2 d-flex align-items-center justify-content-center text-center h-100 mt-3 mb-0">Nenhum resultado encontrado para sua pesquisa</h3>`;
-    const noResultsElement = document.getElementById(noResultsId);
-
-    if (!hasResults) {
-        if (!noResultsElement) {
-            container.insertAdjacentHTML('beforeend', noResultsHtml);
-        } else {
-            noResultsElement.classList.remove('d-none');
-        }
+function searchResultsMessage(container, occurrenceCount) {
+    let msg = '';
+    if (!occurrenceCount) {
+        msg = 'Nenhum resultado encontrado para sua pesquisa';
     } else {
-        if (noResultsElement) {
-            noResultsElement.classList.add('d-none');
-        }
+        msg = `Encontramos ${occurrenceCount} resultado${occurrenceCount > 1 ? 's' : ''} para sua pesquisa`;
     }
-}
 
+    const html = `  <div class="search-result-text border-bottom mb-3 pb-4">
+    <h3 style="line-height: 1.7" class="u-text-muted--2 fs-4 text-center mb-0">${msg}</h3></div>`;
+    container.getElementsByClassName('search-result-text')[0]?.remove();
+    container.insertAdjacentHTML('afterbegin', html);
+}
 
 function validatePattern(value, pattern) {
     return pattern.test(value);
@@ -292,6 +299,16 @@ function forceRedirectByError(code) {
             break;
         }
     }
+}
+
+function getUrlParameter(parameter, remove = 0) {
+    const url = new URL(window.location.href);
+    const urlParams = new URLSearchParams(url.search);
+    if (remove) {
+        url.searchParams.delete(parameter);
+        window.history.replaceState({}, document.title, url.toString());
+    }
+    return urlParams.get(parameter);
 }
 
 async function buildMasks() {

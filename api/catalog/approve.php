@@ -80,7 +80,7 @@ try {
                     INNER JOIN ability a ON c.HabilidadeId = a.id 
                     INNER JOIN tool t ON c.FerramentaId = t.id 
                     INNER JOIN public p ON c.PublicoAlvoId = p.id 
-                    INNER JOIN actuser u ON c.userId = u.id 
+                    INNER JOIN actUser u ON c.userId = u.id 
                     WHERE c.id = :catalogId AND c.Status = 4
                     ORDER BY c.createdAt DESC";
 
@@ -144,7 +144,7 @@ try {
             $newStatus += 2; // Rejeição
         }
 
-        if ($newStatus == 8) {
+        if ($newStatus == 8 || $newStatus == 3) { //catalogo deletetado ou cadastro recusado
             $active = 0;
         }
 

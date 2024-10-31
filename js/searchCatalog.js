@@ -22,6 +22,13 @@ async function buildCatalogsDatatable() {
     document.getElementById('searchDatatable2').classList.add('d-none');
 
     const filters = getCatalogFilters();
+    const cT = getUrlParameter('cT', true);
+
+    if (cT && typeof cT !== "undefined" && parseInt(cT) >= 1 && parseInt(cT) <= 3) {
+        filters['catalogType'] = cT;
+        document.getElementById('catalogType').value = cT;
+        toggleFieldsVisibility(cT);
+    }
 
     fetch(`${apiUrl}/catalog/search.php`, {
         method: 'POST',
@@ -38,7 +45,6 @@ async function buildCatalogsDatatable() {
             }
 
             document.getElementById('loader').classList.add('d-none');
-
 
             if (catalogsDatatableObj1) {
                 catalogsDatatableObj1.destroy();
@@ -98,10 +104,27 @@ async function buildCatalogsDatatable() {
                     pageLength: 25
                 });
             }
+            console.log(document.querySelectorAll('.searched-catalogs-count'))
+
+            document.querySelectorAll('.searched-catalogs-count').forEach((el) => {
+                const quantity = resp['data'].length;
+                el.textContent = `${quantity} catálogo${quantity >= 0 ? 's' : ''} encontrado${quantity >= 0 ? 's' : ''}`;
+            });
         })
         .catch((err) => {
             error(err);
         });
+}
+
+
+changeNavbarLinks();
+async function changeNavbarLinks() {
+    await locks['header'];
+    if (userData && typeof userData !== "undefined") {
+        const navLink = document.getElementById('menu_login').getElementsByTagName('a')[0];
+        navLink.href = systemUrl + 'catalog.php'
+        navLink.textContent = 'Meus Catálogos';
+    }
 }
 
 function getCatalogFilters() {

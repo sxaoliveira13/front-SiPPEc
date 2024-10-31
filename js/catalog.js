@@ -1,10 +1,52 @@
 let numberOfNewCatalogs = 0;
 let numberOfNewUsers = 0;
-
 let newCatalogsData;
 let newUsersData;
-
 let currentCatalog = {};
+
+$.extend($.fn.dataTable.defaults, {
+    autoWidth: false,
+    dom: '<"datatable-header"fl><"datatable-scroll datatable-scroll--catalog"t><"datatable-footer"ip>',
+    language: {
+        url: systemUrl + 'assets/json/datatable.pt-BR.json',
+        search: '_INPUT_',
+        searchPlaceholder: 'Pesquisar',
+        lengthMenu: '<span>Exibir:</span> _MENU_',
+        paginate: { 'first': 'Primeiro', 'last': 'Ultimo', 'next': '&rarr;', 'previous': '&larr;' }
+    }
+});
+
+
+$.extend($.fn.dataTable.ext.type.order, {
+    "order-by-date-beauty-asc": function (val_1, val_2) {
+        val_1 = parseInt(val_1.split('?')[0].split('!')[1]);
+        val_2 = parseInt(val_2.split('?')[0].split('!')[1]);
+        if (val_1 > val_2) { return 1; }
+        if (val_2 > val_1) { return -1; }
+        return 0;
+    },
+    "order-by-date-beauty-desc": function (val_1, val_2) {
+        val_1 = parseInt(val_1.split('?')[0].split('!')[1]);
+        val_2 = parseInt(val_2.split('?')[0].split('!')[1]);
+        if (val_1 > val_2) { return -1; }
+        if (val_2 > val_1) { return 1; }
+        return 0;
+    },
+    "order-by-number-asc": function (val_1, val_2) {
+        val_1 = parseInt(numbers(val_1));
+        val_2 = parseInt(numbers(val_2));
+        if (val_1 > val_2) { return 1; }
+        if (val_2 > val_1) { return -1; }
+        return 0;
+    },
+    "order-by-number-desc": function (val_1, val_2) {
+        val_1 = parseInt(numbers(val_1));
+        val_2 = parseInt(numbers(val_2));
+        if (val_1 > val_2) { return -1; }
+        if (val_2 > val_1) { return 1; }
+        return 0;
+    }
+});
 
 window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btnDeleteCatalog').setAttribute("disabled", true);
@@ -30,18 +72,6 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-$.extend($.fn.dataTable.defaults, {
-    autoWidth: false,
-    dom: '<"datatable-header"fl><"datatable-scroll datatable-scroll--catalog"t><"datatable-footer"ip>',
-    language: {
-        url: systemUrl + 'assets/json/datatable.pt-BR.json',
-        search: '_INPUT_',
-        searchPlaceholder: 'Pesquisar',
-        lengthMenu: '<span>Exibir:</span> _MENU_',
-        paginate: { 'first': 'Primeiro', 'last': 'Ultimo', 'next': '&rarr;', 'previous': '&larr;' }
-    }
-});
-
 buildUserInfo();
 async function buildUserInfo() {
     await Promise.all([locks['user'], locks['onload']]);
@@ -53,7 +83,7 @@ async function buildUserInfo() {
     }
 }
 
-var dataTableObjNewUsers = false;
+let dataTableObjNewUsers = false;
 async function fetchNewUsers() {
     await fetch(`${apiUrl}/user/getNew.php`, {
         method: 'GET',
@@ -110,7 +140,7 @@ async function fetchNewUsers() {
         });
 }
 
-var dataTableObjNewCatalogs = false;
+let dataTableObjNewCatalogs = false;
 async function fetchNewCatalogs() {
     await fetch(`${apiUrl}/catalog/getNewSolicitations.php`, {
         method: 'GET',
@@ -146,10 +176,14 @@ async function fetchNewCatalogs() {
                 dataTableObjNewCatalogs.destroy();
             }
 
+
             dataTableObjNewCatalogs = $('.datatableNewCatalogs').DataTable({
+                columnDefs: [
+                    { "type": "order-by-date-beauty-asc", targets: [5] },
+                ],
                 "data": resp['data'].map(function (c) {
                     let actionButton = `<button onclick="buildCatalogSolicitationModal(${c['catalogId']});" class="fs-5 w-auto button-primary px-4 py-2 ms-auto">Ver</button>`;
-                    return [c['title'], catalogsDict[c['categoryId']], `<span class="text-capitalize">${catalogStatusDict[c['status']]}</span>`, c['userName'], c['createdAt'], actionButton];
+                    return [c['title'], catalogsDict[c['categoryId']], `<span class="text-capitalize">${catalogStatusDict[c['status']]}</span>`, c['userName'], formatDate(c['createdAt']), actionButton];
                 }),
             });
         }).catch((err) => {
@@ -444,7 +478,18 @@ function buildEditCatalogModal(catalogId) {
     document.getElementById("catalogId").value = currentCatalog.catalogId;
     document.getElementById("categoryId").value = currentCatalog.categoryId;
     document.getElementById("catalogTitle").value = currentCatalog.title;
-    document.getElementById("catalogContent").value = currentCatalog.content;
+
+    const optionExists = Array.from(document.getElementById("catalogContent").options).some((op) => op.value === currentCatalog.content);
+
+    if (optionExists) {
+        document.getElementById("catalogContent").value = currentCatalog.content;
+    } else {
+        const select = document.getElementById("catalogContent");
+        const novaOption = new Option(currentCatalog.content, currentCatalog.content);
+        select.add(novaOption);
+        document.getElementById("catalogContent").value = currentCatalog.content;
+    }
+
     document.getElementById("catalogTool").value = currentCatalog.toolId;
     document.getElementById("catalogPublic").value = currentCatalog.publicId;
     document.getElementById("catalogAbility").value = currentCatalog.abilityId;
@@ -472,7 +517,8 @@ function buildEditCatalogModal(catalogId) {
 }
 
 async function cancelCatalogDeletion(btn) {
-    if (typeof currentCatalog['catalogId'] !== "undefined" || !currentCatalog['catalogId']) {
+    if (typeof currentCatalog['catalogId'] === "undefined") {
+        console.log('a')
         return;
     }
 
@@ -570,18 +616,26 @@ async function updateCatalog(btn) {
         },
         body: JSON.stringify(data)
     }).then((resp) => resp.json())
-        .then((resp) => {
-            btn.removeAttribute('disabled');
-            btn.textContent = 'Salvar Alterações';
-
+        .then(async (resp) => {
             if (!resp['success']) {
+                btn.removeAttribute('disabled');
+                btn.textContent = 'Salvar Alterações';
                 throw new CustomError(resp['msg'], resp['code']);
             }
 
-            document.getElementById(`catalogTitle-${data['catalogId']}`).textContent = data['titulo'];
-            success('Catálogo atualizado com sucesso!');
-            fetchUserCatalogs();
+            await fetchUserCatalogs();
             buildEditCatalogModal(data['catalogId']);
+
+            document.getElementById(`catalogTitle-${data['catalogId']}`).textContent = data['titulo'];
+
+            if (currentCatalog['status'] === '1' || userData['userType'] === '2') {
+                success('Catálogo atualizado com sucesso!');
+            } else {
+                success("Solicitação feita com sucesso!");
+            }
+
+            btn.removeAttribute('disabled');
+            btn.textContent = 'Salvar Alterações';
         }).catch((err) => {
             btn.removeAttribute('disabled');
             btn.textContent = 'Salvar Alterações';
@@ -707,7 +761,12 @@ async function insertCatalog(btn, formId, categoryId) {
                 throw new CustomError(resp['msg'], resp['code']);
             }
 
-            success("Solicitação feita com sucesso!");
+            if (userData['userType'] === '2') {
+                success("Catálogo cadastrado com sucesso!");
+            } else {
+                success("Solicitação feita com sucesso!");
+            }
+
             fetchUserCatalogs();
         }).catch((err) => {
             btn.removeAttribute('disabled');
@@ -721,12 +780,17 @@ async function insertCatalog(btn, formId, categoryId) {
         });
 }
 
-async function deleteCatalog() {
+async function deleteCatalog(btn) {
+    btn.setAttribute('disabled', true);
+    const btnSvg = btn.children[0];
     const catalogId = document.getElementById("catalogId").value;
 
     if (typeof catalogId === 'undefined' || catalogId === null) {
+        btn.removeAttribute('disabled');
         return;
     }
+
+    btn.innerHTML = '<span class="loader loader--white p-3"></span>'
 
     fetch(`${apiUrl}/catalog/delete.php`, {
         method: 'POST',
@@ -736,20 +800,24 @@ async function deleteCatalog() {
         body: JSON.stringify({ 'catalogId': catalogId })
     }).then((resp) => resp.json())
         .then(async (resp) => {
+            btn.removeAttribute('disabled');
+            btn.innerHTML = '';
+            btn.appendChild(btnSvg)
+
             if (typeof resp['success'] !== "undefined" && !resp['success']) {
                 throw new CustomError(resp['msg'], resp['code']);
             }
 
             document.getElementById(`catalog_${catalogId}`).remove();
 
-            if (currentCatalog['status'] === '1') {
+            await fetchUserCatalogs();
+
+            if (currentCatalog['status'] === '1' || userData['userType'] === '2') {
                 success("Catálago excluído com sucesso!");
                 $("#editCatalogModal").modal('hide');
             } else {
                 success("Solicitação feita com sucesso!");
             }
-
-            fetchUserCatalogs();
         }).catch((err) => {
             if (err instanceof CustomError) {
                 console.log(err['message'])

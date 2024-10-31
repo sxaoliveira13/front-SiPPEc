@@ -27,7 +27,7 @@ $data = json_decode($json, true);
 $userId = sanitize($data['userId'], 'int');
 
 try {
-    $sql = "SELECT email, name, type FROM actuser WHERE id = :userId";
+    $sql = "SELECT email, name, type FROM actUser WHERE id = :userId";
     $stmt = $CFG['link']->prepare($sql);
     $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
     $stmt->execute();
@@ -37,11 +37,11 @@ try {
         error('Falha ao tentar enviar email de confirmação/rejeição de cadastro!');
     }
 
-    $approved = 'aprovado';
-    $emailBody = 'Seu cadastro foi aprovado pelo administrador do sistema. Acesse <a style="font-weight: 700;" href="http://localhost/sippec/login.php">http://localhost/sippec</a> para ter acesso ao sistema.';
+    $approved = 'Aprovado';
+    $emailBody = 'Seu cadastro na plataforma foi aprovado! Agora você pode contribuir com a disseminação do Pensamento Computacional acessando <a href="https://liag.ft.unicamp.br/act-sistema/sippec/catalog.php">https://liag.ft.unicamp.br/act-sistema/sippec/login.php</a>.<br><br>Agradecemos pela sua colaboração.';
 
     if ($rs['type'] === '3') {
-        $approved = 'negado';
+        $approved = 'Negado';
         $emailBody = 'Lamentamos informar que sua solicitação de cadastro foi negada pelo administrador do sistema. Para mais informações, entre em contato com o professor <b>Marcos Augusto Francisco Borges</b> pelo email <b>maborges@unicamp.br</b>';
     }
 

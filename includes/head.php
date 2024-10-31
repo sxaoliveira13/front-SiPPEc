@@ -4,8 +4,10 @@ $CFG = array();
 
 if ($_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '127.0.0.1') {
     $CFG['system_url'] = 'http://localhost/sippec/';
+    $CFG['api_url'] = 'http://localhost/sippec/api';
 } else {
     $CFG['system_url'] = 'https://liag.ft.unicamp.br/act-sistema/sippec/';
+    $CFG['api_url'] = 'https://liag.ft.unicamp.br/act-sistema/sippec/api';
 }
 
 ?>
@@ -16,14 +18,14 @@ if ($_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '127.0.0.
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="theme-color" content="##ECF0F1">
-    <meta name="description" content="Sistema de gerenciamento de catálogos do ACT (Aprendizado, Computação e Tecnologia), um projeto do LIAG que promove o Pensamento Computacional e a Computação Criativa na educação no Brasil.">
+    <meta name="description" content="Sistema de gerenciamento de catálogos do ACT (Aprendizado, Computação e Tecnologia). Projeto do Laboratório de Informática, Aprendizagem e Gestão (LIAG) que promove o Pensamento Computacional e a Computação Criativa na educação no Brasil.">
     <meta name="author" content="LIAG - Laboratório de Informática, Aprendizagem e Gestão">
-    <meta name="keywords" content="LIAG, ACT, Tecnologia, Computação Criativa, Aprendizado, Pensamento Computacional, Unicamp, Educação, Métodos, Jogos Educativos, Artigos">
+    <meta name="keywords" content="LIAG, ACT, Computação Criativa, Pensamento Computacional, Aprendizado, Unicamp, Tecnologia, Educação, Métodos, Jogos Educativos, Artigos">
     <meta name="robots" content="index, follow">
 
     <!-- Open Graph para Facebook e Instagram -->
     <meta property="og:title" content="SiPPeC - Um sistema de gerenciamento de Catálogos do ACT (Aprendizado, Computação e Tecnologia)">
-    <meta property="og:description" content="Explore o SiPPeC, um projeto do LIAG que incentiva o Pensamento Computacional e a Computação Criativa na educação brasileira. Aqui você encontrará ferramentas e recursos para inovar o ensino de tecnologia.">
+    <meta property="og:description" content="Explore o SiPPeC, um projeto do Laboratório de Informática, Aprendizagem e Gestão (LIAG) que incentiva o Pensamento Computacional e a Computação Criativa na educação brasileira. Aqui você encontrará ferramentas e recursos para inovar o ensino de tecnologia.">
     <meta property="og:image" content="<?php echo $CFG['system_url'] ?>assets/img/actCompleto.png">
     <meta property="og:url" content="<?php echo $CFG['system_url'] ?>">
     <meta property="og:type" content="website">
@@ -32,7 +34,7 @@ if ($_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '127.0.0.
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="SiPPeC - Um sistema de gerenciamento de Catálogos do ACT (Aprendizado, Computação e Tecnologia)">
-    <meta name="twitter:description" content="Explore o SiPPeC, um projeto do LIAG que incentiva o Pensamento Computacional e a Computação Criativa na educação brasileira. Aqui você encontrará ferramentas e recursos para inovar o ensino de tecnologia.">
+    <meta name="twitter:description" content="Explore o SiPPeC, um projeto do Laboratório de Informática, Aprendizagem e Gestão (LIAG) que incentiva o Pensamento Computacional e a Computação Criativa na educação brasileira. Aqui você encontrará ferramentas e recursos para inovar o ensino de tecnologia.">
     <meta name="twitter:image" content="<?php echo $CFG['system_url'] ?>assets/img/actCompleto.png">
 
     <title>SiPPeC <?php if (!empty($pageName)) {
@@ -48,6 +50,7 @@ if ($_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '127.0.0.
     <script>
         const currentPage = '<?php echo $currentPage; ?>';
         const systemUrl = '<?php echo $CFG['system_url']; ?>';
+        const apiUrl = '<?php echo $CFG['api_url']; ?>';
     </script>
 
     <script src="<?php echo $CFG['system_url'] ?>assets/js/jquery.min.js"></script>

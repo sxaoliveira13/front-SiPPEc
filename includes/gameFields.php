@@ -116,6 +116,6 @@
 <div class="form-group">
     <label class="form-group__label" for="gameLink">Link de Acesso <span class="text-danger">*</span></label>
     <div class="position-relative">
-        <input class="form-group__input form-group__input--line" type="text" placeholder="Informe o link de acesso do jogo educacional" id="gameLink" name="link" required maxlength="200" autocomplete="off">
+        <input class="form-group__input form-group__input--line" type="text" placeholder="Informe o link de acesso do jogo educacional" id="gameLink" name="link" required maxlength="300" autocomplete="off">
     </div>
 </div>

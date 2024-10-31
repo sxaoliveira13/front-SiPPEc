@@ -41,6 +41,20 @@ if ($USERDATA['userType'] == 2) {
     $active = 1;
 }
 
+$errorMsg;
+
+if (strlen($data['titulo']) > 200) {
+    $errorMsg = 'O título é muito grande!';
+}
+
+if (strlen($data['link']) > 200) {
+    $errorMsg = 'O link de acesso é muito grande!';
+}
+
+if (!empty($error)) {
+    error($errorMsg);
+}
+
 try {
     $sql = "INSERT INTO catalogo (userId, CategoriaId, Titulo, Ativo, Status, AguardandoRevisao, PublicoAlvoId, Conteudo, FerramentaId, HabilidadeId, Ambiente, Abordagem, CaminhoDeAcesso) VALUES (:userId, :categoria, :titulo, :active, :status, :aguardandoRevisao, :publico, :conteudo, :ferramenta, :habilidade, :ambiente, :abordagem, :link)";
 

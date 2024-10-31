@@ -1,13 +1,9 @@
-Options -Indexes
-<filesMatch ".(htaccess|phps)$">
-  Deny from all
-</filesMatch>
+<If "%{HTTP_REFERER} !~ /^https?:\/\/(www\.)?https://liag.ft.unicamp\.br/">
+Require all denied
+</If>
 
-Header set Access-Control-Allow-Credentials "true"
-Header set Access-Control-Allow-Methods "GET,POST"
-Header set Access-Control-Allow-Origin "https://liag.ft.unicamp.br"
-Header set Vary "Origin"
-Header always edit Set-Cookie (.*) "$1; SameSite=none"
+# Opcional: Se precisar liberar acesso a um arquivo específico
 
-RewriteCond %{REQUEST_FILENAME}.php -f
-RewriteRule !.*\.php$ %{REQUEST_FILENAME}.php [QSA,L]
+<Files "nome_do_arquivo_liberado.php">
+Require all granted
+</Files>

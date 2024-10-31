@@ -7,4 +7,9 @@
     display: inline-block;
     box-sizing: border-box;
     animation: rotation 1s linear infinite;
+
+    &--white {
+        border-color: #fff;
+        border-bottom-color: transparent;
+    }
 }

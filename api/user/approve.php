@@ -28,16 +28,21 @@ $userId = sanitize($data['userId'], 'int');
 $isApproved = sanitize($data['isApproved'], 'int');
 
 try {
-    $sql = "UPDATE actuser SET type = :userType WHERE id = :userId";
+    $CFG['link']->beginTransaction();
+
+    $sql = "UPDATE actUser SET type = :userType WHERE id = :userId";
 
     $stmt = $CFG['link']->prepare($sql);
     $stmt->bindParam(':userType', $isApproved, PDO::PARAM_INT);
     $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
-
     $stmt->execute();
+
+    $CFG['link']->commit();
 } catch (PDOException $e) {
+    $CFG['link']->rollBack();
     error('Falha ao tentar aprovar/recusar usuário!');
 } catch (Exception $e) {
+    $CFG['link']->rollBack();
     error('Falha ao tentar aprovar/recusar usuário!');
 }
 

@@ -13,7 +13,6 @@ require(dirname(__FILE__) . '/includes/head.php');
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="<?php echo $CFG['system_url'] ?>assets/js/datatable.min.js"></script>
 <script src="<?php echo $CFG['system_url'] ?>js/catalog.js"></script>
-
 </head>
 
 <body>
@@ -42,9 +41,6 @@ require(dirname(__FILE__) . '/includes/head.php');
                 <div id="catalogListLoader" class="position-absolute top-50 start-50 translate-middle">
                     <span class="loader"></span>
                 </div>
-                <h3 id="noResultsText" style="line-height: 1.7" class="u-text-muted--2 d-flex align-items-center justify-content-center text-center d-none h-100 mt-3 mb-0">
-                    Nenhum resultado encontrado para sua pesquisa
-                </h3>
             </ul>
         </section>
         <section class="main__grid--2 h-100">

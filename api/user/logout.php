@@ -9,9 +9,9 @@ $out = array('success' => true);
 try {
     deleteUserToken((int)(@explode('_', $_COOKIE['userToken'])[0]));
     unsetcookie('userToken');
-} catch(Exception $e) {
+} catch (Exception $e) {
     $out['success'] = false;
-    $out['msg'] = $e->getMessage();
+    $out['msg'] = "Falha ao tentar desconectar";
 }
 
 echo json_encode($out);

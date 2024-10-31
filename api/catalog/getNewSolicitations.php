@@ -52,7 +52,7 @@ try {
         INNER JOIN ability a ON c.HabilidadeId = a.id 
         INNER JOIN tool t ON c.FerramentaId = t.id 
         INNER JOIN public p ON c.PublicoAlvoId = p.id 
-        INNER JOIN actuser u ON c.userId = u.id 
+        INNER JOIN actUser u ON c.userId = u.id 
         WHERE c.AguardandoRevisao = 1
         ORDER BY c.createdAt DESC";
 

@@ -240,7 +240,7 @@ function error($msg, $code = 999)
 function unsetcookie($key, $path = '', $domain = '', $secure = true)
 {
     if (array_key_exists($key, $_COOKIE)) {
-        if (false === setcookie($key, null, -1, $path, $domain, $secure)) {
+        if (false === setcookie($key, '', time() - 3600, $path, $domain, $secure)) {
             return false;
         }
 

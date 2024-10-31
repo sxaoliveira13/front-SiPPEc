@@ -6,6 +6,13 @@ require_once("api/functions.php");
 $currentPage = 'searchCatalogs';
 $pageName = 'Catalogos';
 
+if (!isset($_COOKIE['userToken'])) {
+    header("Location: login.php");
+    exit;
+}
+
+$USERDATA = checkToken($_COOKIE['userToken'] ?? []);
+
 require(dirname(__FILE__) . '/includes/head.php');
 ?>
 
@@ -44,10 +51,16 @@ require(dirname(__FILE__) . '/includes/head.php');
                 <div class="form-group">
                     <label class="form-group__label" for="catalogType">Tipo de Catálogo </label>
                     <select class="form-group__input form-group__input" onchange="toggleFieldsVisibility(this.value);" id="catalogType" name="catalogType">
-                        <option value="1" selected="">Artigo</option>
+                        <option value="1">Artigo</option>
                         <option value="2">Jogo</option>
                         <option value="3">Método</option>
                     </select>
+                    <script>
+                        if (catalogType && typeof catalogType !== "undefined" && parseInt(catalogType) >= 1 && parseInt(catalogType) <= 3) {
+                            console.log(catalogType)
+                            document.getElementById('catalogType').value = catalogType;
+                        }
+                    </script>
                 </div>
             </div>
             <div class="col-xl-3 col-md-4 col-sm-6 col-12 my-3">
@@ -194,6 +207,7 @@ require(dirname(__FILE__) . '/includes/head.php');
         </form>
         <span id="loader" class="loader my-auto"></span>
         <div id="searchDatatable1" class="w-100 mt-5 mb-auto d-none">
+            <h3 class="searched-catalogs-count fw-bolder mb-4">0 catálogos encontrados</h3>
             <table id="catalogTableType1" class="table">
                 <thead>
                     <tr>
@@ -209,6 +223,7 @@ require(dirname(__FILE__) . '/includes/head.php');
             </table>
         </div>
         <div id="searchDatatable2" class="w-100 mt-5 mb-auto d-none">
+            <h3 class="searched-catalogs-count fw-bolder mb-4">0 catálogos encontrados</h3>
             <table id="catalogTableType2" class="table">
                 <thead>
                     <tr>

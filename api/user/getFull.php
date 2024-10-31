@@ -27,7 +27,7 @@ $data = json_decode($json, true);
 $userId = sanitize($data['userId'], 'int');
 
 try {
-    $sqlUser = "SELECT id, name, email, phone, createTime, lastAccess FROM actuser WHERE id = :userId";
+    $sqlUser = "SELECT id, name, email, phone, createTime, lastAccess FROM actUser WHERE id = :userId";
     $stmtUser = $CFG['link']->prepare($sqlUser);
     $stmtUser->bindParam(':userId', $userId, PDO::PARAM_INT);
     $stmtUser->execute();

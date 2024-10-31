@@ -534,6 +534,10 @@ select {
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
 }
+.loader--white {
+  border-color: #fff;
+  border-bottom-color: transparent;
+}
 
 .datatable-header {
   display: flex;

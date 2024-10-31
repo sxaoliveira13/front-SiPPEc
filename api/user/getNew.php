@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 
 try {
-    $sql = "SELECT * FROM actuser WHERE type = '0' ORDER BY createTime";
+    $sql = "SELECT * FROM actUser WHERE type = '0' ORDER BY createTime";
     $stmt = $CFG['link']->prepare($sql);
     $stmt->execute();
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);

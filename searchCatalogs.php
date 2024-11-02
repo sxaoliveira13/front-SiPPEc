@@ -6,12 +6,9 @@ require_once("api/functions.php");
 $currentPage = 'searchCatalogs';
 $pageName = 'Catalogos';
 
-if (!isset($_COOKIE['userToken'])) {
-    header("Location: login.php");
-    exit;
+if (isset($_COOKIE['userToken'])) {
+    $USERDATA = checkToken($_COOKIE['userToken'] ?? []);
 }
-
-$USERDATA = checkToken($_COOKIE['userToken'] ?? []);
 
 require(dirname(__FILE__) . '/includes/head.php');
 ?>

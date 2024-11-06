@@ -1,9 +1,4 @@
-<If "%{HTTP_REFERER} !~ /^https?:\/\/(www\.)?https://liag.ft.unicamp\.br/">
-Require all denied
-</If>
-
-# Opcional: Se precisar liberar acesso a um arquivo específico
-
-<Files "nome_do_arquivo_liberado.php">
-Require all granted
-</Files>
+Options -Indexes
+<filesMatch ".(htaccess|phps|env)$">
+Deny from all
+</filesMatch>

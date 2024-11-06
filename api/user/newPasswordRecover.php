@@ -58,7 +58,7 @@ try {
 
     sendMail(
         $userEmail,
-        "SiPPeC - Código de Recuperação de Senha",
+        "SiPPeC - " . $recoverCode . ": Código de Recuperação de Senha",
         'Seu código de recuperação de senha é: <b>' . $recoverCode . "</b>",
         "Código de Recuperação de Senha: " . $recoverCode
     );

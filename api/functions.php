@@ -1,5 +1,10 @@
 <?php
 
+require_once __DIR__ . '/../vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+
 /**
  * Sanitize strings or arrays
  * @param $string
@@ -119,13 +124,13 @@ function sendMail($destination, $subject, $body, $altBody = '')
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'victor.costa.osses@gmail.com';
-        $mail->Password = 'wwkw afyy xqtc pfaz';
+        $mail->Username = 'liag.unicampft@gmail.com';
+        $mail->Password = $_ENV['EMAIL_PASSWORD'];
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
         $mail->CharSet = 'UTF-8';
 
-        $mail->setFrom('victor.costa.osses@gmail.com');
+        $mail->setFrom('liag.unicampft@gmail.com');
         $mail->addAddress($destination);
 
         $mail->isHTML(true);

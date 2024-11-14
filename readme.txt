@@ -52,5 +52,3 @@ Não faça nenhuma alteração direta no arquivo main.css
 No seu terminal, execute npm run watch sass (esse comando pode ser encontrado no package.json)
 
 Feito isso, qualquer alteração em arquivos sass vai se refletir no main.css
-
-### 7. Compile os arquivos SCSS em CSS

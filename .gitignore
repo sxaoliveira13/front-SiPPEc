@@ -109,3 +109,6 @@ public
 # VS Code directory and files
 .vscode/
 .history/
+
+# others
+readme.txt

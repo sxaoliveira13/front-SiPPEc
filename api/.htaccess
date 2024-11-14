@@ -1,4 +1,0 @@
-Options -Indexes
-<filesMatch ".(htaccess|phps|env)$">
-Deny from all
-</filesMatch>

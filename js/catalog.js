@@ -703,10 +703,11 @@ async function requestCatalogRegistrationReview(btn) {
 
 async function showManageTab() {
     await locks['user'];
-    if (typeof userData['userType'] != "undefined" && userData['userType'] === "2") {
+    if (typeof userData['userType'] != "undefined" && userData['userType'] == 2) {
         const tabButton = document.getElementById('manageSolicitations');
         tabButton.classList.remove('d-none');
     }
+
 }
 
 async function getFullUserInfo(userId) {

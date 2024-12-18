@@ -3,8 +3,9 @@
 $CFG = array();
 
 if ($_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '127.0.0.1') {
-    $CFG['system_url'] = 'http://localhost/sippec/';
-    $CFG['api_url'] = 'http://localhost/sippec/api';
+    $currentFolder = trim(explode('/', $_SERVER['REQUEST_URI'])[1]);
+    $CFG['system_url'] = "http://localhost/$currentFolder/";
+    $CFG['api_url'] = "http://localhost/$currentFolder/api";
 } else {
     $CFG['system_url'] = 'https://liag.ft.unicamp.br/act-sistema/sippec/';
     $CFG['api_url'] = 'https://liag.ft.unicamp.br/act-sistema/sippec/api';

@@ -10,7 +10,7 @@ if (empty($USERDATA['userId'])) {
     error("Autenticação inválida ", 1);
 }
 if ($USERDATA['userType'] != 1 && $USERDATA['userType'] != 2) {
-    error("Você não tem permissão para isso! ", 2);
+    error("Você não tem permissão para isso!", 2);
 }
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);

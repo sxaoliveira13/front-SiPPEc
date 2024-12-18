@@ -14,6 +14,7 @@ if (isset($_COOKIE['userToken'])) {
     }
 }
 
+// t is recover password token generated after password recover submit
 if (!isset($_GET['t'])) {
     header("Location: login.php");
     exit;

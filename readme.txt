@@ -41,14 +41,26 @@ O arquivo .env contém as credenciais de acesso ao banco de dados do liag. Ele n
 
 O arquivo sippec.sql contém a estrutura incial das tabelas do banco de dados. Usei o phpmyadmin para criar o banco.
 
+Crie o banco de dados chamado 'sippec' e importe o sql com as tabelas para ele.
+
 ### 5. Abra o site localhost utilizando um servidor Apache (mesmo tipo do server em produção)
 
-Utilizei o XAMPP como servidor local
+Utilizei o XAMPP como gereciador de servidor web local
 
 ### 6. Compile os arquivos SCSS em CSS
 
 Não faça nenhuma alteração direta no arquivo main.css
 
-No seu terminal, execute npm run watch sass (esse comando pode ser encontrado no package.json)
+No seu terminal, execute <npm run watch sass> (esse comando pode ser encontrado no package.json)
 
 Feito isso, qualquer alteração em arquivos sass vai se refletir no main.css
+
+### 7. BEM - Metodologia de escrita CSS
+
+Os códigos SASS são escritos utilizando a metodologia de escrita CSS conhecida como BEM (Block-Element-Modifier)
+
+### 8. Arquivos .htaccess
+
+No servidor onde estão os arquivos do SiPPeC, existem alguns arquivos ocultos .htaccess. Eles tem algumas configurações de acesso a diretórios e páginas.
+
+Se você não entender porque certos redirecionamentos acontecem, provavelmente é alguma configuração em algum .htaccess

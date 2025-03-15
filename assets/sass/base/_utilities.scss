@@ -1,0 +1,136 @@
+.u-container {
+    width: 100%;
+    max-width: $container-width;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.u-flex-auto {
+    flex: 1 1 auto;
+}
+
+.u-cursor-pointer {
+    cursor: pointer;
+}
+
+.u-overflow-auto {
+    overflow: auto;
+}
+
+.u-box-padding {
+    &--horizontal {
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+
+        &-big {
+            padding-left: 4rem;
+            padding-right: 4rem;
+        }
+    }
+
+    &--vertical {
+        padding-top: 2.5rem;
+        padding-bottom: 2.5rem;
+
+        &-big {
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+        }
+    }
+}
+
+.u-fw-500 {
+    font-weight: 500 !important;
+}
+
+.u-text-color {
+    &--green {
+        color: $color-green;
+    }
+
+    &--red {
+        color: $color-red;
+    }
+
+    &--yellow {
+        color: $color-yellow;
+    }
+
+    &--muted {
+        color: $color-grey-light-2;
+    }
+}
+
+.u-disabled {
+    pointer-events: none;
+    cursor: inherit;
+    opacity: .7;
+}
+
+.u-hover-svg {
+    transition: all .2s ease;
+
+    &--primary:hover {
+        filter: brightness(0) invert(66%) sepia(18%) saturate(1200%) hue-rotate(140deg) brightness(90%) contrast(90%);
+    }
+}
+
+.u-text-muted {
+    &--1 {
+        color: $color-grey-light-1;
+    }
+
+    &--2 {
+        color: $color-grey-light-2;
+    }
+
+    &--3 {
+        color: $color-grey-light-3;
+    }
+}
+
+.u-filter {
+    &--green {
+        filter: brightness(0) invert(53%) sepia(75%) saturate(1363%) hue-rotate(66deg) brightness(95%) contrast(108%);
+    }
+
+    &--red {
+        filter: brightness(0) invert(10%) sepia(84%) saturate(6939%) hue-rotate(14deg) brightness(91%) contrast(113%);
+    }
+}
+
+.u-bg--red {
+    background-color: rgba($color-red, .7) !important;
+}
+
+.u-bg--yellow {
+    background-color: #FFA500 !important;
+}
+
+.u-bg--green {
+    background-color: rgba($color-green, .7) !important;
+}
+
+.u-text-overflow {
+    text-overflow: ellipsis;
+}
+
+.u-text-ellipsis {
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+
+    &--2-lines {
+        line-clamp: 2;
+        -webkit-line-clamp: 2;
+    }
+}
+
+.u-break-word {
+    word-wrap: break-word;
+}
+
+.u-min-w-300 {
+    min-width: 300px;
+}

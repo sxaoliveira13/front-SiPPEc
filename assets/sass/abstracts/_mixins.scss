@@ -1,0 +1,28 @@
+@mixin button-styles($background, $font-size, $color, $border-radius) {
+    background: $background;
+    font-size: $font-size;
+    color: $color;
+    border-radius: $border-radius;
+    border: none;
+    padding: 0.7em 1.6em;
+    text-align: center;
+    width: 100%;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
+
+    &:hover,
+    &:focus {
+        background: darken($background, 10%);
+        color: lighten($color, 10%);
+    }
+}
+
+@mixin badge-size($width, $height, $font-size) {
+    width: $width;
+    height: $height;
+    font-size: $font-size;
+    border-radius: 50%;
+}

@@ -1,0 +1,28 @@
+.badge {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bolder;
+    color: $color-white;
+
+    &--primary {
+        background-color: $color-primary;
+    }
+
+    &--danger {
+        background-color: $color-red;
+    }
+
+    &--rounded,
+    &--rounded-big {
+        @include badge-size(3.3rem, 3.3rem, 1.6rem);
+    }
+
+    &--rounded-medium {
+        @include badge-size(2.5rem, 2.5rem, 1.4rem);
+    }
+
+    &--rounded-small {
+        @include badge-size(2rem, 2rem, 1.2rem);
+    }
+}

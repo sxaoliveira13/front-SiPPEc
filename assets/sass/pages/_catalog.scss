@@ -1,0 +1,15 @@
+header.u-container {
+    margin-bottom: 3rem;
+}
+
+.main {
+    &__section {
+        &--box {
+            .tab-content {
+                @media (max-width: 1200px) {
+                    max-height: unset;
+                }
+            }
+        }
+    }
+}
